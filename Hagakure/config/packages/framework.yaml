@@ -1,0 +1,2 @@
+framework:
+    # Configuration framework - CORS géré par CorsListener

@@ -1,0 +1,128 @@
+# ============================================
+# Fichiers d'environnement (.env)
+# ============================================
+.env
+.env.local
+.env.*.local
+.env.prod
+.env.prod.local
+.env.dev
+.env.dev.local
+.env.test
+.env.test.local
+
+# Exception : garder les fichiers d'exemple
+!.env.example
+!.env.dist
+!**/.env.example
+!**/.env.dist
+
+# ============================================
+# Symfony - Backend (Hagakure/)
+# ============================================
+
+# Dépendances Composer
+Hagakure/vendor/
+Hagakure/composer.phar
+
+# Cache et logs Symfony
+Hagakure/var/cache/
+Hagakure/var/log/
+Hagakure/var/sessions/
+!Hagakure/var/cache/.gitkeep
+!Hagakure/var/log/.gitkeep
+!Hagakure/var/sessions/.gitkeep
+
+# Build Symfony
+Hagakure/public/build/
+Hagakure/public/bundles/
+
+# Fichiers de configuration sensibles
+Hagakure/config/secrets/
+
+# ============================================
+# React - Frontend (hagakure-front/)
+# ============================================
+
+# Dépendances Node
+hagakure-front/node_modules/
+hagakure-front/npm-debug.log*
+hagakure-front/yarn-debug.log*
+hagakure-front/yarn-error.log*
+hagakure-front/pnpm-debug.log*
+hagakure-front/lerna-debug.log*
+# Note: package-lock.json est généralement tracké pour garantir la cohérence des versions
+# hagakure-front/package-lock.json
+hagakure-front/yarn.lock
+hagakure-front/pnpm-lock.yaml
+
+# Build Vite/React
+hagakure-front/dist/
+hagakure-front/dist-ssr/
+hagakure-front/build/
+hagakure-front/.vite/
+
+# Node modules dans Hagakure aussi (si présent)
+Hagakure/node_modules/
+# Note: package-lock.json est généralement tracké
+# Hagakure/package-lock.json
+
+# ============================================
+# Fichiers système
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ============================================
+# IDE et éditeurs
+# ============================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# ============================================
+# Fichiers temporaires
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.log
+
+# ============================================
+# Fichiers de test
+# ============================================
+Hagakure/.phpunit.result.cache
+Hagakure/phpunit.xml
+Hagakure/coverage/
+Hagakure/.nyc_output/
+
+# ============================================
+# Docker (si utilisé)
+# ============================================
+Hagakure/docker-compose.override.yml
+Hagakure/.docker/
+
+# ============================================
+# Autres
+# ============================================
+*.local
+*.cache
+.cache/
+

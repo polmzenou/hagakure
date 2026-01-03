@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Samourais{% endblock %}
+
+{% block body %}
+<div class="list-container">
+    <div class="list-header">
+        <h1>⚔️ Samourais</h1>
+        <div class="list-actions">
+            <a href="{{ path('app_home') }}" class="btn btn-secondary">← Retour</a>
+            <a href="{{ path('app_samourai_new') }}" class="btn btn-primary">+ Nouveau Samouraï</a>
+        </div>
+    </div>
+
+    {% if samourais is empty %}
+        <div class="empty-state">
+            <p>Aucun samouraï enregistré.</p>
+            <a href="{{ path('app_samourai_new') }}" class="btn btn-primary">Créer le premier samouraï</a>
+        </div>
+    {% else %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Clan</th>
+                        <th>Date de naissance</th>
+                        <th>Date de mort</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for samourai in samourais %}
+                    <tr>
+                        <td>{{ samourai.id }}</td>
+                        <td class="font-bold">{{ samourai.name }}</td>
+                        <td>{{ samourai.clanId ? samourai.clanId.name : '-' }}</td>
+                        <td>{{ samourai.birthDate ? samourai.birthDate|date('Y-m-d') : '-' }}</td>
+                        <td>{{ samourai.deathDate ? samourai.deathDate|date('Y-m-d') : '-' }}</td>
+                        <td class="description-cell">{{ samourai.description|slice(0, 100) }}...</td>
+                        <td class="actions-cell">
+                            <a href="{{ path('app_samourai_show', {'id': samourai.id}) }}" class="btn-icon btn-edit" title="Voir">👁️</a>
+                            <a href="{{ path('app_samourai_edit', {'id': samourai.id}) }}" class="btn-icon btn-edit" title="Modifier">✏️</a>
+                            <form method="post" action="{{ path('app_samourai_delete', {'id': samourai.id}) }}" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce samouraï ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ samourai.id) }}">
+                                <button type="submit" class="btn-icon btn-delete" title="Supprimer">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,210 @@
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { weaponApi } from '../services/api'
+import { isAdmin } from '../utils/permissions'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import './List.css'
+
+interface Weapon {
+  id: number
+  name: string
+  type: string
+  description?: string
+  image?: string
+}
+
+function WeaponList() {
+  const [weapons, setWeapons] = useState<Weapon[]>([])
+  const [filteredWeapons, setFilteredWeapons] = useState<Weapon[]>([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 6
+
+  const loadData = async () => {
+    try {
+      const data = await weaponApi.getAll()
+      setWeapons(Array.isArray(data) ? data : [])
+      setLoading(false)
+    } catch (error) {
+      console.error('Error loading weapons:', error)
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  useEffect(() => {
+    let filtered = [...weapons]
+
+    // Filtre par recherche
+    if (searchTerm) {
+      filtered = filtered.filter(w =>
+        w.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        w.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    }
+
+    // Filtre par type
+    if (selectedType) {
+      filtered = filtered.filter(w => w.type === selectedType)
+    }
+
+    setFilteredWeapons(filtered)
+    setCurrentPage(1)
+  }, [searchTerm, selectedType, weapons])
+
+  // Récupérer les types uniques
+  const uniqueTypes = Array.from(new Set(weapons.map(w => w.type).filter(Boolean)))
+
+  // Pagination
+  const totalPages = Math.ceil(filteredWeapons.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentWeapons = filteredWeapons.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  if (loading) return <div className="loading">Chargement...</div>
+
+  return (
+    <div className="app">
+      <Header />
+      <div className="list-container">
+        {/* Header Section */}
+        <div className="page-header">
+          <div>
+            <h1 className="page-title">Les Armes</h1>
+            <p className="page-subtitle">
+              Explorez l'arsenal des samouraïs, du légendaire katana aux armes
+              traditionnelles qui ont marqué l'histoire du Japon féodal.
+            </p>
+          </div>
+          {isAdmin() && (
+            <Link to="/weapons/new" className="btn-add">
+              ➕ Ajouter une Arme
+            </Link>
+          )}
+        </div>
+
+        {/* Search Bar */}
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Rechercher une arme..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <svg className="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </div>
+
+        {/* Filter Dropdown */}
+        <div className="filter-dropdown-container">
+          <label htmlFor="type-filter" className="filter-label">
+            Filtrer par type :
+          </label>
+          <select
+            id="type-filter"
+            className="filter-select"
+            value={selectedType || ''}
+            onChange={(e) => setSelectedType(e.target.value || null)}
+          >
+            <option value="">Tous les types</option>
+            {uniqueTypes.map(type => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Results count */}
+        <div className="results-info">
+          {filteredWeapons.length} arme{filteredWeapons.length > 1 ? 's' : ''} trouvée{filteredWeapons.length > 1 ? 's' : ''}
+        </div>
+
+        {/* Weapons Grid */}
+        {currentWeapons.length === 0 ? (
+          <div className="empty-state">
+            <p>Aucune arme trouvée.</p>
+          </div>
+        ) : (
+          <div className="samourais-grid">
+            {currentWeapons.map((weapon) => (
+              <div key={weapon.id} className="samourai-card">
+                {weapon.image ? (
+                  <div className="samourai-image">
+                    <img src={weapon.image} alt={weapon.name} />
+                  </div>
+                ) : (
+                  <div className="samourai-image-placeholder">
+                    <span className="placeholder-icon">🗡️</span>
+                  </div>
+                )}
+                <div className="samourai-info">
+                  <h3 className="samourai-name">{weapon.name}</h3>
+                  <p className="samourai-clan">{weapon.type || 'Type non spécifié'}</p>
+                  <p className="samourai-description">
+                    {weapon.description?.substring(0, 100) || 'Aucune description'}
+                    {weapon.description && weapon.description.length > 100 ? '...' : ''}
+                  </p>
+                  <Link to={`/weapons/${weapon.id}`} className="view-button">
+                    Voir les détails
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button
+              className="pagination-btn"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              ←
+            </button>
+            
+            {[...Array(totalPages)].map((_, index) => {
+              const page = index + 1
+              return (
+                <button
+                  key={page}
+                  className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </button>
+              )
+            })}
+            
+            <button
+              className="pagination-btn"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              →
+            </button>
+          </div>
+        )}
+      </div>
+      <Footer />
+    </div>
+  )
+}
+
+export default WeaponList

@@ -1,0 +1,8 @@
+/* Import des styles globaux */
+@import url('/css/style.css');
+
+/* Styles spécifiques React si nécessaire */
+#root {
+  min-height: 100vh;
+}
+

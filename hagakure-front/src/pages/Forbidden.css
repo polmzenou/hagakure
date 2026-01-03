@@ -1,0 +1,118 @@
+.forbidden-container {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.forbidden-content {
+  background: white;
+  border-radius: 16px;
+  padding: 4rem 3rem;
+  text-align: center;
+  max-width: 600px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.forbidden-icon {
+  font-size: 6rem;
+  margin-bottom: 2rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.forbidden-title {
+  font-size: 2.5rem;
+  color: #D0391B;
+  font-family: 'YujiSyuku', serif;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.forbidden-message {
+  font-size: 1.25rem;
+  color: #2C2C2C;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.forbidden-submessage {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.forbidden-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.forbidden-actions .btn-primary,
+.forbidden-actions .btn-secondary {
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: 'YujiSyuku', serif;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.forbidden-actions .btn-primary {
+  background: #D0391B;
+  color: white;
+  box-shadow: 0 2px 8px rgba(208, 57, 27, 0.2);
+}
+
+.forbidden-actions .btn-primary:hover {
+  background: #B02F16;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(208, 57, 27, 0.3);
+}
+
+.forbidden-actions .btn-secondary {
+  background: white;
+  color: #D0391B;
+  border: 2px solid #D0391B;
+}
+
+.forbidden-actions .btn-secondary:hover {
+  background: #D0391B;
+  color: white;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .forbidden-content {
+    padding: 3rem 2rem;
+  }
+
+  .forbidden-title {
+    font-size: 2rem;
+  }
+
+  .forbidden-icon {
+    font-size: 4rem;
+  }
+
+  .forbidden-actions {
+    flex-direction: column;
+  }
+
+  .forbidden-actions .btn-primary,
+  .forbidden-actions .btn-secondary {
+    width: 100%;
+  }
+}
+

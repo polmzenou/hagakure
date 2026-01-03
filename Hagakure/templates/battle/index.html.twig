@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Batailles{% endblock %}
+
+{% block body %}
+<div class="list-container">
+    <div class="list-header">
+        <h1>⚡ Batailles</h1>
+        <div class="list-actions">
+            <a href="{{ path('app_home') }}" class="btn btn-secondary">← Retour</a>
+            <a href="{{ path('app_battle_new') }}" class="btn btn-primary">+ Nouvelle Bataille</a>
+        </div>
+    </div>
+
+    {% if battles is empty %}
+        <div class="empty-state">
+            <p>Aucune bataille enregistrée.</p>
+            <a href="{{ path('app_battle_new') }}" class="btn btn-primary">Créer la première bataille</a>
+        </div>
+    {% else %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Date</th>
+                        <th>Lieu</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for battle in battles %}
+                    <tr>
+                        <td>{{ battle.id }}</td>
+                        <td class="font-bold">{{ battle.name }}</td>
+                        <td>{{ battle.date ? battle.date|date('Y-m-d') : '-' }}</td>
+                        <td>{{ battle.locationId ? battle.locationId.name : '-' }}</td>
+                        <td class="actions-cell">
+                            <a href="{{ path('app_battle_edit', {'id': battle.id}) }}" class="btn-icon btn-edit">✏️</a>
+                            <form method="post" action="{{ path('app_battle_delete', {'id': battle.id}) }}" style="display: inline;" onsubmit="return confirm('Supprimer ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ battle.id) }}">
+                                <button type="submit" class="btn-icon btn-delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

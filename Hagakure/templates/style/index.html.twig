@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Styles{% endblock %}
+
+{% block body %}
+<div class="list-container">
+    <div class="list-header">
+        <h1>🥋 Styles de Combat</h1>
+        <div class="list-actions">
+            <a href="{{ path('app_home') }}" class="btn btn-secondary">← Retour</a>
+            <a href="{{ path('app_style_new') }}" class="btn btn-primary">+ Nouveau Style</a>
+        </div>
+    </div>
+
+    {% if styles is empty %}
+        <div class="empty-state">
+            <p>Aucun style enregistré.</p>
+            <a href="{{ path('app_style_new') }}" class="btn btn-primary">Créer le premier style</a>
+        </div>
+    {% else %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for style in styles %}
+                    <tr>
+                        <td>{{ style.id }}</td>
+                        <td class="font-bold">{{ style.name }}</td>
+                        <td class="actions-cell">
+                            <a href="{{ path('app_style_edit', {'id': style.id}) }}" class="btn-icon btn-edit">✏️</a>
+                            <form method="post" action="{{ path('app_style_delete', {'id': style.id}) }}" style="display: inline;" onsubmit="return confirm('Supprimer ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ style.id) }}">
+                                <button type="submit" class="btn-icon btn-delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

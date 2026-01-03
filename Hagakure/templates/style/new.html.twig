@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Style{% endblock %}
+
+{% block body %}
+<div class="form-container">
+    <div class="form-header">
+        <h1>🥋 Nouveau Style</h1>
+        <a href="{{ path('app_style_index') }}" class="btn btn-secondary">← Retour</a>
+    </div>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ path('app_style_index') }}" class="btn btn-secondary">Annuler</a>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
