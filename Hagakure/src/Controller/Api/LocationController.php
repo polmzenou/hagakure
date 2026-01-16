@@ -54,6 +54,8 @@ class LocationController extends AbstractController
         $location->setRegion($data['region'] ?? '');
         $location->setLatitude($data['latitude'] ?? '0');
         $location->setLongitude($data['longitude'] ?? '0');
+        $location->setType($data['type'] ?? null);
+        $location->setDescription($data['description'] ?? null);
 
         $this->entityManager->persist($location);
         $this->entityManager->flush();
@@ -84,6 +86,12 @@ class LocationController extends AbstractController
         if (isset($data['longitude'])) {
             $location->setLongitude($data['longitude']);
         }
+        if (isset($data['type'])) {
+            $location->setType($data['type']);
+        }
+        if (isset($data['description'])) {
+            $location->setDescription($data['description']);
+        }
 
         $this->entityManager->flush();
 
@@ -113,6 +121,8 @@ class LocationController extends AbstractController
             'region' => $location->getRegion(),
             'latitude' => $location->getLatitude(),
             'longitude' => $location->getLongitude(),
+            'type' => $location->getType(),
+            'description' => $location->getDescription(),
             'battles_count' => $location->getBattles()->count(),
         ];
     }

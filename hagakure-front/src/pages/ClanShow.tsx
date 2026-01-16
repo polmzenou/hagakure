@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { clanApi, authApi, favoriteApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
+import { formatDate } from '../utils/dateUtils'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './Show.css'
@@ -144,13 +145,13 @@ function ClanShow() {
                 {clan.founded_date && (
                   <div className="detail-item">
                     <span className="detail-label">Date de fondation :</span>
-                    <span className="detail-value">{clan.founded_date}</span>
+                    <span className="detail-value">{formatDate(clan.founded_date)}</span>
                   </div>
                 )}
                 {clan.disbanded_date && (
                   <div className="detail-item">
                     <span className="detail-label">Date de dissolution :</span>
-                    <span className="detail-value">{clan.disbanded_date}</span>
+                    <span className="detail-value">{formatDate(clan.disbanded_date)}</span>
                   </div>
                 )}
               </div>

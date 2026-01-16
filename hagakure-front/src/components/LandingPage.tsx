@@ -91,22 +91,18 @@ const LandingPage = () => {
             {/* Stats Cards */}
             <div className="stats-grid">
               <div className="stat-card">
-                <div className="stat-icon">🗡️</div>
                 <div className="stat-number">{stats.samourais}</div>
                 <div className="stat-label">Samourais</div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">🏯</div>
                 <div className="stat-number">{stats.clans}</div>
                 <div className="stat-label">Clans</div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">⚔️</div>
                 <div className="stat-number">{stats.batailles}</div>
                 <div className="stat-label">Batailles</div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">🗡️</div>
                 <div className="stat-number">{stats.armes}</div>
                 <div className="stat-label">Armes</div>
               </div>

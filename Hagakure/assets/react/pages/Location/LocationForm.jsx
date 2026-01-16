@@ -12,7 +12,9 @@ function LocationForm() {
     name: '',
     region: '',
     latitude: '',
-    longitude: ''
+    longitude: '',
+    type: '',
+    description: ''
   })
 
   useEffect(() => {
@@ -26,7 +28,9 @@ function LocationForm() {
         name: data.name || '',
         region: data.region || '',
         latitude: data.latitude || '',
-        longitude: data.longitude || ''
+        longitude: data.longitude || '',
+        type: data.type || '',
+        description: data.description || ''
       })
     } catch (error) {
       console.error('Error loading location:', error)
@@ -62,6 +66,14 @@ function LocationForm() {
           <div className="form-group">
             <label htmlFor="region">Région *</label>
             <input type="text" id="region" name="region" value={formData.region} onChange={(e) => setFormData({...formData, region: e.target.value})} required className="form-control" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="type">Type</label>
+            <input type="text" id="type" name="type" value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})} className="form-control" placeholder="Ex: Château, Ville, Province" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea id="description" name="description" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} className="form-control" rows="4" placeholder="Description du lieu..."></textarea>
           </div>
           <div className="form-row">
             <div className="form-group">

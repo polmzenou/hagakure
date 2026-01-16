@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { samouraiApi, clanApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
+import { formatDateShort } from '../utils/dateUtils'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './List.css'
@@ -217,7 +218,7 @@ function SamouraiList() {
                   <h3 className="samourai-name">{samourai.name}</h3>
                   <p className="samourai-clan">{samourai.clan?.name || 'Sans clan'}</p>
                   <p className="samourai-dates">
-                    {samourai.birth_date || '?'} - {samourai.death_date || '?'}
+                    {formatDateShort(samourai.birth_date)} - {formatDateShort(samourai.death_date)}
                   </p>
                   <Link to={`/samourais/${samourai.id}`} className="view-button">
                     Voir la fiche

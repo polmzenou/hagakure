@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { profileApi, favoriteApi, authApi, type ProfileData, type Favorite } from '../services/api'
+import { formatDate } from '../utils/dateUtils'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './MonCompte.css'
@@ -351,11 +352,7 @@ function MonCompte() {
                         <h3 className="favorite-timeline-title">{favorite.entity.name}</h3>
                         {favorite.entity.date && (
                           <p className="favorite-timeline-date">
-                            {new Date(favorite.entity.date).toLocaleDateString('fr-FR', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric'
-                            })}
+                            {formatDate(favorite.entity.date)}
                           </p>
                         )}
                         {favorite.entity.description && (

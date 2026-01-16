@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { authApi } from '../services/api'
+import { isAdmin } from '../utils/permissions'
 import './Header.css'
 
 interface User {
@@ -46,7 +47,9 @@ function Header() {
         <nav className="main-nav">
           <Link to="/samourais" className="nav-link">Samourais</Link>
           <Link to="/clans" className="nav-link">Clans</Link>
-          <Link to="/battles" className="nav-link">Batailles</Link>
+          {isAdmin() && (
+            <Link to="/battles" className="nav-link">Batailles</Link>
+          )}
           <Link to="/weapons" className="nav-link">Armes</Link>
           <Link to="/styles" className="nav-link">Style de combat</Link>
         </nav>

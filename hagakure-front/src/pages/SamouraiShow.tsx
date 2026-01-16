@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { samouraiApi, authApi, favoriteApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
+import { formatDate } from '../utils/dateUtils'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './Show.css'
@@ -153,13 +154,13 @@ function SamouraiShow() {
                 {samourai.birth_date && (
                   <div className="detail-item">
                     <span className="detail-label">Date de naissance :</span>
-                    <span className="detail-value">{samourai.birth_date}</span>
+                    <span className="detail-value">{formatDate(samourai.birth_date)}</span>
                   </div>
                 )}
                 {samourai.death_date && (
                   <div className="detail-item">
                     <span className="detail-label">Date de mort :</span>
-                    <span className="detail-value">{samourai.death_date}</span>
+                    <span className="detail-value">{formatDate(samourai.death_date)}</span>
                   </div>
                 )}
                 {samourai.clan && (

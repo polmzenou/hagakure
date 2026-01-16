@@ -1,0 +1,201 @@
+.historical-eras-section {
+  width: 100%;
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+  padding: 4rem 2rem;
+  margin-top: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.eras-watermarks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.eras-watermark {
+  position: absolute;
+  font-family: 'YujiSyuku', serif;
+  color: rgba(0, 0, 0, 0.08);
+  font-weight: bold;
+  line-height: 1.2;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.eras-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.eras-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-family: 'YujiSyuku', serif;
+}
+
+.eras-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.eras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.era-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  border-left: 4px solid;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.era-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.era-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.era-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  font-family: 'YujiSyuku', serif;
+}
+
+.era-dates {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #c41e3a;
+  background: rgba(196, 30, 58, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.era-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.era-event {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.era-event-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c41e3a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'YujiSyuku', serif;
+}
+
+.era-event-text {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.era-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.era-highlights-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c41e3a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'YujiSyuku', serif;
+}
+
+.era-highlights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.era-highlights-list li {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.era-highlights-list li::before {
+  content: '・';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.2rem;
+  color: #c41e3a;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .historical-eras-section {
+    padding: 3rem 1rem;
+  }
+
+  .eras-title {
+    font-size: 2rem;
+  }
+
+  .eras-subtitle {
+    font-size: 1rem;
+  }
+
+  .eras-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .era-card {
+    padding: 1.5rem;
+  }
+
+  .era-name {
+    font-size: 1.5rem;
+  }
+}

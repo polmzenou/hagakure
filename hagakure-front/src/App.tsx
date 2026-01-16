@@ -4,6 +4,7 @@ import LandingPage from './components/LandingPage'
 import Login from './pages/Login'
 import Forbidden from './pages/Forbidden'
 import Timeline from './pages/Timeline'
+import Map from './pages/Map'
 import ProtectedRoute from './components/ProtectedRoute'
 import SamouraiList from './pages/SamouraiList'
 import SamouraiForm from './pages/SamouraiForm'
@@ -30,6 +31,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forbidden" element={<Forbidden />} />
         <Route path="/timeline" element={<Timeline />} />
+        <Route path="/map" element={<Map />} />
         <Route path="/account" element={<ProtectedRoute><MonCompte /></ProtectedRoute>} />
         
         {/* Samourai Routes */}

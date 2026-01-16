@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { timelineApi, authApi, favoriteApi, battleApi } from '../services/api'
 import type { TimelineEvent } from '../services/api'
+import { formatDate } from '../utils/dateUtils'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import HistoricalEras from '../components/HistoricalEras'
 import './Timeline.css'
 
 function Timeline() {
@@ -386,6 +388,7 @@ function Timeline() {
       <div className="timeline-page">
         <div className="timeline-header">
           <h1 className="timeline-title">Frise Chronologique</h1>
+          <h2 className="timeline-title-jp">「年代順」</h2>
           <p className="timeline-subtitle">
             Explorez l'histoire des samourais et des batailles légendaires du Japon féodal
           </p>
@@ -549,11 +552,7 @@ function Timeline() {
                   </span>
                   <h2 className="details-title">{selectedEvent.title}</h2>
                   <p className="details-date">
-                    {new Date(selectedEvent.date).toLocaleDateString('fr-FR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
+                    {formatDate(selectedEvent.date)}
                   </p>
                 </div>
                 {isAuthenticated && (
@@ -604,6 +603,7 @@ function Timeline() {
           )}
         </div>
       </div>
+      <HistoricalEras />
       <Footer />
     </div>
   )

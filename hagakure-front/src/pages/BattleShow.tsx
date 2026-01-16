@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { battleApi, authApi, favoriteApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
+import { formatDate } from '../utils/dateUtils'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './Show.css'
@@ -109,9 +110,19 @@ function BattleShow() {
       <Header />
       <div className="show-container">
         <div className="show-header">
-          <Link to="/battles" className="btn btn-secondary">
-            ← Retour à la liste
-          </Link>
+          {isAdmin() && (   
+            <>
+            <Link to="/battles" className="btn btn-secondary">
+              ← Retour à la liste
+            </Link>
+            <Link to={`/battles/${id}/edit`} className="btn btn-primary">
+              ✏️ Modifier
+            </Link>
+            <button onClick={handleDelete} className="btn btn-danger">
+              🗑️ Supprimer
+            </button>
+          </>
+          )}
           <div className="show-actions">
             {isAuthenticated && (
               <button 
@@ -121,16 +132,7 @@ function BattleShow() {
                 {isFavorite ? '★ Retirer des Favoris' : '☆ Ajouter aux Favoris'}
               </button>
             )}
-            {isAdmin() && (
-              <>
-                <Link to={`/battles/${id}/edit`} className="btn btn-primary">
-                  ✏️ Modifier
-                </Link>
-                <button onClick={handleDelete} className="btn btn-danger">
-                  🗑️ Supprimer
-                </button>
-              </>
-            )}
+            
           </div>
         </div>
 
@@ -148,7 +150,7 @@ function BattleShow() {
                 {battle.date && (
                   <div className="detail-item">
                     <span className="detail-label">Date :</span>
-                    <span className="detail-value">{battle.date}</span>
+                    <span className="detail-value">{formatDate(battle.date)}</span>
                   </div>
                 )}
                 {battle.location && (

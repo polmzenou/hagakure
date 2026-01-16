@@ -28,6 +28,12 @@ class Location
     #[ORM\Column(type: Types::DECIMAL, precision: 20, scale: 20)]
     private ?string $longitude = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
     /**
      * @var Collection<int, Battle>
      */
@@ -88,6 +94,30 @@ class Location
     public function setLongitude(string $longitude): static
     {
         $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

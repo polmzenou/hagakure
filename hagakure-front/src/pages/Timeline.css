@@ -18,8 +18,16 @@
   font-size: 3rem;
   color: #2C2C2C;
   font-family: 'YujiSyuku', serif;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
+}
+
+.timeline-title-jp {
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  font-family: 'YujiSyuku', serif;
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
 .timeline-subtitle {

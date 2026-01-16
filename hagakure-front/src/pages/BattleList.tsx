@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { battleApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
+import { formatDateShort } from '../utils/dateUtils'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './List.css'
@@ -94,7 +95,7 @@ function BattleList() {
                   <tr key={battle.id}>
                     <td>{battle.id}</td>
                     <td className="font-bold">{battle.name}</td>
-                    <td>{battle.date || '-'}</td>
+                    <td>{formatDateShort(battle.date, '-')}</td>
                     <td>{battle.location?.name || '-'}</td>
                     <td>{battle.winner_clan?.name || '-'}</td>
                     <td className="actions-cell">
