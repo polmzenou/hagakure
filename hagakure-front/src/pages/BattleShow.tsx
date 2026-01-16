@@ -188,7 +188,7 @@ function BattleShow() {
                         to={`/samourais/${samourai.id}`}
                         className="relation-item"
                       >
-                        ⚔️ {samourai.name}
+                        {samourai.name}
                       </Link>
                     ))}
                   </div>
@@ -203,7 +203,7 @@ function BattleShow() {
                     rel="noopener noreferrer"
                     className="source-link"
                   >
-                    📚 Voir la source
+                    Voir la source
                   </a>
                 </div>
               )}

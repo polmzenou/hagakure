@@ -132,7 +132,7 @@ function StyleShow() {
               </div>
             )}
             <div className="show-info">
-              <h1 className="show-title">🎭 {style.name}</h1>
+              <h1 className="show-title">{style.name}</h1>
 
               {style.description && (
                 <div className="show-description">

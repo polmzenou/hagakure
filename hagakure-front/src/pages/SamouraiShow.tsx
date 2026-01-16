@@ -148,7 +148,7 @@ function SamouraiShow() {
               </div>
             )}
             <div className="show-info">
-              <h1 className="show-title">⚔️ {samourai.name}</h1>
+              <h1 className="show-title">{samourai.name}</h1>
               
               <div className="show-details">
                 {samourai.birth_date && (
