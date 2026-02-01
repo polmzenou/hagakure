@@ -31,7 +31,12 @@ class WeaponController extends AbstractController
             $data[] = $this->serializeWeapon($weapon);
         }
 
-        return $this->json($data);
+        $response = $this->json($data);
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
@@ -43,7 +48,12 @@ class WeaponController extends AbstractController
             return $this->json(['error' => 'Weapon not found'], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializeWeapon($weapon));
+        $response = $this->json($this->serializeWeapon($weapon));
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('', name: 'create', methods: ['POST'])]

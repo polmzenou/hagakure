@@ -14,7 +14,6 @@ export const canCreate = (): boolean => isAdmin()
 export const canEdit = (): boolean => isAdmin()
 export const canDelete = (): boolean => isAdmin()
 export const canView = (): boolean => {
-  // Tout le monde peut voir (même non connecté pour l'instant)
   return true
 }
 

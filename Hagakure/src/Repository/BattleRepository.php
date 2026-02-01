@@ -16,28 +16,31 @@ class BattleRepository extends ServiceEntityRepository
         parent::__construct($registry, Battle::class);
     }
 
-//    /**
-//     * @return Battle[] Returns an array of Battle objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findAllWithRelations(): array
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.location_id', 'l')
+            ->addSelect('l')
+            ->leftJoin('b.winner_clan_id', 'wc')
+            ->addSelect('wc')
+            ->leftJoin('b.samourais', 's')
+            ->addSelect('s')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Battle
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findOneWithRelations(int $id): ?Battle
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.location_id', 'l')
+            ->addSelect('l')
+            ->leftJoin('b.winner_clan_id', 'wc')
+            ->addSelect('wc')
+            ->leftJoin('b.samourais', 's')
+            ->addSelect('s')
+            ->where('b.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

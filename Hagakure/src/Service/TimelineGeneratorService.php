@@ -45,7 +45,6 @@ class TimelineGeneratorService
             'samurais_skipped' => 0,
         ];
 
-        // Traiter toutes les batailles
         $battles = $this->battleRepository->findAll();
         foreach ($battles as $battle) {
             $isNew = $this->syncBattleTimeline($battle);
@@ -56,10 +55,8 @@ class TimelineGeneratorService
             }
         }
 
-        // Traiter toutes les naissances de samourais
         $samourais = $this->samouraiRepository->findAll();
         foreach ($samourais as $samourai) {
-            // Ignorer les samourais sans date de naissance
             if ($samourai->getBirthDate() === null) {
                 $stats['samurais_skipped']++;
                 continue;
@@ -88,8 +85,6 @@ class TimelineGeneratorService
      */
     public function syncBattleTimeline(Battle $battle): bool
     {
-        // Chercher une entrée Timeline existante pour cette bataille
-        // Critère : type='battle' ET battle_id = battle
         $timeline = $this->timelineRepository->findOneBy([
             'type' => 'battle',
             'battle_id' => $battle

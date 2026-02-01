@@ -36,13 +36,11 @@ class GenerateHistoricalEventsCommand extends Command
             ''
         ]);
 
-        // Démarrer la synchronisation
         $io->section('Synchronisation des événements historiques...');
         
         try {
             $stats = $this->timelineGenerator->syncHistoricalEvents();
 
-            // Afficher les résultats
             $io->success('Synchronisation terminée avec succès !');
             
             $io->section('Résultats :');

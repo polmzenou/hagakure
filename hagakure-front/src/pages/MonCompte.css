@@ -544,5 +544,69 @@
     height: 100%;
     filter: brightness(0.45);
   }
+
+  .favorites-filters {
+    flex-direction: column;
+  }
+
+  .filter-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mon-compte-page {
+    padding: 0.75rem;
+  }
+
+  .mon-compte-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .mon-compte-title {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab-button {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .mon-compte-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .favorite-item {
+    padding: 1rem;
+  }
+
+  .favorite-image {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+  }
+
+  .favorite-name {
+    font-size: 1.1rem;
+  }
+
+  .favorite-timeline-item {
+    padding: 1.5rem;
+  }
+
+  .favorite-timeline-title {
+    font-size: 1.5rem;
+  }
+
+  .favorite-timeline-year {
+    font-size: 1rem;
+  }
+
+  .favorite-timeline-description {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
 }
 

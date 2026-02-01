@@ -53,7 +53,6 @@ class FavoriteController extends AbstractController
             $entity = null;
             $entityData = null;
 
-            // Récupérer l'entité selon son type
             switch ($entityType) {
                 case 'samourai':
                     $entity = $this->samouraiRepository->find($entityId);

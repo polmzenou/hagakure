@@ -8,7 +8,6 @@ import Footer from '../components/Footer'
 import 'leaflet/dist/leaflet.css'
 import './Map.css'
 
-// Interface pour les données Location
 interface Location {
   id: number
   name: string
@@ -20,21 +19,18 @@ interface Location {
   battles_count?: number
 }
 
-// Interface pour les batailles
 interface Battle {
   id: number
   name: string
   location_id?: number
 }
 
-// Fonction pour déterminer si c'est une bataille
 const isBattle = (type: string | null): boolean => {
   if (!type) return false
   const lowerType = type.toLowerCase()
   return lowerType.includes('bataille') || lowerType.includes('champ de bataille') || lowerType.includes('forteresse')
 }
 
-// Création des icônes personnalisées
 const createBattleIcon = () => {
   return L.divIcon({
     className: 'custom-marker battle-marker',
@@ -65,7 +61,6 @@ const createLocationIcon = () => {
   })
 }
 
-// Composant pour le contenu du popup
 function PopupContent({ 
   location, 
   battleForLocation
@@ -74,7 +69,6 @@ function PopupContent({
   battleForLocation: Battle | null
 }) {
   const isBattleType = isBattle(location.type)
-  // const isFavorite = favorites[location.id] || false // Commenté pour plus tard
 
   return (
     <div className="popup-content">
@@ -97,25 +91,12 @@ function PopupContent({
       )}
       
       <div className="popup-actions">
-        {/* Bouton pour voir la bataille si elle existe */}
         {isBattleType && battleForLocation && (
           <Link to={`/battles/${battleForLocation.id}`} className="popup-btn battle-link">
             <span className="btn-icon">⚔️</span>
             Voir la bataille
           </Link>
         )}
-        
-        {/* Bouton favoris - Commenté pour plus tard
-        {isAuthenticated && (
-          <button 
-            className={`popup-btn favorite-btn ${isFavorite ? 'is-favorite' : ''}`}
-            onClick={() => onToggleFavorite(location.id)}
-          >
-            <span className="btn-icon">{isFavorite ? '★' : '☆'}</span>
-            {isFavorite ? 'Favori' : 'Ajouter aux favoris'}
-          </button>
-        )}
-        */}
       </div>
     </div>
   )
@@ -126,20 +107,7 @@ function Map() {
   const [battles, setBattles] = useState<Battle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  // const [isAuthenticated, setIsAuthenticated] = useState(false) // Commenté pour plus tard
-  // const [favorites, setFavorites] = useState<Record<number, boolean>>({}) // Commenté pour plus tard
 
-  // Kanjis pour le fond décoratif (thème carte/géographie)
-  // 地 (chi) - Terre
-  // 図 (zu) - Carte
-  // 国 (kuni) - Pays
-  // 城 (shiro) - Château
-  // 山 (yama) - Montagne
-  // 川 (kawa) - Rivière
-  // 海 (umi) - Mer
-  // 道 (michi) - Chemin
-  // 戦 (ikusa) - Bataille
-  // 侍 (samurai) - Samouraï
   const mapKanjis = [
     { kanji: '地', meaning: 'Terre' },
     { kanji: '図', meaning: 'Carte' },
@@ -154,7 +122,6 @@ function Map() {
   ]
 
   useEffect(() => {
-    // setIsAuthenticated(authApi.isAuthenticated()) // Commenté pour plus tard
     loadData()
   }, [])
 
@@ -176,11 +143,6 @@ function Map() {
         setBattles([])
       }
       
-      /* Commenté pour plus tard - Vérifier les favoris
-      if (authApi.isAuthenticated()) {
-        await loadFavorites(Array.isArray(locationsData) ? locationsData : [])
-      }
-      */
     } catch (err) {
       console.error('Error loading locations:', err)
       setError('Erreur lors du chargement des lieux')
@@ -189,45 +151,6 @@ function Map() {
     }
   }
 
-  /* Commenté pour plus tard - Gestion des favoris
-  const loadFavorites = async (locs: Location[]) => {
-    const favoritesMap: Record<number, boolean> = {}
-    
-    for (const loc of locs) {
-      try {
-        const result = await favoriteApi.check({
-          entity_type: 'location',
-          entity_id: loc.id
-        })
-        favoritesMap[loc.id] = result.is_favorite
-      } catch {
-        favoritesMap[loc.id] = false
-      }
-    }
-    
-    setFavorites(favoritesMap)
-  }
-
-  const handleToggleFavorite = async (locationId: number) => {
-    if (!isAuthenticated) return
-    
-    try {
-      const result = await favoriteApi.toggle({
-        entity_type: 'location',
-        entity_id: locationId
-      })
-      
-      setFavorites(prev => ({
-        ...prev,
-        [locationId]: result.is_favorite
-      }))
-    } catch (error: unknown) {
-      console.error('Error toggling favorite:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Erreur lors de l\'ajout aux favoris'
-      alert(errorMessage)
-    }
-  }
-  */
 
   // Trouver la bataille associée à une location par son nom
   const findBattleForLocation = (location: Location): Battle | null => {
@@ -291,14 +214,6 @@ function Map() {
             <span className="legend-icon location">⭐</span>
             <span className="legend-label">Lieu historique</span>
           </div>
-          {/* Commenté pour plus tard - Légende favoris
-          {isAuthenticated && (
-            <div className="legend-item">
-              <span className="legend-icon favorite">★</span>
-              <span className="legend-label">Cliquez pour ajouter aux favoris</span>
-            </div>
-          )}
-          */}
         </div>
 
         {loading && (

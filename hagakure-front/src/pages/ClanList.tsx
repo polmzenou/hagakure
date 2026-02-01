@@ -79,12 +79,12 @@ function ClanList() {
             <p className="page-subtitle">
               Découvrez les grands clans qui ont dominé le Japon féodal, leurs alliances et leurs rivalités.
             </p>
+            {isAdmin() && (
+              <Link to="/clans/new" className="btn-add">
+                ➕ Ajouter un Clan
+              </Link>
+            )}
           </div>
-          {isAdmin() && (
-            <Link to="/clans/new" className="btn-add">
-              ➕ Ajouter un Clan
-            </Link>
-          )}
         </div>
 
         {/* Search Bar */}
@@ -116,7 +116,7 @@ function ClanList() {
           <div className="samourais-grid">
             {currentClans.map((clan) => (
               <div key={clan.id} className="samourai-card">
-                {clan.image ? (
+                {clan.image && clan.image.trim() !== '' ? (
                   <div className="samourai-image">
                     <img src={clan.image} alt={clan.name} />
                   </div>

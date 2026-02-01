@@ -3,9 +3,11 @@ import './App.css'
 import LandingPage from './components/LandingPage'
 import Login from './pages/Login'
 import Forbidden from './pages/Forbidden'
+import NotFound from './pages/NotFound'
 import Timeline from './pages/Timeline'
 import Map from './pages/Map'
 import ProtectedRoute from './components/ProtectedRoute'
+import AuthenticatedRoute from './components/AuthenticatedRoute'
 import SamouraiList from './pages/SamouraiList'
 import SamouraiForm from './pages/SamouraiForm'
 import SamouraiShow from './pages/SamouraiShow'
@@ -32,7 +34,7 @@ function App() {
         <Route path="/forbidden" element={<Forbidden />} />
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/map" element={<Map />} />
-        <Route path="/account" element={<ProtectedRoute><MonCompte /></ProtectedRoute>} />
+        <Route path="/account" element={<AuthenticatedRoute><MonCompte /></AuthenticatedRoute>} />
         
         {/* Samourai Routes */}
         <Route path="/samourais" element={<SamouraiList />} />
@@ -63,6 +65,9 @@ function App() {
         <Route path="/battles/new" element={<ProtectedRoute><BattleForm /></ProtectedRoute>} />
         <Route path="/battles/:id" element={<BattleShow />} />
         <Route path="/battles/:id/edit" element={<ProtectedRoute><BattleForm /></ProtectedRoute>} />
+        
+        {/* 404 - Catch all route (must be last) */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

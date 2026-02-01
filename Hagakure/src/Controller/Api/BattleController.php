@@ -33,26 +33,36 @@ class BattleController extends AbstractController
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $battles = $this->repository->findAll();
+        $battles = $this->repository->findAllWithRelations();
         $data = [];
 
         foreach ($battles as $battle) {
             $data[] = $this->serializeBattle($battle);
         }
 
-        return $this->json($data);
+        $response = $this->json($data);
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
-        $battle = $this->repository->find($id);
+        $battle = $this->repository->findOneWithRelations($id);
 
         if (!$battle) {
             return $this->json(['error' => 'Battle not found'], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializeBattle($battle));
+        $response = $this->json($this->serializeBattle($battle));
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('', name: 'create', methods: ['POST'])]
@@ -83,7 +93,6 @@ class BattleController extends AbstractController
                 $battle->setImage($data['image']);
             }
 
-            // Gestion du lieu
             if (isset($data['location_id']) && $data['location_id']) {
                 $location = $this->locationRepository->find($data['location_id']);
                 if ($location) {
@@ -91,7 +100,6 @@ class BattleController extends AbstractController
                 }
             }
 
-            // Gestion du clan vainqueur
             if (isset($data['winner_clan_id']) && $data['winner_clan_id']) {
                 $clan = $this->clanRepository->find($data['winner_clan_id']);
                 if ($clan) {
@@ -99,7 +107,6 @@ class BattleController extends AbstractController
                 }
             }
 
-            // Gestion des samourais
             if (isset($data['samourai_ids']) && is_array($data['samourai_ids'])) {
                 foreach ($data['samourai_ids'] as $samouraiId) {
                     $samourai = $this->samouraiRepository->find($samouraiId);
@@ -153,7 +160,6 @@ class BattleController extends AbstractController
                 $battle->setImage($data['image'] ?: null);
             }
 
-            // Gestion du lieu
             if (isset($data['location_id'])) {
                 if ($data['location_id']) {
                     $location = $this->locationRepository->find($data['location_id']);
@@ -165,7 +171,6 @@ class BattleController extends AbstractController
                 }
             }
 
-            // Gestion du clan vainqueur
             if (isset($data['winner_clan_id'])) {
                 if ($data['winner_clan_id']) {
                     $clan = $this->clanRepository->find($data['winner_clan_id']);
@@ -177,13 +182,10 @@ class BattleController extends AbstractController
                 }
             }
 
-            // Gestion des samourais
             if (isset($data['samourai_ids']) && is_array($data['samourai_ids'])) {
-                // Vider les samourais existants
                 foreach ($battle->getSamourais() as $samourai) {
                     $battle->removeSamourai($samourai);
                 }
-                // Ajouter les nouveaux
                 foreach ($data['samourai_ids'] as $samouraiId) {
                     $samourai = $this->samouraiRepository->find($samouraiId);
                     if ($samourai) {

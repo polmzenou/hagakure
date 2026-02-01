@@ -22,7 +22,6 @@ class TokenAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        // Ce authenticator supporte toutes les requêtes API qui ont un header Authorization
         return $request->headers->has('Authorization');
     }
 
@@ -34,14 +33,12 @@ class TokenAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
 
-        // Extraire le token (format: "Bearer <token>" ou juste "<token>")
         $token = str_replace('Bearer ', '', $authorizationHeader);
 
         if (empty($token)) {
             throw new CustomUserMessageAuthenticationException('Invalid token');
         }
 
-        // Décoder le token (base64: email:timestamp)
         try {
             $decoded = base64_decode($token);
             $parts = explode(':', $decoded);
@@ -64,7 +61,6 @@ class TokenAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // Si l'authentification réussit, on laisse la requête continuer
         return null;
     }
 

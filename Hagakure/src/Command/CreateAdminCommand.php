@@ -38,7 +38,6 @@ class CreateAdminCommand extends Command
         $email = $input->getArgument('email');
         $password = $input->getArgument('password');
 
-        // Vérifier si l'utilisateur existe déjà
         $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
         
         if ($existingUser) {
@@ -46,7 +45,6 @@ class CreateAdminCommand extends Command
             return Command::FAILURE;
         }
 
-        // Créer l'administrateur
         $user = new User();
         $user->setEmail($email);
         $user->setRoles(['ROLE_ADMIN']);

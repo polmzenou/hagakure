@@ -199,3 +199,45 @@
     font-size: 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .historical-eras-section {
+    padding: 2rem 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .eras-title {
+    font-size: 1.75rem;
+  }
+
+  .eras-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .eras-grid {
+    gap: 1rem;
+  }
+
+  .era-card {
+    padding: 1.25rem;
+  }
+
+  .era-name {
+    font-size: 1.25rem;
+  }
+
+  .era-dates {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .era-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .era-event-text {
+    font-size: 0.9rem;
+  }
+}

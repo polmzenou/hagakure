@@ -47,18 +47,15 @@ function Timeline() {
     setIsAuthenticated(authApi.isAuthenticated())
   }, [])
 
-  // Calculer les années min et max pour positionner les événements
   const years = events.map(e => e.year)
   const minYear = Math.min(...years, 1500)
   const maxYear = Math.max(...years, 1700)
   const yearRange = maxYear - minYear || 100
 
-  // Calculer la position horizontale d'un événement
   const getEventPosition = (year: number): number => {
     return ((year - minYear) / yearRange) * 100
   }
 
-  // Générer les marqueurs d'années
   const generateYearMarkers = () => {
     const markers = []
     const step = yearRange > 200 ? 50 : yearRange > 100 ? 20 : 10
@@ -75,14 +72,12 @@ function Timeline() {
     setSelectedEvent(event)
     setBattleData(null)
     
-    // Si l'événement est une bataille et a un battle_id, charger les données de la bataille
     if (event.type === 'battle' && event.battle_id) {
       setLoadingBattle(true)
       try {
         const battle = await battleApi.getOne(event.battle_id)
         setBattleData(battle)
         
-        // Vérifier si la bataille est en favoris (pas l'événement timeline)
         if (isAuthenticated) {
           try {
             const result = await favoriteApi.check({
@@ -104,7 +99,6 @@ function Timeline() {
         setLoadingBattle(false)
       }
     } else {
-      // Pour les autres types d'événements, vérifier si l'événement timeline est en favoris
       if (isAuthenticated) {
         try {
           const result = await favoriteApi.check({
@@ -126,7 +120,7 @@ function Timeline() {
     if (!selectedEvent || !isAuthenticated) return
 
     try {
-      // Si c'est une bataille, utiliser entity_type: 'battle' pour synchroniser avec BattleShow
+      // Utiliser entity_type: 'battle' pour synchroniser avec BattleShow
       if (selectedEvent.type === 'battle' && selectedEvent.battle_id) {
         const result = await favoriteApi.toggle({
           entity_type: 'battle',
@@ -135,7 +129,6 @@ function Timeline() {
         setIsFavorite(result.is_favorite)
         setFavoriteId(result.favorite_id || null)
       } else {
-        // Pour les autres types d'événements, utiliser entity_type: 'timeline'
         const result = await favoriteApi.toggle({
           entity_type: 'timeline',
           entity_id: selectedEvent.id
@@ -581,7 +574,7 @@ function Timeline() {
                         </div>
                       )}
                       <div className="battle-link-content">
-                        <h3 className="battle-link-title">⚡ {battleData.name}</h3>
+                        <h3 className="battle-link-title">{battleData.name}</h3>
                         <p className="battle-link-text">Voir les détails de cette bataille →</p>
                       </div>
                     </Link>

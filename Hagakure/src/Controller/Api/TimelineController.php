@@ -16,7 +16,6 @@ class TimelineController extends AbstractController
     #[Route('', name: 'api_timeline_list', methods: ['GET'])]
     public function list(TimelineRepository $timelineRepository): JsonResponse
     {
-        // Récupérer tous les événements triés par date
         $timelines = $timelineRepository->findBy([], ['date' => 'ASC']);
 
         $data = [];
@@ -32,7 +31,12 @@ class TimelineController extends AbstractController
             ];
         }
 
-        return $this->json($data);
+        $response = $this->json($data);
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     /**
@@ -59,7 +63,12 @@ class TimelineController extends AbstractController
             'updated_at' => $timeline->getUpdatedAt()?->format('Y-m-d H:i:s'),
         ];
 
-        return $this->json($data);
+        $response = $this->json($data);
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 }
 

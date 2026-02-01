@@ -116,10 +116,10 @@ function BattleShow() {
               ← Retour à la liste
             </Link>
             <Link to={`/battles/${id}/edit`} className="btn btn-primary">
-              ✏️ Modifier
+              Modifier
             </Link>
             <button onClick={handleDelete} className="btn btn-danger">
-              🗑️ Supprimer
+              Supprimer
             </button>
           </>
           )}
@@ -144,7 +144,7 @@ function BattleShow() {
               </div>
             )}
             <div className="show-info">
-              <h1 className="show-title">⚡ {battle.name}</h1>
+              <h1 className="show-title">{battle.name}</h1>
               
               <div className="show-details">
                 {battle.date && (
@@ -157,7 +157,7 @@ function BattleShow() {
                   <div className="detail-item">
                     <span className="detail-label">Lieu :</span>
                     <Link to={`/locations/${battle.location.id}`} className="detail-link">
-                      🗺️ {battle.location.name}
+                      {battle.location.name}
                     </Link>
                   </div>
                 )}

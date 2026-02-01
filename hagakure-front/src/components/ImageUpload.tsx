@@ -54,26 +54,21 @@ function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
       return
     }
 
-    // Stocker le nom du fichier
     setFileName(file.name)
 
-    // Compression de l'image
     const reader = new FileReader()
     reader.onload = (e) => {
       const img = new Image()
       img.onload = () => {
-        // Créer un canvas pour redimensionner l'image
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         
-        // Définir la taille maximale (ex: 800px de largeur)
         const MAX_WIDTH = 800
         const MAX_HEIGHT = 800
         
         let width = img.width
         let height = img.height
         
-        // Calculer les nouvelles dimensions en conservant le ratio
         if (width > height) {
           if (width > MAX_WIDTH) {
             height = height * (MAX_WIDTH / width)
@@ -89,13 +84,10 @@ function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
         canvas.width = width
         canvas.height = height
         
-        // Dessiner l'image redimensionnée
         ctx?.drawImage(img, 0, 0, width, height)
         
-        // Convertir en base64 avec compression (qualité 0.7 = 70%)
         const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7)
         
-        // Afficher la taille dans la console
         const sizeKB = (compressedBase64.length / 1024).toFixed(2)
         console.log(`Image "${file.name}" compressée: ${sizeKB} KB (originale: ${(file.size / 1024).toFixed(2)} KB)`)
         

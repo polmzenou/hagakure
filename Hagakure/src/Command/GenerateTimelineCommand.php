@@ -50,27 +50,21 @@ class GenerateTimelineCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // Afficher le titre de la commande
         $io->title('Timeline Generator');
         $io->text('Génération de la timeline pour toutes les batailles et naissances de samourais...');
         $io->newLine();
 
-        // Démarrer le chronomètre
         $startTime = microtime(true);
 
         try {
-            // Générer la timeline complète
             $io->text('Scanning battles and samourais...');
             $stats = $this->timelineGenerator->generateTimeline();
 
-            // Calculer le temps d'exécution
             $executionTime = round(microtime(true) - $startTime, 2);
 
-            // Afficher les statistiques
             $io->success('Timeline generated successfully!');
             $io->newLine();
 
-            // Créer un tableau de statistiques pour l'affichage
             $io->section('Statistics');
             $io->table(
                 ['Category', 'Count'],
@@ -83,7 +77,6 @@ class GenerateTimelineCommand extends Command
                 ]
             );
 
-            // Calcul des totaux
             $totalCreated = $stats['battles_created'] + $stats['births_created'];
             $totalUpdated = $stats['battles_updated'] + $stats['births_updated'];
             $totalProcessed = $totalCreated + $totalUpdated;
@@ -99,7 +92,6 @@ class GenerateTimelineCommand extends Command
             $io->newLine();
             $io->text(sprintf('<comment>Execution time:</comment> %s seconds', $executionTime));
 
-            // Afficher un message d'information sur la synchronisation automatique
             $io->newLine();
             $io->note([
                 'Les futures batailles et samourais seront automatiquement synchronisés',
@@ -110,7 +102,6 @@ class GenerateTimelineCommand extends Command
             return Command::SUCCESS;
 
         } catch (\Exception $e) {
-            // En cas d'erreur, afficher le message et retourner un code d'erreur
             $io->error('An error occurred during timeline generation');
             $io->text([
                 '<fg=red>Error:</> ' . $e->getMessage(),

@@ -59,14 +59,12 @@ function SamouraiList() {
   useEffect(() => {
     let filtered = [...samourais]
 
-    // Filtre par recherche
     if (searchTerm) {
       filtered = filtered.filter(s =>
         s.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
-    // Filtre par clans (multi-sélection)
     if (selectedClans.length > 0) {
       filtered = filtered.filter(s => s.clan && selectedClans.includes(s.clan.id))
     }
@@ -75,7 +73,6 @@ function SamouraiList() {
     setCurrentPage(1)
   }, [searchTerm, selectedClans, samourais])
 
-  // Pagination
   const totalPages = Math.ceil(filteredSamourais.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
@@ -94,7 +91,6 @@ function SamouraiList() {
     )
   }
 
-  // Fermer le dropdown si on clique à l'extérieur
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -112,7 +108,6 @@ function SamouraiList() {
     <div className="app">
       <Header />
       <div className="list-container">
-        {/* Header Section */}
         <div className="page-header">
           <div>
             <h1 className="page-title">Les Samourais</h1>
@@ -120,15 +115,14 @@ function SamouraiList() {
               Découvrez les guerriers légendaires qui ont façonné l'histoire du Japon féodal
               à travers leur courage, leur maîtrise martiale et leur code d'honneur.
             </p>
+            {isAdmin() && (
+              <Link to="/samourais/new" className="btn-add">
+                ➕ Ajouter un Samouraï
+              </Link>
+            )}
           </div>
-          {isAdmin() && (
-            <Link to="/samourais/new" className="btn-add">
-              ➕ Ajouter un Samouraï
-            </Link>
-          )}
         </div>
 
-        {/* Search Bar */}
         <div className="search-container">
           <input
             type="text"
@@ -143,7 +137,6 @@ function SamouraiList() {
           </svg>
         </div>
 
-        {/* Custom Multi-Select Dropdown */}
         <div className="custom-multiselect-container" ref={dropdownRef}>
           <label className="filter-label">Filtrer par clan :</label>
           
@@ -191,12 +184,10 @@ function SamouraiList() {
           </div>
         </div>
 
-        {/* Results count */}
         <div className="results-info">
           {filteredSamourais.length} samouraï{filteredSamourais.length > 1 ? 's' : ''} trouvé{filteredSamourais.length > 1 ? 's' : ''}
         </div>
 
-        {/* Samourais Grid */}
         {currentSamourais.length === 0 ? (
           <div className="empty-state">
             <p>Aucun samouraï trouvé.</p>
@@ -229,7 +220,6 @@ function SamouraiList() {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="pagination">
             <button

@@ -121,10 +121,10 @@ function ClanShow() {
             {isAdmin() && (
               <>
                 <Link to={`/clans/${id}/edit`} className="btn btn-primary">
-                  ✏️ Modifier
+                  Modifier
                 </Link>
                 <button onClick={handleDelete} className="btn btn-danger">
-                  🗑️ Supprimer
+                  Supprimer
                 </button>
               </>
             )}
@@ -139,7 +139,7 @@ function ClanShow() {
               </div>
             )}
             <div className="show-info">
-              <h1 className="show-title">🏯 {clan.name}</h1>
+              <h1 className="show-title">{clan.name}</h1>
               
               <div className="show-details">
                 {clan.founded_date && (

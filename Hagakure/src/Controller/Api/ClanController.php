@@ -24,26 +24,36 @@ class ClanController extends AbstractController
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $clans = $this->repository->findAll();
+        $clans = $this->repository->findAllWithRelations();
         $data = [];
 
         foreach ($clans as $clan) {
             $data[] = $this->serializeClan($clan);
         }
 
-        return $this->json($data);
+        $response = $this->json($data);
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
-        $clan = $this->repository->find($id);
+        $clan = $this->repository->findOneWithRelations($id);
 
         if (!$clan) {
             return $this->json(['error' => 'Clan not found'], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializeClan($clan));
+        $response = $this->json($this->serializeClan($clan));
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('', name: 'create', methods: ['POST'])]

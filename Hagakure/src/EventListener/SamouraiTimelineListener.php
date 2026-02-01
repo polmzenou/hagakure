@@ -42,12 +42,8 @@ class SamouraiTimelineListener
                 'has_birth_date' => $samourai->getBirthDate() !== null
             ]);
 
-            // Ne créer une entrée timeline que si le samouraï a une date de naissance
             if ($samourai->getBirthDate() !== null) {
-                // Synchroniser la timeline pour ce samouraï
                 $this->timelineGenerator->syncSamuraiBirthTimeline($samourai);
-
-                // Flush pour persister les changements de timeline
                 $event->getObjectManager()->flush();
             } else {
                 $this->logger->info('Skipping timeline creation: samurai has no birth_date', [
@@ -79,17 +75,10 @@ class SamouraiTimelineListener
                 'has_birth_date' => $samourai->getBirthDate() !== null
             ]);
 
-            // Si le samouraï a une date de naissance, synchroniser la timeline
             if ($samourai->getBirthDate() !== null) {
-                // Synchroniser la timeline pour ce samouraï
-                // (créera ou mettra à jour l'entrée existante)
                 $this->timelineGenerator->syncSamuraiBirthTimeline($samourai);
-
-                // Flush pour persister les changements de timeline
                 $event->getObjectManager()->flush();
             } else {
-                // Si le samouraï n'a plus de date de naissance,
-                // supprimer l'entrée timeline si elle existait
                 $this->logger->info('Birth date removed, deleting timeline entry if exists', [
                     'samurai_id' => $samourai->getId()
                 ]);

@@ -820,5 +820,99 @@
     width: 100%;
     height: 200px;
   }
+
+  .timeline-header {
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-title-jp {
+    font-size: 1.2rem;
+  }
+
+  .timeline-subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-page {
+    padding: 1rem 0;
+  }
+
+  .timeline-header {
+    padding: 0 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .timeline-title {
+    font-size: 1.75rem;
+  }
+
+  .timeline-title-jp {
+    font-size: 1.1rem;
+  }
+
+  .timeline-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .timeline-wrapper {
+    padding: 0 0.75rem;
+  }
+
+  .timeline-controls {
+    gap: 0.75rem;
+  }
+
+  .timeline-format {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .format-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .zoom-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .event-card {
+    min-width: 120px;
+    max-width: 140px;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .event-title {
+    font-size: 0.8rem;
+  }
+
+  .event-details {
+    padding: 1rem;
+  }
+
+  .details-title {
+    font-size: 1.25rem;
+  }
+
+  .battle-link-card {
+    padding: 1rem;
+  }
+
+  .battle-link-image {
+    height: 150px;
+  }
+
+  .battle-link-title {
+    font-size: 1.25rem;
+  }
+
+  .battle-link-text {
+    font-size: 0.9rem;
+  }
 }
 

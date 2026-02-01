@@ -29,7 +29,12 @@ class LocationController extends AbstractController
             $data[] = $this->serializeLocation($location);
         }
 
-        return $this->json($data);
+        $response = $this->json($data);
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
@@ -41,7 +46,12 @@ class LocationController extends AbstractController
             return $this->json(['error' => 'Location not found'], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializeLocation($location));
+        $response = $this->json($this->serializeLocation($location));
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('', name: 'create', methods: ['POST'])]

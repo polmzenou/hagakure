@@ -27,18 +27,15 @@ function MonCompte() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Vérifier si l'utilisateur est connecté
         if (!authApi.isAuthenticated()) {
           navigate('/login')
           return
         }
 
-        // Charger le profil
         const profileData = await profileApi.get()
         setProfile(profileData)
         setEmailForm({ email: profileData.email })
 
-        // Charger les favoris
         const favoritesData = await favoriteApi.getAll()
         setFavorites(favoritesData)
       } catch (err: any) {

@@ -266,4 +266,101 @@
   .detail-label {
     min-width: auto;
   }
+
+  .show-title {
+    font-size: 1.75rem;
+  }
+
+  .show-details {
+    padding: 1rem;
+  }
+
+  .show-description,
+  .show-relations {
+    padding: 1rem;
+  }
+
+  .show-description h2,
+  .show-relations h2 {
+    font-size: 1.25rem;
+  }
+
+  .relation-list {
+    gap: 0.5rem;
+  }
+
+  .relation-item {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .show-container {
+    padding: 0.75rem;
+  }
+
+  .show-main {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .show-title {
+    font-size: 1.5rem;
+  }
+
+  .show-image {
+    max-height: 250px;
+  }
+
+  .show-details {
+    padding: 0.75rem;
+  }
+
+  .detail-item {
+    gap: 0.25rem;
+  }
+
+  .detail-label {
+    font-size: 0.9rem;
+  }
+
+  .detail-value {
+    font-size: 0.9rem;
+  }
+
+  .show-description,
+  .show-relations {
+    padding: 0.75rem;
+  }
+
+  .show-description h2,
+  .show-relations h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .show-description p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .relation-item {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .show-actions {
+    gap: 0.5rem;
+  }
+
+  .show-actions .btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .btn-favorites {
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+  }
 }

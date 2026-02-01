@@ -12,6 +12,7 @@ interface User {
 
 function Header() {
   const [user, setUser] = useState<User | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -24,7 +25,16 @@ function Header() {
   const handleLogout = () => {
     authApi.logout()
     setUser(null)
+    setIsMobileMenuOpen(false)
     navigate('/')
+  }
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
   }
 
   const isLoggedIn = !!user
@@ -32,35 +42,32 @@ function Header() {
   return (
     <header className="main-header">
       <div className="header-container">
-        {/* Section Gauche : Logo + Timeline + Map */}
         <div className="header-left">
-          <Link to="/" className="logo-link">
+          <Link to="/" className="logo-link" onClick={closeMobileMenu}>
             <img src="/images/logo/Logo noir-rouge.png" alt="Hagakure" className="header-logo" />
           </Link>
           <nav className="left-nav">
-            <Link to="/timeline" className="nav-link nav-timeline">Timeline</Link>
-            <Link to="/map" className="nav-link nav-map">Map</Link>
+            <Link to="/timeline" className="nav-link nav-timeline" onClick={closeMobileMenu}>Timeline</Link>
+            <Link to="/map" className="nav-link nav-map" onClick={closeMobileMenu}>Map</Link>
           </nav>
         </div>
 
-        {/* Section Milieu : Navigation CRUD */}
         <nav className="main-nav">
-          <Link to="/samourais" className="nav-link">Samourais</Link>
-          <Link to="/clans" className="nav-link">Clans</Link>
+          <Link to="/samourais" className="nav-link" onClick={closeMobileMenu}>Samourais</Link>
+          <Link to="/clans" className="nav-link" onClick={closeMobileMenu}>Clans</Link>
           {isAdmin() && (
-            <Link to="/battles" className="nav-link">Batailles</Link>
+            <Link to="/battles" className="nav-link" onClick={closeMobileMenu}>Batailles</Link>
           )}
-          <Link to="/weapons" className="nav-link">Armes</Link>
-          <Link to="/styles" className="nav-link">Style de combat</Link>
+          <Link to="/weapons" className="nav-link" onClick={closeMobileMenu}>Armes</Link>
+          <Link to="/styles" className="nav-link" onClick={closeMobileMenu}>Style de combat</Link>
         </nav>
 
-        {/* Section Droite : Connexion/Déconnexion + Profil */}
         <div className="header-right">
           {isLoggedIn ? (
             <>
               <span className="user-name">{user?.username}</span>
               <button onClick={handleLogout} className="auth-link logout-btn">Se déconnecter</button>
-              <Link to="/account" className="profile-link">
+              <Link to="/account" className="profile-link" onClick={closeMobileMenu}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
                   <path d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -68,7 +75,50 @@ function Header() {
               </Link>
             </>
           ) : (
-            <Link to="/login" className="auth-link">Se connecter</Link>
+            <Link to="/login" className="auth-link" onClick={closeMobileMenu}>Se connecter</Link>
+          )}
+        </div>
+
+        <button 
+          className="mobile-menu-toggle"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle menu"
+        >
+          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`}></span>
+          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`}></span>
+          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`}></span>
+        </button>
+      </div>
+
+      <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+        <nav className="mobile-nav">
+          <Link to="/timeline" className="mobile-nav-link nav-timeline" onClick={closeMobileMenu}>Timeline</Link>
+          <Link to="/map" className="mobile-nav-link nav-map" onClick={closeMobileMenu}>Map</Link>
+          <Link to="/samourais" className="mobile-nav-link" onClick={closeMobileMenu}>Samourais</Link>
+          <Link to="/clans" className="mobile-nav-link" onClick={closeMobileMenu}>Clans</Link>
+          {isAdmin() && (
+            <Link to="/battles" className="mobile-nav-link" onClick={closeMobileMenu}>Batailles</Link>
+          )}
+          <Link to="/weapons" className="mobile-nav-link" onClick={closeMobileMenu}>Armes</Link>
+          <Link to="/styles" className="mobile-nav-link" onClick={closeMobileMenu}>Style de combat</Link>
+        </nav>
+        <div className="mobile-auth">
+          {isLoggedIn ? (
+            <>
+              <div className="mobile-user-info">
+                <span className="mobile-user-name">{user?.username}</span>
+                <Link to="/account" className="mobile-profile-link" onClick={closeMobileMenu}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  Mon compte
+                </Link>
+              </div>
+              <button onClick={handleLogout} className="mobile-logout-btn">Se déconnecter</button>
+            </>
+          ) : (
+            <Link to="/login" className="mobile-login-link" onClick={closeMobileMenu}>Se connecter</Link>
           )}
         </div>
       </div>

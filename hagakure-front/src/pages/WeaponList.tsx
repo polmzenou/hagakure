@@ -86,12 +86,12 @@ function WeaponList() {
               Explorez l'arsenal des samouraïs, du légendaire katana aux armes
               traditionnelles qui ont marqué l'histoire du Japon féodal.
             </p>
+            {isAdmin() && (
+              <Link to="/weapons/new" className="btn-add">
+                ➕ Ajouter une Arme
+              </Link>
+            )}
           </div>
-          {isAdmin() && (
-            <Link to="/weapons/new" className="btn-add">
-              ➕ Ajouter une Arme
-            </Link>
-          )}
         </div>
 
         {/* Search Bar */}

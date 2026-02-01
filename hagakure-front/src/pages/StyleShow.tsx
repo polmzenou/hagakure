@@ -114,10 +114,10 @@ function StyleShow() {
             {isAdmin() && (
               <>
                 <Link to={`/styles/${id}/edit`} className="btn btn-primary">
-                  ✏️ Modifier
+                  Modifier
                 </Link>
                 <button onClick={handleDelete} className="btn btn-danger">
-                  🗑️ Supprimer
+                  Supprimer
                 </button>
               </>
             )}

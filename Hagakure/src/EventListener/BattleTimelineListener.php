@@ -41,10 +41,7 @@ class BattleTimelineListener
                 'battle_name' => $battle->getName()
             ]);
 
-            // Synchroniser la timeline pour cette bataille
             $this->timelineGenerator->syncBattleTimeline($battle);
-
-            // Flush pour persister les changements de timeline
             $event->getObjectManager()->flush();
 
         } catch (\Exception $e) {
@@ -70,11 +67,7 @@ class BattleTimelineListener
                 'battle_name' => $battle->getName()
             ]);
 
-            // Synchroniser la timeline pour cette bataille
-            // (mettra à jour l'entrée existante)
             $this->timelineGenerator->syncBattleTimeline($battle);
-
-            // Flush pour persister les changements de timeline
             $event->getObjectManager()->flush();
 
         } catch (\Exception $e) {

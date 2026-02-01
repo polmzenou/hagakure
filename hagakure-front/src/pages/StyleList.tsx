@@ -76,12 +76,12 @@ function StyleList() {
               Découvrez les différentes techniques et philosophies martiales
               qui ont façonné l'art du combat des samouraïs.
             </p>
+            {isAdmin() && (
+              <Link to="/styles/new" className="btn-add">
+                ➕ Ajouter un Style
+              </Link>
+            )}
           </div>
-          {isAdmin() && (
-            <Link to="/styles/new" className="btn-add">
-              ➕ Ajouter un Style
-            </Link>
-          )}
         </div>
 
         {/* Search Bar */}

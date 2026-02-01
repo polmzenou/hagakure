@@ -21,6 +21,9 @@ function Forbidden() {
             <Link to="/" className="btn-primary">
               Retour à l'accueil
             </Link>
+            <Link to="/login" className="btn-secondary">
+              Se connecter
+            </Link>
           </div>
         </div>
       </div>

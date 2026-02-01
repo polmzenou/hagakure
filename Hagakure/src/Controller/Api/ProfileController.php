@@ -48,7 +48,6 @@ class ProfileController extends AbstractController
             return $this->json(['message' => 'Email requis'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Vérifier si l'email existe déjà pour un autre utilisateur
         $existingUser = $this->userRepository->findOneBy(['email' => $data['email']]);
         if ($existingUser && $existingUser->getId() !== $user->getId()) {
             return $this->json(['message' => 'Cet email est déjà utilisé'], Response::HTTP_CONFLICT);
@@ -77,17 +76,14 @@ class ProfileController extends AbstractController
             return $this->json(['message' => 'Mot de passe actuel et nouveau mot de passe requis'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Vérifier le mot de passe actuel
         if (!$this->passwordHasher->isPasswordValid($user, $data['currentPassword'])) {
             return $this->json(['message' => 'Mot de passe actuel incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Valider le nouveau mot de passe
         if (strlen($data['newPassword']) < 6) {
             return $this->json(['message' => 'Le nouveau mot de passe doit contenir au moins 6 caractères'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Hasher et sauvegarder le nouveau mot de passe
         $hashedPassword = $this->passwordHasher->hashPassword($user, $data['newPassword']);
         $user->setPassword($hashedPassword);
         $this->entityManager->flush();

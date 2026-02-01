@@ -116,3 +116,30 @@
   }
 }
 
+@media (max-width: 480px) {
+  .forbidden-container {
+    padding: 1rem;
+  }
+
+  .forbidden-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .forbidden-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .forbidden-title {
+    font-size: 1.75rem;
+  }
+
+  .forbidden-message {
+    font-size: 1.1rem;
+  }
+
+  .forbidden-submessage {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+}

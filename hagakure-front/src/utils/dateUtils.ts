@@ -39,7 +39,6 @@ export function formatDate(dateString: string | null | undefined, fallback: stri
       day: 'numeric'
     })
   } catch (error) {
-    // En cas d'erreur, retourner la date originale
     console.error('Error formatting date:', error)
     return dateString
   }
@@ -60,7 +59,6 @@ export function formatDateShort(dateString: string | null | undefined, fallback:
   }
 
   try {
-    // Parser la date au format ISO (AAAA-MM-JJ)
     const dateParts = dateString.split('-')
     
     if (dateParts.length !== 3) {
@@ -71,12 +69,10 @@ export function formatDateShort(dateString: string | null | undefined, fallback:
     const month = parseInt(dateParts[1], 10)
     const day = parseInt(dateParts[2], 10)
 
-    // Vérifier si c'est le 1er janvier (01-01)
     if (month === 1 && day === 1) {
       return year.toString()
     }
 
-    // Sinon, formater la date au format JJ/MM/AAAA
     const date = new Date(year, month - 1, day)
     return date.toLocaleDateString('fr-FR', {
       year: 'numeric',

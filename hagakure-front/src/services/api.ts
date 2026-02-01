@@ -34,14 +34,13 @@ export interface TimelineEvent {
   battle_id?: number
 }
 
-// Helper function to handle API requests
+// Fonction utilitaire pour gérer les requêtes API
 async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`
   
-  // Récupérer le token depuis localStorage
   const token = localStorage.getItem('token')
   
   const config: RequestInit = {
@@ -57,7 +56,6 @@ async function apiRequest<T>(
     const response = await fetch(url, config)
 
     if (!response.ok) {
-      // Essayer de lire le corps de la réponse pour avoir plus de détails
       let errorMessage = `HTTP error! status: ${response.status}`
       let errorDetails = null
       
@@ -71,7 +69,6 @@ async function apiRequest<T>(
         }
         errorDetails = errorData
       } catch {
-        // Si on ne peut pas parser le JSON, utiliser le texte brut
         try {
           const errorText = await response.text()
           if (errorText) {
@@ -91,11 +88,11 @@ async function apiRequest<T>(
       throw error
     }
 
-    // Handle empty responses
+    // Gérer les réponses vides
     const contentType = response.headers.get('content-type')
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json()
-      // API Platform returns data in 'hydra:member' for collections
+      // API Platform retourne les données dans 'hydra:member' pour les collections
       if (data['hydra:member']) {
         return data['hydra:member'] as T
       }
@@ -111,7 +108,7 @@ async function apiRequest<T>(
   }
 }
 
-// Samourai API
+// API Samourai
 export const samouraiApi = {
   getAll: () => apiRequest<any[]>('/samourais'),
   getOne: (id: string | number) => apiRequest<any>(`/samourais/${id}`),
@@ -128,7 +125,7 @@ export const samouraiApi = {
     apiRequest<void>(`/samourais/${id}`, { method: 'DELETE' }),
 }
 
-// Clan API
+// API Clan
 export const clanApi = {
   getAll: () => apiRequest<any[]>('/clans'),
   getOne: (id: string | number) => apiRequest<any>(`/clans/${id}`),
@@ -145,7 +142,7 @@ export const clanApi = {
     apiRequest<void>(`/clans/${id}`, { method: 'DELETE' }),
 }
 
-// Battle API
+// API Bataille
 export const battleApi = {
   getAll: () => apiRequest<any[]>('/battles'),
   getOne: (id: string | number) => apiRequest<any>(`/battles/${id}`),
@@ -162,7 +159,7 @@ export const battleApi = {
     apiRequest<void>(`/battles/${id}`, { method: 'DELETE' }),
 }
 
-// Weapon API
+// API Arme
 export const weaponApi = {
   getAll: () => apiRequest<any[]>('/weapons'),
   getOne: (id: string | number) => apiRequest<any>(`/weapons/${id}`),
@@ -179,7 +176,7 @@ export const weaponApi = {
     apiRequest<void>(`/weapons/${id}`, { method: 'DELETE' }),
 }
 
-// Style API
+// API Style
 export const styleApi = {
   getAll: () => apiRequest<any[]>('/styles'),
   getOne: (id: string | number) => apiRequest<any>(`/styles/${id}`),
@@ -196,7 +193,7 @@ export const styleApi = {
     apiRequest<void>(`/styles/${id}`, { method: 'DELETE' }),
 }
 
-// Auth API
+// API Authentification
 export const authApi = {
   login: (data: LoginData) => apiRequest<AuthResponse>('/login', {
     method: 'POST',
@@ -218,7 +215,7 @@ export const authApi = {
   isAuthenticated: () => !!localStorage.getItem('token')
 }
 
-// Location API
+// API Localisation
 export const locationApi = {
   getAll: () => apiRequest<any[]>('/locations'),
   getOne: (id: string | number) => apiRequest<any>(`/locations/${id}`),

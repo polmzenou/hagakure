@@ -33,26 +33,36 @@ class SamouraiController extends AbstractController
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $samourais = $this->repository->findAll();
+        $samourais = $this->repository->findAllWithRelations();
         $data = [];
 
         foreach ($samourais as $samourai) {
             $data[] = $this->serializeSamourai($samourai);
         }
 
-        return $this->json($data);
+        $response = $this->json($data);
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
-        $samourai = $this->repository->find($id);
+        $samourai = $this->repository->findOneWithRelations($id);
 
         if (!$samourai) {
             return $this->json(['error' => 'Samourai not found'], Response::HTTP_NOT_FOUND);
         }
 
-        return $this->json($this->serializeSamourai($samourai));
+        $response = $this->json($this->serializeSamourai($samourai));
+        $response->setMaxAge(3600);
+        $response->setSharedMaxAge(3600);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 
     #[Route('', name: 'create', methods: ['POST'])]
@@ -97,7 +107,6 @@ class SamouraiController extends AbstractController
                 $samourai->setImage($data['image']);
             }
 
-            // Gestion du clan
             if (isset($data['clan_id']) && $data['clan_id']) {
                 $clan = $this->clanRepository->find($data['clan_id']);
                 if ($clan) {
@@ -115,7 +124,6 @@ class SamouraiController extends AbstractController
                 }
             }
 
-            // Gestion des styles
             if (isset($data['style_ids']) && is_array($data['style_ids'])) {
                 foreach ($data['style_ids'] as $styleId) {
                     $style = $this->styleRepository->find($styleId);
@@ -172,7 +180,6 @@ class SamouraiController extends AbstractController
                 $samourai->setImage($data['image'] ?: null);
             }
 
-            // Gestion du clan
             if (isset($data['clan_id'])) {
                 if ($data['clan_id']) {
                     $clan = $this->clanRepository->find($data['clan_id']);
@@ -184,13 +191,10 @@ class SamouraiController extends AbstractController
                 }
             }
 
-            // Gestion des armes
             if (isset($data['weapon_ids']) && is_array($data['weapon_ids'])) {
-                // Vider les armes existantes
                 foreach ($samourai->getWeapon() as $weapon) {
                     $samourai->removeWeapon($weapon);
                 }
-                // Ajouter les nouvelles
                 foreach ($data['weapon_ids'] as $weaponId) {
                     $weapon = $this->weaponRepository->find($weaponId);
                     if ($weapon) {
@@ -199,13 +203,10 @@ class SamouraiController extends AbstractController
                 }
             }
 
-            // Gestion des styles
             if (isset($data['style_ids']) && is_array($data['style_ids'])) {
-                // Vider les styles existants
                 foreach ($samourai->getStyleId() as $style) {
                     $samourai->removeStyleId($style);
                 }
-                // Ajouter les nouveaux
                 foreach ($data['style_ids'] as $styleId) {
                     $style = $this->styleRepository->find($styleId);
                     if ($style) {

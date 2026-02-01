@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}404 - Page Non Trouvée{% endblock %}
+
+{% block body %}
+<div class="app">
+    <div class="not-found-container">
+        <div class="not-found-content">
+            <div class="not-found-icon">🔍</div>
+            <h1 class="not-found-title">404</h1>
+            <h2 class="not-found-subtitle">Page Non Trouvée</h2>
+            <p class="not-found-message">
+                La page que vous recherchez n'existe pas ou a été déplacée.
+            </p>
+            <p class="not-found-submessage">
+                Il se peut que l'URL soit incorrecte ou que la page ait été supprimée.
+            </p>
+            <div class="not-found-actions">
+                <a href="{{ path('app_react_home') }}" class="btn-primary">
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.not-found-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.not-found-content {
+    background: white;
+    border-radius: 16px;
+    padding: 4rem 3rem;
+    text-align: center;
+    max-width: 700px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.not-found-icon {
+    font-size: 6rem;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.not-found-title {
+    font-size: 8rem;
+    color: #D0391B;
+    font-family: 'YujiSyuku', serif;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.not-found-subtitle {
+    font-size: 2rem;
+    color: #2C2C2C;
+    font-family: 'YujiSyuku', serif;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.not-found-message {
+    font-size: 1.25rem;
+    color: #2C2C2C;
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.not-found-submessage {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+.not-found-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    padding: 0.875rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: 'YujiSyuku', serif;
+    transition: all 0.3s ease;
+    display: inline-block;
+    background: #D0391B;
+    color: white;
+    box-shadow: 0 2px 8px rgba(208, 57, 27, 0.2);
+}
+
+.btn-primary:hover {
+    background: #B02F16;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(208, 57, 27, 0.3);
+}
+</style>
+{% endblock %}

@@ -11,6 +11,8 @@ interface Battle {
   id: number
   name: string
   date?: string
+  description?: string
+  image?: string
   location?: {
     name: string
   }
@@ -62,12 +64,12 @@ function BattleList() {
             <p className="page-subtitle">
               Revivez les batailles légendaires qui ont façonné l'histoire du Japon féodal.
             </p>
+            {isAdmin() && (
+              <Link to="/battles/new" className="btn-add">
+                ➕ Ajouter une Bataille
+              </Link>
+            )}
           </div>
-          {isAdmin() && (
-            <Link to="/battles/new" className="btn-add">
-              ➕ Ajouter une Bataille
-            </Link>
-          )}
         </div>
 
         {battles.length === 0 ? (
@@ -78,34 +80,57 @@ function BattleList() {
             </Link>
           </div>
         ) : (
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nom</th>
-                  <th>Date</th>
-                  <th>Lieu</th>
-                  <th>Clan vainqueur</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {battles.map((battle) => (
-                  <tr key={battle.id}>
-                    <td>{battle.id}</td>
-                    <td className="font-bold">{battle.name}</td>
-                    <td>{formatDateShort(battle.date, '-')}</td>
-                    <td>{battle.location?.name || '-'}</td>
-                    <td>{battle.winner_clan?.name || '-'}</td>
-                    <td className="actions-cell">
-                      <Link
-                        to={`/battles/${battle.id}`}
-                        className="btn-icon btn-view"
-                        title="Voir"
-                      >
-                        👁️
-                      </Link>
+          <div className="battles-list">
+            {battles.map((battle) => (
+              <div key={battle.id} className="battle-card">
+                <div className="battle-card-image">
+                  {battle.image ? (
+                    <img src={battle.image} alt={battle.name} />
+                  ) : (
+                    <div className="battle-image-placeholder">
+                      <span className="placeholder-icon">⚔️</span>
+                    </div>
+                  )}
+                </div>
+                <div className="battle-card-content">
+                  <div className="battle-card-header">
+                    <h3 className="battle-name">{battle.name}</h3>
+                    <div className="battle-meta">
+                      {battle.date && (
+                        <span className="battle-date">
+                          📅 {formatDateShort(battle.date, '-')}
+                        </span>
+                      )}
+                      {battle.location && (
+                        <span className="battle-location">
+                          📍 {battle.location.name}
+                        </span>
+                      )}
+                      {battle.winner_clan && (
+                        <span className="battle-winner">
+                          🏆 {battle.winner_clan.name}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {battle.description && (
+                    <p className="battle-description">
+                      {battle.description.length > 150
+                        ? `${battle.description.substring(0, 150)}...`
+                        : battle.description}
+                    </p>
+                  )}
+                </div>
+                <div className="battle-card-actions">
+                  <Link
+                    to={`/battles/${battle.id}`}
+                    className="btn-icon btn-view"
+                    title="Voir"
+                  >
+                    👁️
+                  </Link>
+                  {isAdmin() && (
+                    <>
                       <Link
                         to={`/battles/${battle.id}/edit`}
                         className="btn-icon btn-edit"
@@ -120,11 +145,11 @@ function BattleList() {
                       >
                         🗑️
                       </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
