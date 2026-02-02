@@ -84,8 +84,7 @@ function StyleShow() {
       try {
         await styleApi.delete(id!)
         navigate('/styles')
-      } catch (error) {
-        console.error('Error deleting style:', error)
+      } catch {
         alert('Erreur lors de la suppression')
       }
     }

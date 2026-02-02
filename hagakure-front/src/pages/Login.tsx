@@ -122,8 +122,8 @@ function Login() {
           </div>
 
           {/* Form */}
-          <form className="login-form" onSubmit={handleSubmit}>
-            {error && <div className="error-message">{error}</div>}
+          <form className="login-form" onSubmit={handleSubmit} aria-label={isLogin ? 'Formulaire de connexion' : 'Formulaire d\'inscription'}>
+            {error && <div className="error-message" role="alert" aria-live="polite">{error}</div>}
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
@@ -134,6 +134,8 @@ function Login() {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                autoComplete="email"
                 placeholder="votre@email.com"
               />
             </div>
@@ -147,6 +149,8 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                autoComplete={isLogin ? 'current-password' : 'new-password'}
                 placeholder="••••••••"
               />
             </div>
@@ -161,6 +165,8 @@ function Login() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required={!isLogin}
+                  aria-required={!isLogin}
+                  autoComplete="new-password"
                   placeholder="••••••••"
                 />
               </div>
@@ -170,6 +176,7 @@ function Login() {
               type="submit"
               className="login-submit-btn"
               disabled={loading}
+              aria-busy={loading}
             >
               {loading ? 'Chargement...' : (isLogin ? 'Se connecter' : 'Créer un compte')}
             </button>

@@ -95,8 +95,7 @@ function BattleShow() {
       try {
         await battleApi.delete(id!)
         navigate('/battles')
-      } catch (error) {
-        console.error('Error deleting battle:', error)
+      } catch {
         alert('Erreur lors de la suppression')
       }
     }

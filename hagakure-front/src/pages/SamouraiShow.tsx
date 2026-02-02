@@ -100,8 +100,7 @@ function SamouraiShow() {
       try {
         await samouraiApi.delete(id!)
         navigate('/samourais')
-      } catch (error) {
-        console.error('Error deleting samourai:', error)
+      } catch {
         alert('Erreur lors de la suppression')
       }
     }
@@ -202,13 +201,9 @@ function SamouraiShow() {
                   <h2>Styles de combat</h2>
                   <div className="relation-list">
                     {samourai.style_id.map((style) => (
-                      <Link
-                        key={style.id}
-                        to={`/styles/${style.id}`}
-                        className="relation-item"
-                      >
+                      <span key={style.id} className="relation-item relation-item-text">
                         {style.name}
-                      </Link>
+                      </span>
                     ))}
                   </div>
                 </div>

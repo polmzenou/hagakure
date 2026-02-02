@@ -59,7 +59,12 @@ function Header() {
             <Link to="/battles" className="nav-link" onClick={closeMobileMenu}>Batailles</Link>
           )}
           <Link to="/weapons" className="nav-link" onClick={closeMobileMenu}>Armes</Link>
-          <Link to="/styles" className="nav-link" onClick={closeMobileMenu}>Style de combat</Link>
+          {isLoggedIn && isAdmin() && (
+            <Link to="/styles" className="nav-link" onClick={closeMobileMenu}>Styles de combat</Link>
+          )}
+          {isLoggedIn && isAdmin() && (
+            <Link to="/users" className="nav-link" onClick={closeMobileMenu}>Gestion des utilisateurs</Link>
+          )}
         </nav>
 
         <div className="header-right">
@@ -100,7 +105,12 @@ function Header() {
             <Link to="/battles" className="mobile-nav-link" onClick={closeMobileMenu}>Batailles</Link>
           )}
           <Link to="/weapons" className="mobile-nav-link" onClick={closeMobileMenu}>Armes</Link>
-          <Link to="/styles" className="mobile-nav-link" onClick={closeMobileMenu}>Style de combat</Link>
+          {isLoggedIn && isAdmin() && (
+            <Link to="/styles" className="mobile-nav-link" onClick={closeMobileMenu}>Styles de combat</Link>
+          )}
+          {isLoggedIn && isAdmin() && (
+            <Link to="/users" className="mobile-nav-link" onClick={closeMobileMenu}>Gestion des utilisateurs</Link>
+          )}
         </nav>
         <div className="mobile-auth">
           {isLoggedIn ? (

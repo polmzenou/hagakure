@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { styleApi } from '../services/api'
+import { useToast } from '../contexts/ToastContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageUpload from '../components/ImageUpload'
@@ -9,6 +10,7 @@ import './Form.css'
 function StyleForm() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -42,8 +44,10 @@ function StyleForm() {
     try {
       if (id) {
         await styleApi.update(id, formData)
+        showToast('Style modifié avec succès')
       } else {
         await styleApi.create(formData)
+        showToast('Style créé avec succès')
       }
       navigate('/styles')
     } catch (error) {
@@ -78,7 +82,7 @@ function StyleForm() {
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form" aria-label="Formulaire de style de combat">
           <div className="form-group">
             <label htmlFor="name">Nom *</label>
             <input
@@ -88,6 +92,7 @@ function StyleForm() {
               value={formData.name}
               onChange={handleChange}
               required
+              aria-required="true"
               className="form-control"
               placeholder="Ex: Kendo"
             />
@@ -101,6 +106,7 @@ function StyleForm() {
               value={formData.description}
               onChange={handleChange}
               required
+              aria-required="true"
               rows={5}
               className="form-control"
               placeholder="Description du style de combat..."
@@ -114,7 +120,7 @@ function StyleForm() {
           />
 
           <div className="form-actions">
-            <button type="submit" disabled={loading} className="btn btn-primary">
+            <button type="submit" disabled={loading} aria-busy={loading} className="btn btn-primary">
               {loading ? 'Enregistrement...' : 'Enregistrer'}
             </button>
             <Link to="/styles" className="btn btn-secondary">

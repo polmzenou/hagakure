@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { clanApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import { formatDateShort } from '../utils/dateUtils'
@@ -18,27 +18,32 @@ interface Clan {
 }
 
 function ClanList() {
+  const location = useLocation()
   const [clans, setClans] = useState<Clan[]>([])
   const [filteredClans, setFilteredClans] = useState<Clan[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
   const loadClans = async () => {
+    setError(null)
+    setLoading(true)
     try {
       const data = await clanApi.getAll()
       setClans(Array.isArray(data) ? data : [])
-      setLoading(false)
-    } catch (error) {
-      console.error('Error loading clans:', error)
+    } catch (err: unknown) {
+      console.error('Error loading clans:', err)
+      setError((err as { message?: string })?.message || 'Impossible de charger les clans.')
+    } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
     loadClans()
-  }, [])
+  }, [location.pathname])
 
   useEffect(() => {
     let filtered = [...clans]
@@ -67,6 +72,26 @@ function ClanList() {
   }
 
   if (loading) return <div className="loading">Chargement...</div>
+
+  if (error) {
+    return (
+      <div className="app">
+        <Header />
+        <div className="list-container">
+          <div className="page-header">
+            <div>
+              <h1 className="page-title">Les Clans</h1>
+            </div>
+          </div>
+          <div className="list-error">
+            <p>{error}</p>
+            <button type="button" className="btn-retry" onClick={loadClans}>Réessayer</button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="app">

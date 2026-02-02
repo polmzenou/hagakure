@@ -17,17 +17,20 @@ function StyleList() {
   const [styles, setStyles] = useState<Style[]>([])
   const [filteredStyles, setFilteredStyles] = useState<Style[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
   const loadData = async () => {
+    setError(null)
     try {
       const data = await styleApi.getAll()
       setStyles(Array.isArray(data) ? data : [])
-      setLoading(false)
-    } catch (error) {
-      console.error('Error loading styles:', error)
+    } catch (err: unknown) {
+      console.error('Error loading styles:', err)
+      setError((err as { message?: string })?.message || 'Impossible de charger les styles.')
+    } finally {
       setLoading(false)
     }
   }
@@ -63,6 +66,26 @@ function StyleList() {
   }
 
   if (loading) return <div className="loading">Chargement...</div>
+
+  if (error) {
+    return (
+      <div className="app">
+        <Header />
+        <div className="list-container">
+          <div className="page-header">
+            <div>
+              <h1 className="page-title">Les Styles de Combat</h1>
+            </div>
+          </div>
+          <div className="list-error">
+            <p>{error}</p>
+            <button type="button" className="btn-retry" onClick={loadData}>Réessayer</button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="app">

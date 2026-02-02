@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { weaponApi } from '../services/api'
+import { useToast } from '../contexts/ToastContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageUpload from '../components/ImageUpload'
@@ -9,6 +10,7 @@ import './Form.css'
 function WeaponForm() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -44,8 +46,10 @@ function WeaponForm() {
     try {
       if (id) {
         await weaponApi.update(id, formData)
+        showToast('Arme modifiée avec succès')
       } else {
         await weaponApi.create(formData)
+        showToast('Arme créée avec succès')
       }
       navigate('/weapons')
     } catch (error) {
@@ -80,7 +84,7 @@ function WeaponForm() {
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form" aria-label="Formulaire d'arme">
           <div className="form-group">
             <label htmlFor="name">Nom *</label>
             <input
@@ -90,6 +94,7 @@ function WeaponForm() {
               value={formData.name}
               onChange={handleChange}
               required
+              aria-required="true"
               className="form-control"
               placeholder="Ex: Katana"
             />
@@ -104,6 +109,7 @@ function WeaponForm() {
               value={formData.type}
               onChange={handleChange}
               required
+              aria-required="true"
               className="form-control"
               placeholder="Ex: Épée"
             />
@@ -117,6 +123,7 @@ function WeaponForm() {
               value={formData.description}
               onChange={handleChange}
               required
+              aria-required="true"
               rows={5}
               className="form-control"
               placeholder="Description de l'arme..."
@@ -130,7 +137,7 @@ function WeaponForm() {
           />
 
           <div className="form-actions">
-            <button type="submit" disabled={loading} className="btn btn-primary">
+            <button type="submit" disabled={loading} aria-busy={loading} className="btn btn-primary">
               {loading ? 'Enregistrement...' : 'Enregistrer'}
             </button>
             <Link to="/weapons" className="btn btn-secondary">

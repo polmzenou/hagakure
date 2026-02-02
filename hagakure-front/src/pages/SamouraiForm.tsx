@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { samouraiApi, clanApi, weaponApi, styleApi } from '../services/api'
+import { useToast } from '../contexts/ToastContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageUpload from '../components/ImageUpload'
@@ -24,6 +25,7 @@ interface Style {
 function SamouraiForm() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
   const [clans, setClans] = useState<Clan[]>([])
   const [weapons, setWeapons] = useState<Weapon[]>([])
@@ -105,8 +107,10 @@ function SamouraiForm() {
 
       if (id) {
         await samouraiApi.update(id, payload)
+        showToast('Samouraï modifié avec succès')
       } else {
         await samouraiApi.create(payload)
+        showToast('Samouraï créé avec succès')
       }
       navigate('/samourais')
     } catch (error) {
@@ -161,7 +165,7 @@ function SamouraiForm() {
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form" aria-label="Formulaire de samouraï">
           <div className="form-group">
             <label htmlFor="name">Nom *</label>
             <input
@@ -171,6 +175,7 @@ function SamouraiForm() {
               value={formData.name}
               onChange={handleChange}
               required
+              aria-required="true"
               className="form-control"
               placeholder="Ex: Miyamoto Musashi"
             />
@@ -228,6 +233,7 @@ function SamouraiForm() {
               value={formData.description}
               onChange={handleChange}
               required
+              aria-required="true"
               rows={5}
               className="form-control"
               placeholder="Description du samouraï..."
@@ -240,37 +246,39 @@ function SamouraiForm() {
             label="Image du Samouraï"
           />
 
-          <div className="form-group">
-            <label>Armes</label>
-            <div className="checkbox-grid">
+          <fieldset className="form-group">
+            <legend>Armes</legend>
+            <div className="checkbox-grid" role="group" aria-label="Sélection des armes">
               {weapons.map(weapon => (
                 <label key={weapon.id} className="checkbox-item">
                   <input
                     type="checkbox"
                     checked={formData.weapon_ids.includes(weapon.id)}
                     onChange={() => handleWeaponToggle(weapon.id)}
+                    aria-label={weapon.name}
                   />
                   <span>{weapon.name}</span>
                 </label>
               ))}
             </div>
-          </div>
+          </fieldset>
 
-          <div className="form-group">
-            <label>Styles de combat</label>
-            <div className="checkbox-grid">
+          <fieldset className="form-group">
+            <legend>Styles de combat</legend>
+            <div className="checkbox-grid" role="group" aria-label="Sélection des styles de combat">
               {styles.map(style => (
                 <label key={style.id} className="checkbox-item">
                   <input
                     type="checkbox"
                     checked={formData.style_ids.includes(style.id)}
                     onChange={() => handleStyleToggle(style.id)}
+                    aria-label={style.name}
                   />
                   <span>{style.name}</span>
                 </label>
               ))}
             </div>
-          </div>
+          </fieldset>
 
           <div className="form-group">
             <label htmlFor="source_url">URL source</label>
@@ -286,7 +294,7 @@ function SamouraiForm() {
           </div>
 
           <div className="form-actions">
-            <button type="submit" disabled={loading} className="btn btn-primary">
+            <button type="submit" disabled={loading} aria-busy={loading} className="btn btn-primary">
               {loading ? 'Enregistrement...' : 'Enregistrer'}
             </button>
             <Link to="/samourais" className="btn btn-secondary">

@@ -24,18 +24,21 @@ interface Battle {
 function BattleList() {
   const [battles, setBattles] = useState<Battle[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     loadBattles()
   }, [])
 
   const loadBattles = async () => {
+    setError(null)
     try {
       const data = await battleApi.getAll()
       setBattles(Array.isArray(data) ? data : [])
-      setLoading(false)
-    } catch (error) {
-      console.error('Error loading battles:', error)
+    } catch (err: unknown) {
+      console.error('Error loading battles:', err)
+      setError((err as { message?: string })?.message || 'Impossible de charger les batailles.')
+    } finally {
       setLoading(false)
     }
   }
@@ -45,14 +48,33 @@ function BattleList() {
       try {
         await battleApi.delete(id)
         loadBattles()
-      } catch (error) {
-        console.error('Error deleting battle:', error)
+      } catch {
         alert('Erreur lors de la suppression')
       }
     }
   }
 
   if (loading) return <div className="loading">Chargement...</div>
+
+  if (error) {
+    return (
+      <div className="app">
+        <Header />
+        <div className="list-container">
+          <div className="page-header">
+            <div>
+              <h1 className="page-title">Les Batailles</h1>
+            </div>
+          </div>
+          <div className="list-error">
+            <p>{error}</p>
+            <button type="button" className="btn-retry" onClick={loadBattles}>Réessayer</button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="app">

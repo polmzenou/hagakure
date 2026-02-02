@@ -75,11 +75,9 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Sections wrapper with shared watermark */}
       <div className="beige-sections-wrapper">
         <div className="japanese-watermark">完百科事典</div>
         
-        {/* Encyclopedia Section */}
         <section id="decouvrir" className="encyclopedia-section">
           <div className="container">
             <h2 className="section-title-jp">「完全な百科事典」</h2>

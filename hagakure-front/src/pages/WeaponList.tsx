@@ -18,18 +18,21 @@ function WeaponList() {
   const [weapons, setWeapons] = useState<Weapon[]>([])
   const [filteredWeapons, setFilteredWeapons] = useState<Weapon[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
   const loadData = async () => {
+    setError(null)
     try {
       const data = await weaponApi.getAll()
       setWeapons(Array.isArray(data) ? data : [])
-      setLoading(false)
-    } catch (error) {
-      console.error('Error loading weapons:', error)
+    } catch (err: unknown) {
+      console.error('Error loading weapons:', err)
+      setError((err as { message?: string })?.message || 'Impossible de charger les armes.')
+    } finally {
       setLoading(false)
     }
   }
@@ -73,6 +76,26 @@ function WeaponList() {
   }
 
   if (loading) return <div className="loading">Chargement...</div>
+
+  if (error) {
+    return (
+      <div className="app">
+        <Header />
+        <div className="list-container">
+          <div className="page-header">
+            <div>
+              <h1 className="page-title">Les Armes</h1>
+            </div>
+          </div>
+          <div className="list-error">
+            <p>{error}</p>
+            <button type="button" className="btn-retry" onClick={loadData}>Réessayer</button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="app">

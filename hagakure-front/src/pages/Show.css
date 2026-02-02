@@ -196,6 +196,18 @@
   box-shadow: var(--shadow);
 }
 
+/* Éléments de relation non cliquables (texte simple) */
+.relation-item-text {
+  cursor: default;
+}
+
+.relation-item-text:hover {
+  background: var(--white);
+  color: var(--primary-color);
+  transform: none;
+  box-shadow: none;
+}
+
 .show-source {
   padding: 1.5rem;
   background: var(--background);

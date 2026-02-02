@@ -24,6 +24,7 @@ import BattleList from './pages/BattleList'
 import BattleForm from './pages/BattleForm'
 import BattleShow from './pages/BattleShow'
 import MonCompte from './pages/MonCompte'
+import UserList from './pages/UserList'
 
 function App() {
   return (
@@ -35,7 +36,8 @@ function App() {
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/map" element={<Map />} />
         <Route path="/account" element={<AuthenticatedRoute><MonCompte /></AuthenticatedRoute>} />
-        
+        <Route path="/users" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
+
         {/* Samourai Routes */}
         <Route path="/samourais" element={<SamouraiList />} />
         <Route path="/samourais/new" element={<ProtectedRoute><SamouraiForm /></ProtectedRoute>} />
@@ -54,10 +56,10 @@ function App() {
         <Route path="/clans/:id" element={<ClanShow />} />
         <Route path="/clans/:id/edit" element={<ProtectedRoute><ClanForm /></ProtectedRoute>} />
         
-        {/* Style Routes */}
-        <Route path="/styles" element={<StyleList />} />
+        {/* Style Routes - ADMIN uniquement */}
+        <Route path="/styles" element={<ProtectedRoute><StyleList /></ProtectedRoute>} />
         <Route path="/styles/new" element={<ProtectedRoute><StyleForm /></ProtectedRoute>} />
-        <Route path="/styles/:id" element={<StyleShow />} />
+        <Route path="/styles/:id" element={<ProtectedRoute><StyleShow /></ProtectedRoute>} />
         <Route path="/styles/:id/edit" element={<ProtectedRoute><StyleForm /></ProtectedRoute>} />
         
         {/* Battle Routes */}

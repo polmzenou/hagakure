@@ -85,8 +85,7 @@ function WeaponShow() {
       try {
         await weaponApi.delete(id!)
         navigate('/weapons')
-      } catch (error) {
-        console.error('Error deleting weapon:', error)
+      } catch {
         alert('Erreur lors de la suppression')
       }
     }

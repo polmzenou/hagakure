@@ -96,6 +96,35 @@
   color: var(--text-light);
 }
 
+.list-error {
+  text-align: center;
+  padding: 2rem;
+  margin: 2rem 0;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  color: #b91c1c;
+}
+
+.list-error p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.list-error .btn-retry {
+  padding: 0.5rem 1.25rem;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.list-error .btn-retry:hover {
+  opacity: 0.9;
+}
+
 /* Page Header with Title and Subtitle */
 .page-header {
   display: flex;
@@ -899,4 +928,38 @@
     font-size: 0.9rem;
     min-width: 40px;
   }
+}
+
+/* Gestion des utilisateurs */
+.user-email-input,
+.user-role-select {
+  max-width: 100%;
+  min-width: 180px;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.actions-cell .btn-primary.btn-sm {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+.actions-cell .btn-primary.btn-sm:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.actions-cell .btn-danger.btn-sm {
+  background: #b91c1c;
+  color: var(--white);
+}
+
+.actions-cell .btn-danger.btn-sm:hover {
+  opacity: 0.9;
 }

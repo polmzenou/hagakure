@@ -15,6 +15,8 @@ class ReactController extends AbstractController
     #[Route('/weapons/{reactRoute}', name: 'app_react_weapons', requirements: ['reactRoute' => '.*'], defaults: ['reactRoute' => null])]
     #[Route('/styles/{reactRoute}', name: 'app_react_styles', requirements: ['reactRoute' => '.*'], defaults: ['reactRoute' => null])]
     #[Route('/locations/{reactRoute}', name: 'app_react_locations', requirements: ['reactRoute' => '.*'], defaults: ['reactRoute' => null])]
+    #[Route('/users', name: 'app_react_users')]
+    #[Route('/users/{reactRoute}', name: 'app_react_users_nested', requirements: ['reactRoute' => '.*'])]
     public function index(): Response
     {
         return $this->render('home/index.html.twig');

@@ -91,8 +91,7 @@ function ClanShow() {
       try {
         await clanApi.delete(id!)
         navigate('/clans')
-      } catch (error) {
-        console.error('Error deleting clan:', error)
+      } catch {
         alert('Erreur lors de la suppression')
       }
     }

@@ -112,13 +112,20 @@ function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleClick()
+    }
+  }
+
   return (
     <div className="image-upload-container">
-      <label className="image-upload-label">{label}</label>
+      <label className="image-upload-label" id="image-upload-label">{label}</label>
       
       {preview ? (
         <div className="image-preview-container">
-          <img src={preview} alt="Preview" className="image-preview" />
+          <img src={preview} alt={`Aperçu de ${label}`} className="image-preview" />
           {fileName && (
             <div className="image-filename">
               📁 {fileName}
@@ -129,6 +136,7 @@ function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
               type="button" 
               className="btn-change-image"
               onClick={handleClick}
+              aria-label="Changer l'image"
             >
               Changer l'image
             </button>
@@ -136,6 +144,7 @@ function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
               type="button" 
               className="btn-remove-image"
               onClick={handleRemove}
+              aria-label="Supprimer l'image"
             >
               Supprimer
             </button>
@@ -149,9 +158,14 @@ function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={handleClick}
+          onKeyDown={handleKeyDown}
+          role="button"
+          tabIndex={0}
+          aria-labelledby="image-upload-label"
+          aria-describedby="dropzone-instructions"
         >
-          <div className="dropzone-icon">📁</div>
-          <p className="dropzone-text">
+          <div className="dropzone-icon" aria-hidden="true">📁</div>
+          <p className="dropzone-text" id="dropzone-instructions">
             Glissez-déposez une image ici
           </p>
           <p className="dropzone-subtext">
@@ -165,6 +179,7 @@ function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
         type="file"
         accept="image/*"
         onChange={handleFileInput}
+        aria-label={label}
         style={{ display: 'none' }}
       />
     </div>

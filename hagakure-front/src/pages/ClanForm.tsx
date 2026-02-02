@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { clanApi } from '../services/api'
+import { useToast } from '../contexts/ToastContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageUpload from '../components/ImageUpload'
@@ -9,6 +10,7 @@ import './Form.css'
 function ClanForm() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -46,8 +48,10 @@ function ClanForm() {
     try {
       if (id) {
         await clanApi.update(id, formData)
+        showToast('Clan modifié avec succès')
       } else {
         await clanApi.create(formData)
+        showToast('Clan créé avec succès')
       }
       navigate('/clans')
     } catch (error) {
@@ -82,7 +86,7 @@ function ClanForm() {
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form" aria-label="Formulaire de clan">
           <div className="form-group">
             <label htmlFor="name">Nom *</label>
             <input
@@ -92,6 +96,7 @@ function ClanForm() {
               value={formData.name}
               onChange={handleChange}
               required
+              aria-required="true"
               className="form-control"
               placeholder="Ex: Clan Tokugawa"
             />
@@ -131,6 +136,7 @@ function ClanForm() {
               value={formData.description}
               onChange={handleChange}
               required
+              aria-required="true"
               rows={5}
               className="form-control"
               placeholder="Description du clan..."
@@ -144,7 +150,7 @@ function ClanForm() {
           />
 
           <div className="form-actions">
-            <button type="submit" disabled={loading} className="btn btn-primary">
+            <button type="submit" disabled={loading} aria-busy={loading} className="btn btn-primary">
               {loading ? 'Enregistrement...' : 'Enregistrer'}
             </button>
             <Link to="/clans" className="btn btn-secondary">

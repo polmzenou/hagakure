@@ -43,12 +43,18 @@ async function apiRequest<T>(
   
   const token = localStorage.getItem('token')
   
+  // Pour les requêtes GET, forcer la vérification avec le serveur (bypass cache si nécessaire)
+  const cacheOption = options.method === 'GET' || !options.method 
+    ? { cache: 'no-cache' as RequestCache }
+    : {}
+  
   const config: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
       ...options.headers,
     },
+    ...cacheOption,
     ...options,
   }
 
@@ -84,6 +90,13 @@ async function apiRequest<T>(
       const error: ApiError = {
         message: errorMessage,
         status: response.status,
+      }
+
+      // 401 sur une requête authentifiée = session expirée → déconnexion + redirection login
+      if (response.status === 401 && token) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        window.location.href = '/login'
       }
       throw error
     }
@@ -191,6 +204,25 @@ export const styleApi = {
     }),
   delete: (id: string | number) =>
     apiRequest<void>(`/styles/${id}`, { method: 'DELETE' }),
+}
+
+// API Utilisateurs (admin)
+export interface UserAdmin {
+  id: number
+  email: string
+  roles: string[]
+}
+
+export const userApi = {
+  getAll: () => apiRequest<UserAdmin[]>('/users'),
+  getOne: (id: string | number) => apiRequest<UserAdmin>(`/users/${id}`),
+  update: (id: string | number, data: { email?: string; roles?: string[]; password?: string }) =>
+    apiRequest<UserAdmin>(`/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  delete: (id: string | number) =>
+    apiRequest<void>(`/users/${id}`, { method: 'DELETE' }),
 }
 
 // API Authentification

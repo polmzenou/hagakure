@@ -30,6 +30,7 @@ function SamouraiList() {
   const [filteredSamourais, setFilteredSamourais] = useState<Samourai[]>([])
   const [clans, setClans] = useState<Clan[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedClans, setSelectedClans] = useState<number[]>([])
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -38,6 +39,7 @@ function SamouraiList() {
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const loadData = async () => {
+    setError(null)
     try {
       const [samouraisData, clansData] = await Promise.all([
         samouraiApi.getAll(),
@@ -45,9 +47,10 @@ function SamouraiList() {
       ])
       setSamourais(Array.isArray(samouraisData) ? samouraisData : [])
       setClans(Array.isArray(clansData) ? clansData : [])
-      setLoading(false)
-    } catch (error) {
-      console.error('Error loading data:', error)
+    } catch (err: unknown) {
+      console.error('Error loading data:', err)
+      setError((err as { message?: string })?.message || 'Impossible de charger les données.')
+    } finally {
       setLoading(false)
     }
   }
@@ -103,6 +106,26 @@ function SamouraiList() {
   }, [])
 
   if (loading) return <div className="loading">Chargement...</div>
+
+  if (error) {
+    return (
+      <div className="app">
+        <Header />
+        <div className="list-container">
+          <div className="page-header">
+            <div>
+              <h1 className="page-title">Les Samourais</h1>
+            </div>
+          </div>
+          <div className="list-error">
+            <p>{error}</p>
+            <button type="button" className="btn-retry" onClick={loadData}>Réessayer</button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="app">

@@ -43,8 +43,11 @@ security:
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         
         # Routes GET (liste et show) - accessibles publiquement (sans authentification)
-        - { path: ^/api/(samourais|clans|weapons|battles|styles|locations|timeline)$, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api/(samourais|clans|weapons|battles|styles|locations|timeline)/\d+$, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/(samourais|clans|weapons|battles|locations|timeline)$, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/(samourais|clans|weapons|battles|locations|timeline)/\d+$, roles: PUBLIC_ACCESS, methods: [GET] }
+        
+        # Styles de combat - ADMIN uniquement (toutes méthodes)
+        - { path: ^/api/styles, roles: ROLE_ADMIN }
         
         # Routes POST (création) - ADMIN uniquement
         - { path: ^/api/(samourais|clans|weapons|battles|styles|locations)$, roles: ROLE_ADMIN, methods: [POST] }
@@ -54,6 +57,9 @@ security:
         
         # Routes DELETE (suppression) - ADMIN uniquement
         - { path: ^/api/(samourais|clans|weapons|battles|styles|locations)/\d+$, roles: ROLE_ADMIN, methods: [DELETE] }
+
+        # Gestion des utilisateurs - ADMIN uniquement
+        - { path: ^/api/users, roles: ROLE_ADMIN }
 
 when@test:
     security:

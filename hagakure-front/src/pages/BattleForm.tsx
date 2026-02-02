@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { battleApi, clanApi, samouraiApi, locationApi } from '../services/api'
+import { useToast } from '../contexts/ToastContext'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ImageUpload from '../components/ImageUpload'
@@ -24,6 +25,7 @@ interface Location {
 function BattleForm() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
   const [clans, setClans] = useState<Clan[]>([])
   const [samourais, setSamourais] = useState<Samourai[]>([])
@@ -101,8 +103,10 @@ function BattleForm() {
 
       if (id) {
         await battleApi.update(id, payload)
+        showToast('Bataille modifiée avec succès')
       } else {
         await battleApi.create(payload)
+        showToast('Bataille créée avec succès')
       }
       navigate('/battles')
     } catch (error) {
@@ -148,7 +152,7 @@ function BattleForm() {
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form" aria-label="Formulaire de bataille">
           <div className="form-group">
             <label htmlFor="name">Nom *</label>
             <input
@@ -158,6 +162,7 @@ function BattleForm() {
               value={formData.name}
               onChange={handleChange}
               required
+              aria-required="true"
               className="form-control"
               placeholder="Ex: Bataille de Sekigahara"
             />
@@ -173,6 +178,7 @@ function BattleForm() {
                 value={formData.date}
                 onChange={handleChange}
                 required
+                aria-required="true"
                 className="form-control"
               />
             </div>
@@ -222,6 +228,7 @@ function BattleForm() {
               value={formData.description}
               onChange={handleChange}
               required
+              aria-required="true"
               rows={5}
               className="form-control"
               placeholder="Description de la bataille..."
@@ -234,21 +241,22 @@ function BattleForm() {
             label="Image de la Bataille"
           />
 
-          <div className="form-group">
-            <label>Samourais participants</label>
-            <div className="checkbox-grid">
+          <fieldset className="form-group">
+            <legend>Samourais participants</legend>
+            <div className="checkbox-grid" role="group" aria-label="Sélection des samourais participants">
               {samourais.map(samourai => (
                 <label key={samourai.id} className="checkbox-item">
                   <input
                     type="checkbox"
                     checked={formData.samourai_ids.includes(samourai.id)}
                     onChange={() => handleSamouraiToggle(samourai.id)}
+                    aria-label={samourai.name}
                   />
                   <span>{samourai.name}</span>
                 </label>
               ))}
             </div>
-          </div>
+          </fieldset>
 
           <div className="form-group">
             <label htmlFor="source_url">URL source</label>
@@ -264,7 +272,7 @@ function BattleForm() {
           </div>
 
           <div className="form-actions">
-            <button type="submit" disabled={loading} className="btn btn-primary">
+            <button type="submit" disabled={loading} aria-busy={loading} className="btn btn-primary">
               {loading ? 'Enregistrement...' : 'Enregistrer'}
             </button>
             <Link to="/battles" className="btn btn-secondary">
