@@ -40,6 +40,9 @@ Hagakure/public/bundles/
 # Fichiers de configuration sensibles
 Hagakure/config/secrets/
 
+# Clés JWT (Lexik) – ne jamais commiter
+Hagakure/config/jwt/*.pem
+
 # ============================================
 # React - Frontend (hagakure-front/)
 # ============================================

@@ -42,7 +42,7 @@ Toutes les commandes sont à exécuter depuis la racine du dépôt (ou depuis le
 ### Étape 2.1 – Cloner le dépôt
 
 ```bash
-git clone <url-du-repo>
+git clone https://github.com/polmzenou/hagakure.git
 cd FullStackProjectHagakure
 ```
 
@@ -92,6 +92,15 @@ cd ..
        ```
      - Remplacer `USER`, `MOT_DE_PASSE` et `NOM_DE_LA_BASE` par vos valeurs.
      - La base de données (ex. `hagakure`) peut ne pas exister encore : elle sera créée à l’étape suivante.
+
+   - **Clés JWT** (authentification par token)  
+     Le `.env.example` contient déjà `JWT_SECRET_KEY`, `JWT_PUBLIC_KEY` et `JWT_PASSPHRASE`. Après avoir créé/copié le `.env`, générer les clés avec :
+     ```bash
+     cd Hagakure
+     php bin/console lexik:jwt:generate-keypair
+     cd ..
+     ```
+     Cela crée `config/jwt/private.pem` et `config/jwt/public.pem` (fichiers ignorés par Git). En cas d’erreur OpenSSL, exécuter la commande depuis votre machine ou vérifier que l’extension OpenSSL est activée en PHP.
 
 Ne pas commiter le fichier `.env` (il est dans `.gitignore`).
 
@@ -255,6 +264,7 @@ Cocher mentalement ou sur papier pour une nouvelle machine :
 - [ ] Dépôt cloné, `cd FullStackProjectHagakure`
 - [ ] `cd Hagakure` puis `composer install`
 - [ ] `Hagakure/.env` créé (`cp .env.example .env`) et configuré (`APP_SECRET`, `DATABASE_URL`)
+- [ ] Clés JWT générées : `php bin/console lexik:jwt:generate-keypair` (dans `Hagakure/`)
 - [ ] Base créée : `php bin/console doctrine:database:create`
 - [ ] Migrations exécutées : `php bin/console doctrine:migrations:migrate`
 - [ ] (Recommandé) Admin créé : `php bin/console app:create-admin email@exemple.fr motdepasse`
@@ -326,6 +336,12 @@ FullStackProjectHagakure/
 - Tester l’API dans le navigateur : **http://localhost:8000/api** (ou une route comme `/api/samourais`).
 - Vérifier que `VITE_API_URL` (ou la valeur par défaut dans `api.ts`) pointe vers cette URL.
 - Redémarrer le serveur Vite après toute modification du `.env` frontend.
+
+### JWT : « JWT Token not found », « Invalid token » ou erreur à la génération des clés
+
+- **Clés non générées** : exécuter `php bin/console lexik:jwt:generate-keypair` dans `Hagakure/` après avoir ajouté les variables `JWT_SECRET_KEY`, `JWT_PUBLIC_KEY` et `JWT_PASSPHRASE` dans `.env` (copier le bloc depuis `.env.example`).
+- **Erreur OpenSSL** lors de `lexik:jwt:generate-keypair` : vérifier que l’extension PHP `openssl` est activée (`php -m | findstr openssl` sous Windows, `php -m | grep openssl` sous Linux/macOS).
+- **Token refusé après login** : le frontend doit envoyer le token dans le header `Authorization: Bearer <token>`. Vérifier que le token reçu à la connexion est bien stocké et renvoyé sur les requêtes protégées.
 
 ### Erreur lors des migrations
 

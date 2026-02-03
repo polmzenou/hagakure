@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,8 @@ class AuthController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        JWTTokenManagerInterface $jwtManager
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -42,15 +44,14 @@ class AuthController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        // Token simple (à améliorer avec JWT en production)
-        $token = base64_encode($user->getEmail() . ':' . time());
+        $token = $jwtManager->create($user);
 
         return $this->json([
             'token' => $token,
             'user' => [
                 'id' => $user->getId(),
                 'email' => $user->getEmail(),
-                'username' => explode('@', $user->getEmail())[0], // Username = partie avant @
+                'username' => explode('@', $user->getEmail())[0],
                 'roles' => $user->getRoles()
             ]
         ], Response::HTTP_CREATED);
@@ -60,7 +61,8 @@ class AuthController extends AbstractController
     public function login(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        JWTTokenManagerInterface $jwtManager
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -79,15 +81,14 @@ class AuthController extends AbstractController
             return $this->json(['message' => 'Email ou mot de passe incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Token simple (à améliorer avec JWT en production)
-        $token = base64_encode($user->getEmail() . ':' . time());
+        $token = $jwtManager->create($user);
 
         return $this->json([
             'token' => $token,
             'user' => [
                 'id' => $user->getId(),
                 'email' => $user->getEmail(),
-                'username' => explode('@', $user->getEmail())[0], // Username = partie avant @
+                'username' => explode('@', $user->getEmail())[0],
                 'roles' => $user->getRoles()
             ]
         ]);

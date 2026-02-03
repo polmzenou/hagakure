@@ -21,13 +21,12 @@ security:
             stateless: true
             security: false
         
-        # Firewall principal pour l'API
+        # Firewall principal pour l'API (JWT)
         api:
             pattern: ^/api
             stateless: true
-            custom_authenticators:
-                - App\Security\TokenAuthenticator
-            entry_point: null
+            provider: app_user_provider
+            jwt: ~
             
         main:
             lazy: true
