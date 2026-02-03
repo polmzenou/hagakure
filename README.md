@@ -100,7 +100,14 @@ cd ..
      php bin/console lexik:jwt:generate-keypair
      cd ..
      ```
-     Cela crée `config/jwt/private.pem` et `config/jwt/public.pem` (fichiers ignorés par Git). En cas d’erreur OpenSSL, exécuter la commande depuis votre machine ou vérifier que l’extension OpenSSL est activée en PHP.
+     Ou, si OpenSSL est installé en ligne de commande :
+     ```bash
+     cd Hagakure/config/jwt
+     openssl genrsa -out private.pem 4096
+     openssl rsa -pubout -in private.pem -out public.pem
+     ```
+     (Créer le dossier `Hagakure/config/jwt` au préalable s’il n’existe pas.)  
+     Cela crée `config/jwt/private.pem` et `config/jwt/public.pem` (fichiers ignorés par Git). En cas d’erreur OpenSSL avec la commande Symfony, exécuter depuis votre machine ou utiliser la méthode OpenSSL ci-dessus.
 
 Ne pas commiter le fichier `.env` (il est dans `.gitignore`).
 
