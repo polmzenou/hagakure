@@ -1,393 +1,350 @@
-# 🗾 Hagakure - Encyclopédie Interactive du Japon Féodal
+# Hagakure – Encyclopédie interactive du Japon féodal
 
-**Hagakure** est une application web full-stack moderne qui présente une encyclopédie interactive sur le Japon féodal. L'application permet d'explorer l'histoire, les samouraïs, les clans, les batailles, les armes et les styles de combat de cette période fascinante.
+Application web full-stack : backend Symfony (API) + frontend React. Ce README décrit **point par point** comment initialiser le projet sur une nouvelle machine.
 
-## 📋 Table des matières
+---
 
-- [À propos du projet](#-à-propos-du-projet)
-- [Fonctionnalités](#-fonctionnalités)
-- [Architecture](#-architecture)
-- [Prérequis](#-prérequis)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Lancement](#-lancement)
-- [Structure du projet](#-structure-du-projet)
-- [Technologies utilisées](#-technologies-utilisées)
-- [Dépannage](#-dépannage)
+## Table des matières
 
-## 🎯 À propos du projet
+- [Prérequis](#1-prérequis)
+- [Initialisation du projet (étape par étape)](#2-initialisation-du-projet-étape-par-étape)
+- [Lancement en développement](#3-lancement-en-développement)
+- [Vérification que tout fonctionne](#4-vérification-que-tout-fonctionne)
+- [Récapitulatif (checklist)](#5-récapitulatif-checklist)
+- [À propos du projet](#6-à-propos-du-projet)
+- [Structure du projet](#7-structure-du-projet)
+- [Dépannage](#8-dépannage)
 
-Hagakure est une encyclopédie interactive qui permet aux utilisateurs de :
+---
 
-- **Explorer** l'histoire du Japon féodal à travers une timeline interactive
-- **Découvrir** les samouraïs, leurs clans, leurs armes et leurs styles de combat
-- **Consulter** les batailles historiques et leurs détails
-- **Créer un compte** pour sauvegarder leurs favoris
-- **Personnaliser** leur profil et gérer leurs favoris
+## 1. Prérequis
 
-## ✨ Fonctionnalités
+À installer sur la machine avant de commencer :
 
-### Pour tous les utilisateurs
-- 📜 **Timeline interactive** : Parcourir les événements historiques du Japon féodal
-- ⚔️ **Batailles** : Consulter les détails des batailles historiques
-- 🗡️ **Samouraïs** : Explorer les biographies des samouraïs célèbres
-- 🏛️ **Clans** : Découvrir les différents clans et leur histoire
-- ⚔️ **Armes** : Consulter les armes utilisées à l'époque
-- 🥋 **Styles de combat** : Explorer les différents styles de combat
+| Prérequis | Version minimale | Vérification |
+|-----------|------------------|--------------|
+| **PHP** | 8.2 | `php -v` |
+| **Composer** | 2.x | `composer --version` |
+| **Node.js** | 18.x | `node -v` |
+| **npm** | 9.x (livré avec Node) | `npm -v` |
+| **MySQL** | 8.0 (ou MariaDB 10.x) | Service démarré, accès avec utilisateur/mot de passe |
+| **Symfony CLI** | Optionnel | `symfony version` |
 
-### Pour les utilisateurs connectés
-- 🔐 **Authentification** : Création de compte et connexion
-- ⭐ **Favoris** : Ajouter des éléments aux favoris (samouraïs, batailles, armes, clans, styles, événements)
-- 👤 **Mon compte** : Gérer son profil (changer email, mot de passe)
-- 📋 **Gestion des favoris** : Voir et organiser tous ses favoris par catégorie
+- Si **Symfony CLI** est installé : on pourra lancer le backend avec `symfony server:start`.
+- Sinon : on utilisera le serveur PHP intégré (`php -S localhost:8000 -t public`).
 
-## 🏗️ Architecture
+---
 
-Le projet est divisé en deux parties principales :
+## 2. Initialisation du projet (étape par étape)
 
-### Backend (Symfony)
-- **Framework** : Symfony 7.4
-- **API** : API Platform pour une API REST automatique
-- **Base de données** : MySQL/PostgreSQL avec Doctrine ORM
-- **Authentification** : JWT Token-based authentication
-- **CORS** : Configuré pour accepter les requêtes du frontend
+Toutes les commandes sont à exécuter depuis la racine du dépôt (ou depuis le dossier indiqué).
 
-### Frontend (React)
-- **Framework** : React 19 avec TypeScript
-- **Build tool** : Vite
-- **Routing** : React Router
-- **Styling** : CSS3 avec design responsive
-
-## 📦 Prérequis
-
-Avant de commencer, assurez-vous d'avoir installé :
-
-- **PHP** >= 8.2 
-- **Composer** (gestionnaire de dépendances PHP)
-- **Node.js** >= 18.x et **npm**
-- **MySQL** >= 8.0 ou **PostgreSQL** >= 16 (selon votre configuration)
-- **Symfony CLI** (optionnel, mais recommandé)
-
-### Vérification des prérequis
-
-```bash
-# Vérifier PHP
-php -v
-
-# Vérifier Composer
-composer --version
-
-# Vérifier Node.js
-node -v
-npm -v
-
-# Vérifier Symfony CLI (optionnel)
-symfony version
-```
-
-## 🚀 Installation
-
-### 1. Cloner le projet
+### Étape 2.1 – Cloner le dépôt
 
 ```bash
 git clone <url-du-repo>
 cd FullStackProjectHagakure
 ```
 
-### 2. Installer les dépendances du backend
+Vous devez vous retrouver dans le dossier qui contient `Hagakure/` et `hagakure-front/`.
+
+---
+
+### Étape 2.2 – Backend : installer les dépendances PHP
 
 ```bash
 cd Hagakure
 composer install
+cd ..
 ```
 
-### 3. Installer les dépendances du frontend
-
-```bash
-cd ../hagakure-front
-npm install
-```
-
-## ⚙️ Configuration
-
-### Configuration du Backend (Symfony)
-
-#### 1. Créer le fichier `.env`
-
-Dans le dossier `Hagakure/`, créez un fichier `.env` à partir du template `.env` (s'il existe) ou créez-en un nouveau :
-
-```bash
-cd Hagakure
-cp .env.example .env  # Si un fichier .env.example existe
-# Sinon, créez simplement un fichier .env
-```
-
-#### 2. Configurer les variables d'environnement
-
-Ouvrez le fichier `Hagakure/.env` et configurez les variables suivantes :
-
-```env
-# Environnement
-APP_ENV=dev
-APP_SECRET=votre_secret_aleatoire_ici_changez_le
-
-# Base de données
-# Pour MySQL :
-DATABASE_URL="mysql://root:password@127.0.0.1:3306/hagakure?serverVersion=8.0.0&charset=utf8mb4"
-
-# Pour PostgreSQL :
-# DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
-
-# Mailer (optionnel pour le développement)
-MAILER_DSN=null://null
-```
-
-**⚠️ Important :**
-- Remplacez `votre_secret_aleatoire_ici_changez_le` par une chaîne aléatoire (vous pouvez utiliser `php bin/console secrets:generate-app-secret`)
-- Remplacez les identifiants de la base de données (`root`, `password`, `hagakure`) par vos propres identifiants
-- Ajustez le port et le nom de la base de données selon votre configuration
-
-#### 3. Créer la base de données
-
-```bash
-# Créer la base de données
-php bin/console doctrine:database:create
-
-# Exécuter les migrations
-php bin/console doctrine:migrations:migrate
-
-# (Optionnel) Charger des données de test
-# php bin/console doctrine:fixtures:load
-```
-
-#### 4. Créer un utilisateur administrateur (optionnel)
-
-```bash
-php bin/console app:create-admin
-```
-
-### Configuration du Frontend (React)
-
-#### 1. Créer le fichier `.env`
-
-Dans le dossier `hagakure-front/`, créez un fichier `.env` :
-
-```bash
-cd hagakure-front
-touch .env
-```
-
-#### 2. Configurer l'URL de l'API
-
-Ouvrez le fichier `hagakure-front/.env` et ajoutez :
-
-```env
-# URL de l'API Symfony (par défaut : http://localhost:8000/api)
-VITE_API_URL=http://localhost:8000/api
-```
-
-**Note :** Si vous utilisez un port différent pour Symfony, modifiez l'URL en conséquence.
-
-## 🎮 Lancement
-
-### Développement
-
-#### 1. Démarrer le serveur Symfony (Backend)
-
-Dans un terminal, depuis le dossier `Hagakure/` :
-
-```bash
-cd Hagakure
-
-# Avec Symfony CLI (recommandé)
-symfony server:start
-
-# Ou avec PHP built-in server
-php -S localhost:8000 -t public
-```
-
-Le backend sera accessible sur `http://localhost:8000`
-
-#### 2. Démarrer le serveur React (Frontend)
-
-Dans un autre terminal, depuis le dossier `hagakure-front/` :
-
-```bash
-cd hagakure-front
-npm run dev
-```
-
-Le frontend sera accessible sur `http://localhost:5173`
-
-#### 3. Accéder à l'application
-
-Ouvrez votre navigateur et allez sur : **http://localhost:5173**
-
-### Production
-
-#### Build du frontend
-
-```bash
-cd hagakure-front
-npm run build
-```
-
-Les fichiers de production seront générés dans `hagakure-front/dist/`
-
-#### Configuration Symfony pour la production
-
-1. Modifiez `APP_ENV=prod` dans `Hagakure/.env`
-2. Optimisez le cache :
-
-```bash
-cd Hagakure
-php bin/console cache:clear --env=prod
-php bin/console cache:warmup --env=prod
-```
-
-## 📁 Structure du projet
-
-```
-FullStackProjectHagakure/
-├── Hagakure/                    # Backend Symfony
-│   ├── bin/
-│   │   └── console              # Commandes Symfony
-│   ├── config/                  # Configuration Symfony
-│   │   ├── packages/            # Configuration des bundles
-│   │   └── routes/             # Routes
-│   ├── migrations/              # Migrations Doctrine
-│   ├── public/                  # Point d'entrée web
-│   │   ├── index.php
-│   │   └── images/              # Images uploadées
-│   ├── src/
-│   │   ├── Controller/
-│   │   │   └── Api/             # Contrôleurs API
-│   │   ├── Entity/              # Entités Doctrine
-│   │   │   ├── User.php
-│   │   │   ├── Samourai.php
-│   │   │   ├── Battle.php
-│   │   │   ├── Clan.php
-│   │   │   ├── Weapon.php
-│   │   │   ├── Style.php
-│   │   │   ├── Timeline.php
-│   │   │   └── Favorite.php
-│   │   ├── Repository/          # Repositories Doctrine
-│   │   ├── Service/              # Services métier
-│   │   └── Security/            # Authentification
-│   ├── var/                     # Cache et logs (ignoré par Git)
-│   ├── vendor/                   # Dépendances Composer (ignoré par Git)
-│   ├── .env                     # Variables d'environnement (à créer)
-│   └── composer.json
-│
-├── hagakure-front/               # Frontend React
-│   ├── public/                  # Fichiers statiques
-│   │   ├── images/
-│   │   └── fonts/
-│   ├── src/
-│   │   ├── components/          # Composants React réutilisables
-│   │   │   ├── Header.tsx
-│   │   │   └── Footer.tsx
-│   │   ├── pages/               # Pages de l'application
-│   │   │   ├── Timeline.tsx
-│   │   │   ├── SamouraiList.tsx
-│   │   │   ├── BattleShow.tsx
-│   │   │   ├── MonCompte.tsx
-│   │   │   └── ...
-│   │   ├── services/            # Services API
-│   │   │   └── api.ts
-│   │   ├── App.tsx              # Composant principal
-│   │   └── main.tsx             # Point d'entrée
-│   ├── .env                     # Variables d'environnement (à créer)
-│   ├── package.json
-│   └── vite.config.ts
-│
-└── README.md                    # Ce fichier
-```
-
-## 🛠️ Technologies utilisées
-
-### Backend
-- **Symfony 7.4** : Framework PHP
-- **API Platform 4.2** : Génération automatique d'API REST
-- **Doctrine ORM 3.5** : ORM pour la base de données
-- **Nelmio CORS Bundle** : Gestion CORS
-- **JWT Authentication** : Authentification par token
-
-### Frontend
-- **React 19** : Bibliothèque UI
-- **TypeScript** : Typage statique
-- **Vite 7** : Build tool et serveur de développement
-- **React Router 7** : Routing
-- **CSS3** : Styles personnalisés
-
-### Base de données
-- **MySQL 8.0+** ou **PostgreSQL 16+**
-
-## 🔧 Dépannage
-
-### Erreur : "DATABASE_URL not found"
-
-**Solution :** Assurez-vous d'avoir créé le fichier `Hagakure/.env` et configuré la variable `DATABASE_URL`.
-
-### Erreur CORS
-
-**Symptômes :** Les requêtes du frontend vers l'API sont bloquées.
-
-**Solutions :**
-1. Vérifiez que le backend Symfony est bien démarré
-2. Vérifiez la configuration CORS dans `Hagakure/config/packages/nelmio_cors.yaml`
-3. Assurez-vous que l'URL du frontend (`http://localhost:5173`) est dans la liste des origines autorisées
-
-### Erreur : "Cannot connect to database"
-
-**Solutions :**
-1. Vérifiez que votre serveur de base de données est démarré
-2. Vérifiez les identifiants dans `DATABASE_URL` du fichier `.env`
-3. Vérifiez que la base de données existe : `php bin/console doctrine:database:create`
-
-### Le frontend ne se connecte pas à l'API
-
-**Solutions :**
-1. Vérifiez que Symfony est bien démarré sur le port 8000
-2. Testez l'API directement : `http://localhost:8000/api`
-3. Vérifiez la variable `VITE_API_URL` dans `hagakure-front/.env`
-4. Redémarrez le serveur Vite après modification du `.env`
-
-### Erreur lors des migrations
-
-**Solution :**
-```bash
-# Supprimer et recréer la base de données (⚠️ supprime toutes les données)
-php bin/console doctrine:database:drop --force
-php bin/console doctrine:database:create
-php bin/console doctrine:migrations:migrate
-```
-
-### Les images ne s'affichent pas
-
-**Solution :** Vérifiez que le dossier `Hagakure/public/images/` existe et contient les images nécessaires.
-
-## 📝 Notes importantes
-
-- ⚠️ **Ne commitez jamais** les fichiers `.env` dans Git (ils sont déjà dans `.gitignore`)
-- 🔒 **Changez toujours** `APP_SECRET` en production
-- 📦 Les dossiers `vendor/` et `node_modules/` sont ignorés par Git - ils seront installés via `composer install` et `npm install`
-- 🗄️ Les fichiers de cache (`var/cache/`, `var/log/`) sont également ignorés
-
-## 🤝 Contribution
-
-Pour contribuer au projet :
-
-1. Créez une branche pour votre fonctionnalité
-2. Commitez vos changements
-3. Poussez vers la branche
-4. Ouvrez une Pull Request
-
-## 📄 Licence
-
-Propriétaire - Tous droits réservés
+- Si une erreur apparaît (extensions PHP manquantes, etc.), corrigez l’environnement PHP puis relancez `composer install`.
 
 ---
 
-**Développé avec ❤️ pour explorer l'histoire du Japon féodal**
+### Étape 2.3 – Backend : fichier `.env`
 
+1. **Créer le fichier `.env`** à partir du template (dans le dossier `Hagakure/`) :
+
+   ```bash
+   cd Hagakure
+   cp .env.example .env
+   cd ..
+   ```
+
+2. **Ouvrir `Hagakure/.env`** dans un éditeur et modifier au minimum :
+
+   - **`APP_SECRET`**  
+     Remplacer par une chaîne aléatoire (ex. 32 caractères). Vous pouvez générer un secret avec :
+     ```bash
+     cd Hagakure
+     php -r "echo bin2hex(random_bytes(16));"
+     cd ..
+     ```
+     Puis coller le résultat dans `APP_SECRET=`.
+
+   - **`DATABASE_URL`**  
+     Adapter à votre MySQL/MariaDB :
+     - Utilisateur, mot de passe, hôte, port, nom de base.
+     - Exemple MySQL :
+       ```env
+       DATABASE_URL="mysql://USER:MOT_DE_PASSE@127.0.0.1:3306/NOM_DE_LA_BASE?serverVersion=8.0.0&charset=utf8mb4"
+       ```
+     - Remplacer `USER`, `MOT_DE_PASSE` et `NOM_DE_LA_BASE` par vos valeurs.
+     - La base de données (ex. `hagakure`) peut ne pas exister encore : elle sera créée à l’étape suivante.
+
+Ne pas commiter le fichier `.env` (il est dans `.gitignore`).
+
+---
+
+### Étape 2.4 – Backend : base de données et migrations
+
+Toujours depuis la racine du projet :
+
+```bash
+cd Hagakure
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+cd ..
+```
+
+- **`doctrine:database:create`** : crée la base définie dans `DATABASE_URL` (si elle n’existe pas).
+- **`doctrine:migrations:migrate`** : exécute les migrations (tables, schéma). Répondre `yes` si la console demande confirmation.
+
+En cas d’erreur de connexion, vérifier que le serveur MySQL/MariaDB est démarré et que `DATABASE_URL` dans `Hagakure/.env` est correct.
+
+---
+
+### Étape 2.5 – Backend : créer un utilisateur administrateur (recommandé)
+
+Pour vous connecter en tant qu’admin dans l’application :
+
+```bash
+cd Hagakure
+php bin/console app:create-admin VOTRE_EMAIL@exemple.fr VOTRE_MOT_DE_PASSE
+cd ..
+```
+
+Remplacer `VOTRE_EMAIL@exemple.fr` et `VOTRE_MOT_DE_PASSE` par les valeurs souhaitées. Cet utilisateur aura le rôle administrateur.
+
+---
+
+### Étape 2.6 – Backend : timeline (optionnel)
+
+Si vous voulez que la page « Timeline » affiche des événements issus des batailles, naissances de samouraïs et événements historiques :
+
+```bash
+cd Hagakure
+php bin/console app:timeline:generate
+php bin/console app:timeline:generate-historical
+cd ..
+```
+
+- **`app:timeline:generate`** : synchronise la timeline avec les batailles et naissances déjà en base.
+- **`app:timeline:generate-historical`** : ajoute les événements historiques prédéfinis (politique, duels).
+
+Vous pouvez les exécuter plus tard si la base est vide au premier lancement.
+
+---
+
+### Étape 2.7 – Frontend : installer les dépendances Node
+
+```bash
+cd hagakure-front
+npm install
+cd ..
+```
+
+---
+
+### Étape 2.8 – Frontend : fichier `.env` (optionnel)
+
+Par défaut, le frontend appelle l’API sur `http://localhost:8000/api` (voir `hagakure-front/src/services/api.ts` et le proxy Vite).
+
+Si votre backend tourne sur une autre URL/port, créez un fichier `.env` dans `hagakure-front/` :
+
+```bash
+cd hagakure-front
+# Créer le fichier .env (sous Linux/macOS : touch .env)
+echo "VITE_API_URL=http://localhost:8000/api" > .env
+cd ..
+```
+
+Ajustez `VITE_API_URL` si besoin (ex. `http://127.0.0.1:8080/api`). Après modification du `.env`, redémarrer le serveur Vite (`npm run dev`).
+
+---
+
+## 3. Lancement en développement
+
+Il faut **deux terminaux** : un pour le backend, un pour le frontend.
+
+### Terminal 1 – Backend (Symfony)
+
+```bash
+cd Hagakure
+
+# Option A – Avec Symfony CLI (recommandé si installé)
+symfony server:start
+
+# Option B – Sans Symfony CLI
+php -S localhost:8000 -t public
+```
+
+Laisser ce terminal ouvert. Le backend doit répondre sur **http://localhost:8000**.
+
+# Hagakure – Frontend (React)
+
+Frontend React + TypeScript + Vite de l’encyclopédie **Hagakure**.
+
+Pour **initialiser tout le projet** (backend + frontend) sur une nouvelle machine, suivez le **README à la racine du dépôt** (`../README.md`). Ce fichier ne décrit que le frontend.
+
+## Prérequis
+
+- Node.js 18+
+- npm
+- Backend Symfony (Hagakure) en cours d’exécution sur `http://localhost:8000` (ou configurer `VITE_API_URL`)
+
+## Installation rapide (dans le cadre du projet complet)
+
+```bash
+cd hagakure-front
+npm install
+```
+
+Si l’API n’est pas sur `http://localhost:8000`, créer un fichier `.env` :
+
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+## Lancement
+
+```bash
+npm run dev
+```
+
+Application disponible sur **http://localhost:5173**.
+
+## Scripts
+
+- `npm run dev` – Serveur de développement
+- `npm run build` – Build production (sortie dans `dist/`)
+- `npm run preview` – Prévisualisation du build
+- `npm run lint` – ESLint
+
+## Connexion à l’API
+
+- Par défaut, les appels API utilisent `http://localhost:8000/api` (voir `src/services/api.ts`).
+- En dev, Vite peut proxyifier `/api` vers `http://localhost:8000` (voir `vite.config.ts`).
+- Pour une autre URL, définir `VITE_API_URL` dans `.env` et redémarrer `npm run dev`.
+
+## Structure
+
+- `src/components/` – Composants réutilisables (Header, Footer, LandingPage, etc.)
+- `src/pages/` – Pages (Timeline, listes, formulaires, Mon compte, etc.)
+- `src/services/api.ts` – Client API (auth, samourais, batailles, clans, etc.)
+- `public/` – Fichiers statiques (images, polices)
+
+---
+
+## 5. Récapitulatif (checklist)
+
+Cocher mentalement ou sur papier pour une nouvelle machine :
+
+- [ ] Prérequis installés (PHP 8.2+, Composer, Node 18+, MySQL/MariaDB)
+- [ ] Dépôt cloné, `cd FullStackProjectHagakure`
+- [ ] `cd Hagakure` puis `composer install`
+- [ ] `Hagakure/.env` créé (`cp .env.example .env`) et configuré (`APP_SECRET`, `DATABASE_URL`)
+- [ ] Base créée : `php bin/console doctrine:database:create`
+- [ ] Migrations exécutées : `php bin/console doctrine:migrations:migrate`
+- [ ] (Recommandé) Admin créé : `php bin/console app:create-admin email@exemple.fr motdepasse`
+- [ ] (Optionnel) Timeline : `app:timeline:generate` et `app:timeline:generate-historical`
+- [ ] `cd hagakure-front` puis `npm install`
+- [ ] (Optionnel) `hagakure-front/.env` si l’API n’est pas sur `http://localhost:8000`
+- [ ] Terminal 1 : backend (Symfony sur port 8000)
+- [ ] Terminal 2 : frontend (`npm run dev` dans `hagakure-front`)
+- [ ] Test : http://localhost:5173 et http://localhost:8000/api
+
+---
+
+## 6. À propos du projet
+
+- **Backend** : Symfony 7.4, API REST (contrôleurs dédiés), Doctrine ORM, MySQL/MariaDB, authentification JWT, CORS configuré pour le frontend.
+- **Frontend** : React 19, TypeScript, Vite 7, React Router, CSS responsive.
+
+Fonctionnalités principales : timeline interactive, samouraïs, clans, batailles, armes, styles de combat, favoris, compte utilisateur, back office admin (gestion des entités et des utilisateurs).
+
+---
+
+## 7. Structure du projet
+
+```
+FullStackProjectHagakure/
+├── Hagakure/                 # Backend Symfony
+│   ├── bin/console           # Commandes Symfony
+│   ├── config/               # Configuration (packages, routes)
+│   ├── migrations/           # Migrations Doctrine
+│   ├── public/               # Point d’entrée web (index.php, images)
+│   ├── src/
+│   │   ├── Controller/Api/   # Contrôleurs API
+│   │   ├── Entity/           # Entités Doctrine
+│   │   ├── Repository/
+│   │   ├── Service/           # Ex. TimelineGeneratorService
+│   │   ├── Command/          # app:create-admin, app:timeline:*
+│   │   └── Security/
+│   ├── .env                  # À créer à partir de .env.example
+│   └── composer.json
+├── hagakure-front/           # Frontend React
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/         # api.ts
+│   │   └── main.tsx
+│   ├── .env                  # Optionnel (VITE_API_URL)
+│   └── package.json
+└── README.md
+```
+
+---
+
+## 8. Dépannage
+
+### Erreur « DATABASE_URL not found » ou connexion base refusée
+
+- Vérifier que `Hagakure/.env` existe et contient `DATABASE_URL` avec le bon utilisateur, mot de passe, hôte, port et nom de base.
+- Vérifier que MySQL/MariaDB est démarré.
+
+### Erreurs CORS ou « Network Error » côté frontend
+
+- Vérifier que le backend tourne bien sur le port 8000.
+- Vérifier `Hagakure/config/packages/nelmio_cors.yaml` (origines autorisées).
+- Si vous utilisez une autre URL pour l’API, définir `VITE_API_URL` dans `hagakure-front/.env` et redémarrer `npm run dev`.
+
+### Le frontend ne joint pas l’API
+
+- Tester l’API dans le navigateur : **http://localhost:8000/api** (ou une route comme `/api/samourais`).
+- Vérifier que `VITE_API_URL` (ou la valeur par défaut dans `api.ts`) pointe vers cette URL.
+- Redémarrer le serveur Vite après toute modification du `.env` frontend.
+
+### Erreur lors des migrations
+
+Si le schéma est dans un état incohérent (à utiliser avec précaution, cela supprime les données) :
+
+```bash
+cd Hagakure
+php bin/console doctrine:database:drop --force
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+cd ..
+```
+
+### Fichiers à ne pas commiter
+
+- `Hagakure/.env` et `Hagakure/.env.local` (déjà dans `.gitignore`)
+- `hagakure-front/.env` si il contient des secrets (pour ce projet, en dev, souvent seulement `VITE_API_URL`)
+- `vendor/`, `node_modules/`, `var/cache/`, `var/log/`
+
+---
+
+**Développé pour l’encyclopédie interactive du Japon féodal.**
