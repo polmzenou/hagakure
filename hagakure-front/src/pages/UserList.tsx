@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { userApi, type UserAdmin } from '../services/api'
+import { isAdmin } from '../utils/permissions'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import './List.css'
 import './Form.css'
+import './UserList.css'
 
 interface UserRow extends UserAdmin {
   editEmail: string
@@ -93,7 +96,7 @@ function UserList() {
     return (
       <div className="app">
         <Header />
-        <div className="list-container">
+        <div className="list-container userlist-page">
           <div className="page-header">
             <div>
               <h1 className="page-title">Gestion des utilisateurs</h1>
@@ -114,7 +117,7 @@ function UserList() {
   return (
     <div className="app">
       <Header />
-      <div className="list-container">
+      <div className="list-container userlist-page">
         <div className="page-header">
           <div>
             <h1 className="page-title">Gestion des utilisateurs</h1>
@@ -123,6 +126,18 @@ function UserList() {
             </p>
           </div>
         </div>
+
+        {/* Liens admin pour ajouter lieu et événement */}
+        {isAdmin() && (
+          <div className="admin-actions">
+            <Link to="/locations/new" className="btn btn-primary">
+              + Ajouter un lieu
+            </Link>
+            <Link to="/events/new" className="btn btn-primary">
+              + Ajouter un événement
+            </Link>
+          </div>
+        )}
 
         {users.length === 0 ? (
           <div className="empty-state">

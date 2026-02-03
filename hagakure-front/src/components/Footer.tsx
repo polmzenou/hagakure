@@ -30,16 +30,16 @@ function Footer() {
           </ul>
         </div>
         <div className="footer-column">
-          <h3 className="footer-title">À propos</h3>
+          <h3 className="footer-title">Informations</h3>
           <ul className="footer-links">
             <li>
-              <Link to="#">Nous contacter</Link>
+              <Link to="/a-propos">À propos</Link>
             </li>
             <li>
-              <Link to="/#apropos">À propos</Link>
+              <Link to="/nous-contacter">Nous contacter</Link>
             </li>
             <li>
-              <Link to="#">Politique de confidentialité</Link>
+              <Link to="/politique-de-confidentialite">Politique de confidentialité</Link>
             </li>
           </ul>
         </div>

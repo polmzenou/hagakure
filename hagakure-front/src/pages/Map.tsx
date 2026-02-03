@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, ScaleControl, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import { locationApi, battleApi } from '../services/api'
+import { isAdmin } from '../utils/permissions'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import 'leaflet/dist/leaflet.css'
@@ -63,11 +64,16 @@ const createLocationIcon = () => {
 
 function PopupContent({ 
   location, 
-  battleForLocation
+  battleForLocation,
+  userIsAdmin,
+  onDelete
 }: { 
   location: Location
   battleForLocation: Battle | null
+  userIsAdmin: boolean
+  onDelete: (id: number) => void
 }) {
+  const navigate = useNavigate()
   const isBattleType = isBattle(location.type)
 
   return (
@@ -97,6 +103,29 @@ function PopupContent({
             Voir la bataille
           </Link>
         )}
+        
+        {userIsAdmin && (
+          <div className="popup-admin-actions">
+            <button 
+              className="popup-btn popup-btn-edit"
+              onClick={() => navigate(`/locations/${location.id}/edit`)}
+              title="Modifier ce lieu"
+            >
+              Modifier
+            </button>
+            <button 
+              className="popup-btn popup-btn-delete"
+              onClick={() => {
+                if (window.confirm('Êtes-vous sûr de vouloir supprimer ce lieu ?')) {
+                  onDelete(location.id)
+                }
+              }}
+              title="Supprimer ce lieu"
+            >
+              Supprimer
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -107,6 +136,11 @@ function Map() {
   const [battles, setBattles] = useState<Battle[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [userIsAdmin, setUserIsAdmin] = useState(false)
+
+  useEffect(() => {
+    setUserIsAdmin(isAdmin())
+  }, [])
 
   const mapKanjis = [
     { kanji: '地', meaning: 'Terre' },
@@ -164,6 +198,17 @@ function Map() {
       return battleNameLower.includes(locationNameLower) || 
              locationNameLower.includes(battleNameLower.replace('bataille de ', '').replace('siège de ', '').replace('siège d\'', ''))
     }) || null
+  }
+
+  // Supprimer un lieu
+  const handleDeleteLocation = async (id: number) => {
+    try {
+      await locationApi.delete(id)
+      setLocations(prev => prev.filter(loc => loc.id !== id))
+    } catch (error) {
+      console.error('Error deleting location:', error)
+      alert('Erreur lors de la suppression du lieu')
+    }
   }
 
   // Centre du Japon
@@ -295,6 +340,8 @@ function Map() {
                       <PopupContent
                         location={location}
                         battleForLocation={battleForLocation}
+                        userIsAdmin={userIsAdmin}
+                        onDelete={handleDeleteLocation}
                       />
                     </Popup>
                   </Marker>

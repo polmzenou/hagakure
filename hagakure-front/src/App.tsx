@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
+import ScrollToTop from './components/ScrollToTop'
 import LandingPage from './components/LandingPage'
 import Login from './pages/Login'
 import Forbidden from './pages/Forbidden'
@@ -25,18 +26,33 @@ import BattleForm from './pages/BattleForm'
 import BattleShow from './pages/BattleShow'
 import MonCompte from './pages/MonCompte'
 import UserList from './pages/UserList'
+import LocationForm from './pages/LocationForm'
+import LocationEdit from './pages/LocationEdit'
+import EventForm from './pages/EventForm'
+import EventEdit from './pages/EventEdit'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import Contact from './pages/Contact'
+import About from './pages/About'
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forbidden" element={<Forbidden />} />
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/map" element={<Map />} />
+        <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+        <Route path="/nous-contacter" element={<Contact />} />
+        <Route path="/a-propos" element={<About />} />
         <Route path="/account" element={<AuthenticatedRoute><MonCompte /></AuthenticatedRoute>} />
         <Route path="/users" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
+        <Route path="/locations/new" element={<ProtectedRoute><LocationForm /></ProtectedRoute>} />
+        <Route path="/locations/:id/edit" element={<ProtectedRoute><LocationEdit /></ProtectedRoute>} />
+        <Route path="/events/new" element={<ProtectedRoute><EventForm /></ProtectedRoute>} />
+        <Route path="/events/:id/edit" element={<ProtectedRoute><EventEdit /></ProtectedRoute>} />
 
         {/* Samourai Routes */}
         <Route path="/samourais" element={<SamouraiList />} />

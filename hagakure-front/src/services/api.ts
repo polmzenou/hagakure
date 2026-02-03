@@ -43,7 +43,7 @@ async function apiRequest<T>(
   
   const token = localStorage.getItem('token')
   
-  // Pour les requêtes GET, forcer la vérification avec le serveur (bypass cache si nécessaire)
+  // Pour les requêtes GET, forcer la vérification avec le serveur
   const cacheOption = options.method === 'GET' || !options.method 
     ? { cache: 'no-cache' as RequestCache }
     : {}
@@ -92,7 +92,7 @@ async function apiRequest<T>(
         status: response.status,
       }
 
-      // 401 sur une requête authentifiée = session expirée → déconnexion + redirection login
+      // 401 sur une requête authentifiée = session expirée => déconnexion + redirection login
       if (response.status === 401 && token) {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
@@ -101,7 +101,7 @@ async function apiRequest<T>(
       throw error
     }
 
-    // Gérer les réponses vides
+    // Gérer les réponses vides => renvoyer un objet vide
     const contentType = response.headers.get('content-type')
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json()
@@ -268,6 +268,17 @@ export const locationApi = {
 export const timelineApi = {
   getAll: () => apiRequest<TimelineEvent[]>('/timeline'),
   getOne: (id: string | number) => apiRequest<TimelineEvent>(`/timeline/${id}`),
+  create: (data: unknown) => apiRequest<TimelineEvent>('/timeline', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }),
+  update: (id: string | number, data: unknown) =>
+    apiRequest<TimelineEvent>(`/timeline/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  delete: (id: string | number) =>
+    apiRequest<void>(`/timeline/${id}`, { method: 'DELETE' }),
 }
 
 // Profile API

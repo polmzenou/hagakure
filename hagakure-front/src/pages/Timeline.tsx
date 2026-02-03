@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { timelineApi, authApi, favoriteApi, battleApi } from '../services/api'
 import type { TimelineEvent } from '../services/api'
 import { formatDate } from '../utils/dateUtils'
+import { isAdmin } from '../utils/permissions'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import HistoricalEras from '../components/HistoricalEras'
 import './Timeline.css'
 
 function Timeline() {
+  const navigate = useNavigate()
   const [events, setEvents] = useState<TimelineEvent[]>([])
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null)
   const [loading, setLoading] = useState(true)
@@ -19,6 +21,7 @@ function Timeline() {
   const [loadingBattle, setLoadingBattle] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [activeFilters, setActiveFilters] = useState<string[]>([])
+  const [userIsAdmin, setUserIsAdmin] = useState(false)
   const timelineRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [startX, setStartX] = useState(0)
@@ -45,6 +48,7 @@ function Timeline() {
   useEffect(() => {
     loadTimeline()
     setIsAuthenticated(authApi.isAuthenticated())
+    setUserIsAdmin(isAdmin())
   }, [])
 
   const years = events.map(e => e.year)
@@ -555,6 +559,35 @@ function Timeline() {
                   >
                     {isFavorite ? '★ Retirer des Favoris' : '☆ Ajouter aux Favoris'}
                   </button>
+                )}
+                {userIsAdmin && (
+                  <div className="admin-actions-inline">
+                    <button 
+                      className="btn-admin btn-edit"
+                      onClick={() => navigate(`/events/${selectedEvent.id}/edit`)}
+                      title="Modifier cet événement"
+                    >
+                      Modifier
+                    </button>
+                    <button 
+                      className="btn-admin btn-delete"
+                      onClick={async () => {
+                        if (window.confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')) {
+                          try {
+                            await timelineApi.delete(selectedEvent.id)
+                            setEvents(prev => prev.filter(e => e.id !== selectedEvent.id))
+                            setSelectedEvent(null)
+                          } catch (error) {
+                            console.error('Error deleting event:', error)
+                            alert('Erreur lors de la suppression')
+                          }
+                        }
+                      }}
+                      title="Supprimer cet événement"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 )}
               </div>
               <div className="details-description">

@@ -835,6 +835,46 @@
   }
 }
 
+/* Boutons admin inline pour Timeline */
+.admin-actions-inline {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.btn-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-admin.btn-edit {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: #fff;
+}
+
+.btn-admin.btn-edit:hover {
+  background: linear-gradient(135deg, #2980b9 0%, #1f6aa5 100%);
+  transform: translateY(-1px);
+}
+
+.btn-admin.btn-delete {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: #fff;
+}
+
+.btn-admin.btn-delete:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  transform: translateY(-1px);
+}
+
 @media (max-width: 480px) {
   .timeline-page {
     padding: 1rem 0;
@@ -913,6 +953,16 @@
 
   .battle-link-text {
     font-size: 0.9rem;
+  }
+
+  .admin-actions-inline {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-admin {
+    width: 100%;
+    justify-content: center;
   }
 }
 

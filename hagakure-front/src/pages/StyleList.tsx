@@ -21,6 +21,7 @@ function StyleList() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
   const itemsPerPage = 6
+  const prevFiltersRef = useRef<string | null>(null)
 
   const loadData = async () => {
     setError(null)
@@ -40,6 +41,16 @@ function StyleList() {
   }, [])
 
   useEffect(() => {
+    if (!searchParams.has('page')) {
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev)
+        next.set('page', '1')
+        return next
+      })
+    }
+  }, [searchParams, setSearchParams])
+
+  useEffect(() => {
     let filtered = [...styles]
 
     // Filtre par recherche
@@ -54,9 +65,9 @@ function StyleList() {
     if (prevFiltersRef.current !== searchTerm) {
       prevFiltersRef.current = searchTerm
       setSearchParams(prev => {
-        const o = Object.fromEntries(prev)
-        o.page = '1'
-        return o
+        const next = new URLSearchParams(prev)
+        next.set('page', '1')
+        return next
       })
     }
   }, [searchTerm, styles])
@@ -73,9 +84,9 @@ function StyleList() {
 
   const handlePageChange = (page: number) => {
     setSearchParams(prev => {
-      const o = Object.fromEntries(prev)
-      o.page = String(page)
-      return o
+      const next = new URLSearchParams(prev)
+      next.set('page', String(page))
+      return next
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }

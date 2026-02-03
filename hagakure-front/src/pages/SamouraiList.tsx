@@ -61,6 +61,16 @@ function SamouraiList() {
   }, [])
 
   useEffect(() => {
+    if (!searchParams.has('page')) {
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev)
+        next.set('page', '1')
+        return next
+      })
+    }
+  }, [searchParams, setSearchParams])
+
+  useEffect(() => {
     let filtered = [...samourais]
 
     if (searchTerm) {
@@ -79,9 +89,9 @@ function SamouraiList() {
     prevFiltersRef.current = { searchTerm, selectedClans }
     if (filtersChanged) {
       setSearchParams(prev => {
-        const o = Object.fromEntries(prev)
-        o.page = '1'
-        return o
+        const next = new URLSearchParams(prev)
+        next.set('page', '1')
+        return next
       })
     }
   }, [searchTerm, selectedClans, samourais, setSearchParams])
@@ -98,9 +108,9 @@ function SamouraiList() {
 
   const handlePageChange = (page: number) => {
     setSearchParams(prev => {
-      const o = Object.fromEntries(prev)
-      o.page = String(page)
-      return o
+      const next = new URLSearchParams(prev)
+      next.set('page', String(page))
+      return next
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
