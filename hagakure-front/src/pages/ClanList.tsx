@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { clanApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import { formatDateShort } from '../utils/dateUtils'
@@ -23,9 +23,10 @@ function ClanList() {
   const [filteredClans, setFilteredClans] = useState<Clan[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
+  const prevFiltersRef = useRef(searchTerm)
 
   const loadClans = async () => {
     setError(null)
@@ -57,17 +58,32 @@ function ClanList() {
     }
 
     setFilteredClans(filtered)
-    setCurrentPage(1)
+    if (prevFiltersRef.current !== searchTerm) {
+      prevFiltersRef.current = searchTerm
+      setSearchParams(prev => {
+        const o = Object.fromEntries(prev)
+        o.page = '1'
+        return o
+      })
+    }
   }, [searchTerm, clans])
 
-  // Pagination
   const totalPages = Math.ceil(filteredClans.length / itemsPerPage)
+  const currentPage = useMemo(() => {
+    const p = parseInt(searchParams.get('page') || '1', 10)
+    if (isNaN(p) || p < 1) return 1
+    return Math.min(p, totalPages || 1)
+  }, [searchParams, totalPages])
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const currentClans = filteredClans.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+    setSearchParams(prev => {
+      const o = Object.fromEntries(prev)
+      o.page = String(page)
+      return o
+    })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -143,7 +159,7 @@ function ClanList() {
               <div key={clan.id} className="samourai-card">
                 {clan.image && clan.image.trim() !== '' ? (
                   <div className="samourai-image">
-                    <img src={clan.image} alt={clan.name} />
+                    <img src={clan.image} alt={clan.name} loading="lazy" width="300" height="250" />
                   </div>
                 ) : (
                   <div className="samourai-image-placeholder">
@@ -164,7 +180,7 @@ function ClanList() {
                       {clan.samourais.length} samouraï{clan.samourais.length > 1 ? 's' : ''}
                     </p>
                   )}
-                  <Link to={`/clans/${clan.id}`} className="view-button">
+                  <Link to={`/clans/${clan.id}`} state={{ fromPage: currentPage }} className="view-button">
                     Voir les détails
                   </Link>
                 </div>

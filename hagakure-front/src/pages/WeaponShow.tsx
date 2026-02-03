@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { weaponApi, authApi, favoriteApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import Header from '../components/Header'
@@ -21,6 +21,8 @@ interface Weapon {
 function WeaponShow() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromPage = (location.state as { fromPage?: number })?.fromPage
   const [weapon, setWeapon] = useState<Weapon | null>(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -91,15 +93,34 @@ function WeaponShow() {
     }
   }
 
-  if (loading) return <div className="loading">Chargement...</div>
-  if (!weapon) return <div className="loading">Arme non trouvée</div>
+  if (loading) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="loading">Chargement...</div>
+      </div>
+      <Footer />
+    </div>
+  )
+  if (!weapon) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="show-not-found">
+          <p className="show-not-found-message">Arme non trouvée</p>
+          <Link to={fromPage ? `/weapons?page=${fromPage}` : '/weapons'} className="btn btn-secondary">← Retour à la liste</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
 
   return (
     <div className="app">
       <Header />
       <div className="show-container">
         <div className="show-header">
-          <Link to="/weapons" className="btn btn-secondary">
+          <Link to={fromPage ? `/weapons?page=${fromPage}` : '/weapons'} className="btn btn-secondary">
             ← Retour à la liste
           </Link>
           <div className="show-actions">
@@ -128,7 +149,7 @@ function WeaponShow() {
           <div className="show-main">
             {weapon.image && (
               <div className="show-image">
-                <img src={weapon.image} alt={weapon.name} />
+                <img src={weapon.image} alt={weapon.name} loading="eager" width="400" height="300" />
               </div>
             )}
             <div className="show-info">

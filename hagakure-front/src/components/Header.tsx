@@ -44,7 +44,7 @@ function Header() {
       <div className="header-container">
         <div className="header-left">
           <Link to="/" className="logo-link" onClick={closeMobileMenu}>
-            <img src="/images/logo/Logo noir-rouge.png" alt="Hagakure" className="header-logo" />
+            <img src="/images/logo/Logo noir-rouge.png" alt="Hagakure" className="header-logo" width="58" height="50" />
           </Link>
           <nav className="left-nav">
             <Link to="/timeline" className="nav-link nav-timeline" onClick={closeMobileMenu}>Timeline</Link>
@@ -55,25 +55,22 @@ function Header() {
         <nav className="main-nav">
           <Link to="/samourais" className="nav-link" onClick={closeMobileMenu}>Samourais</Link>
           <Link to="/clans" className="nav-link" onClick={closeMobileMenu}>Clans</Link>
-          {isAdmin() && (
-            <Link to="/battles" className="nav-link" onClick={closeMobileMenu}>Batailles</Link>
-          )}
+          <Link to="/battles" className="nav-link" onClick={closeMobileMenu}>Batailles</Link>
           <Link to="/weapons" className="nav-link" onClick={closeMobileMenu}>Armes</Link>
           {isLoggedIn && isAdmin() && (
             <Link to="/styles" className="nav-link" onClick={closeMobileMenu}>Styles de combat</Link>
           )}
           {isLoggedIn && isAdmin() && (
-            <Link to="/users" className="nav-link" onClick={closeMobileMenu}>Gestion des utilisateurs</Link>
+            <Link to="/users" className="nav-link" onClick={closeMobileMenu}>Back Office</Link>
           )}
         </nav>
 
         <div className="header-right">
           {isLoggedIn ? (
             <>
-              <span className="user-name">{user?.username}</span>
               <button onClick={handleLogout} className="auth-link logout-btn">Se déconnecter</button>
-              <Link to="/account" className="profile-link" onClick={closeMobileMenu}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <Link to="/account" className="profile-link" onClick={closeMobileMenu} aria-label="Mon compte">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
                   <path d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
@@ -101,9 +98,7 @@ function Header() {
           <Link to="/map" className="mobile-nav-link nav-map" onClick={closeMobileMenu}>Map</Link>
           <Link to="/samourais" className="mobile-nav-link" onClick={closeMobileMenu}>Samourais</Link>
           <Link to="/clans" className="mobile-nav-link" onClick={closeMobileMenu}>Clans</Link>
-          {isAdmin() && (
-            <Link to="/battles" className="mobile-nav-link" onClick={closeMobileMenu}>Batailles</Link>
-          )}
+          <Link to="/battles" className="mobile-nav-link" onClick={closeMobileMenu}>Batailles</Link>
           <Link to="/weapons" className="mobile-nav-link" onClick={closeMobileMenu}>Armes</Link>
           {isLoggedIn && isAdmin() && (
             <Link to="/styles" className="mobile-nav-link" onClick={closeMobileMenu}>Styles de combat</Link>

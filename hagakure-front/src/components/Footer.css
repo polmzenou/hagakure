@@ -27,9 +27,11 @@
 }
 
 .footer-logo {
-  height: 80px;
-  width: auto;
+  height: auto;
+  width: 230px;
+  aspect-ratio: 230 / 200;
   margin-bottom: 1rem;
+  object-fit: contain;
 }
 
 .footer-description {

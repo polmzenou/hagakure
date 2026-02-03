@@ -84,7 +84,7 @@ function Login() {
   return (
     <div className="login-page">
       <div className="login-background">
-        <img src="/images/hero bg.png" alt="Background" className="login-bg-image" />
+        <img src="/images/hero bg.png" alt="" className="login-bg-image" aria-hidden="true" />
         <div className="login-overlay"></div>
       </div>
 
@@ -92,7 +92,7 @@ function Login() {
         <div className="login-card">
           {/* Logo */}
           <div className="login-logo">
-            <img src="/images/logo/Logo noir-rouge.png" alt="Hagakure" />
+            <img src="/images/logo/Logo noir-rouge.png" alt="Hagakure" width="120" height="104" />
           </div>
           <p className="login-welcome-text">Bienvenue sur Hagakure</p>
           <p className="login-welcome-text-2">Se connecter pourra vous permettre de mettre en favoris les personnages, les événements, les batailles, etc.</p>

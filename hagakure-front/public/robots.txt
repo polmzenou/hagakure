@@ -1,0 +1,14 @@
+# Robots.txt pour Hagakure - Encyclopédie des Samourais
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://hagakure.com/sitemap.xml
+
+# Désactiver l'indexation des pages d'erreur et admin
+Disallow: /login
+Disallow: /account
+Disallow: /users
+Disallow: /forbidden
+Disallow: /*/new
+Disallow: /*/edit

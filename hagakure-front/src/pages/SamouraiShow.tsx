@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { samouraiApi, authApi, favoriteApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import { formatDate } from '../utils/dateUtils'
@@ -36,6 +36,8 @@ interface Samourai {
 function SamouraiShow() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromPage = (location.state as { fromPage?: number })?.fromPage
   const [samourai, setSamourai] = useState<Samourai | null>(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -106,15 +108,34 @@ function SamouraiShow() {
     }
   }
 
-  if (loading) return <div className="loading">Chargement...</div>
-  if (!samourai) return <div className="loading">Samouraï non trouvé</div>
+  if (loading) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="loading">Chargement...</div>
+      </div>
+      <Footer />
+    </div>
+  )
+  if (!samourai) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="show-not-found">
+          <p className="show-not-found-message">Samouraï non trouvé</p>
+          <Link to={fromPage ? `/samourais?page=${fromPage}` : '/samourais'} className="btn btn-secondary">← Retour à la liste</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
 
   return (
     <div className="app">
       <Header />
       <div className="show-container">
         <div className="show-header">
-          <Link to="/samourais" className="btn btn-secondary">
+          <Link to={fromPage ? `/samourais?page=${fromPage}` : '/samourais'} className="btn btn-secondary">
             ← Retour à la liste
           </Link>
           <div className="show-actions">
@@ -129,10 +150,10 @@ function SamouraiShow() {
             {isAdmin() && (
               <>
                 <Link to={`/samourais/${id}/edit`} className="btn btn-primary">
-                  ✏️
+                  Modifier  
                 </Link>
                 <button onClick={handleDelete} className="btn btn-danger">
-                  🗑️
+                  Supprimer
                 </button>
               </>
             )}
@@ -143,7 +164,7 @@ function SamouraiShow() {
           <div className="show-main">
             {samourai.image && (
               <div className="show-image">
-                <img src={samourai.image} alt={samourai.name} />
+                <img src={samourai.image} alt={samourai.name} loading="eager" width="400" height="300" />
               </div>
             )}
             <div className="show-info">

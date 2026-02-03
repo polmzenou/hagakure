@@ -101,8 +101,27 @@ function BattleShow() {
     }
   }
 
-  if (loading) return <div className="loading">Chargement...</div>
-  if (!battle) return <div className="loading">Bataille non trouvée</div>
+  if (loading) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="loading">Chargement...</div>
+      </div>
+      <Footer />
+    </div>
+  )
+  if (!battle) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="show-not-found">
+          <p className="show-not-found-message">Bataille non trouvée</p>
+          <Link to="/battles" className="btn btn-secondary">← Retour à la liste</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
 
   return (
     <div className="app">
@@ -139,7 +158,7 @@ function BattleShow() {
           <div className="show-main">
             {battle.image && (
               <div className="show-image">
-                <img src={battle.image} alt={battle.name} />
+                <img src={battle.image} alt={battle.name} loading="eager" width="400" height="300" />
               </div>
             )}
             <div className="show-info">

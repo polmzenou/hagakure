@@ -6,7 +6,7 @@ function Footer() {
     <footer className="main-footer">
       <div className="footer-container">
         <div className="footer-column footer-left">
-          <img src="/images/logo/Logo blanc-rouge.png" alt="Hagakure" className="footer-logo" style={{ width: '230px', height: '200px' }} />
+          <img src="/images/logo/Logo blanc-rouge.png" alt="Hagakure" className="footer-logo" width="230" height="200" />
           <p className="footer-description">
             Une encyclopédie dédiée à l'histoire fascinante du Japon féodal et de ses guerriers légendaires.
           </p>

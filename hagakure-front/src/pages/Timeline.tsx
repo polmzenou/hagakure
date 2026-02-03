@@ -570,7 +570,7 @@ function Timeline() {
                     <Link to={`/battles/${selectedEvent.battle_id}`} className="battle-link-card">
                       {battleData.image && (
                         <div className="battle-link-image">
-                          <img src={battleData.image} alt={battleData.name} />
+                          <img src={battleData.image} alt={battleData.name} loading="lazy" width="60" height="60" />
                         </div>
                       )}
                       <div className="battle-link-content">

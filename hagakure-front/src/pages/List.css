@@ -96,6 +96,18 @@
   color: var(--text-light);
 }
 
+/* Skeleton loading pour éviter CLS */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 .list-error {
   text-align: center;
   padding: 2rem;
@@ -469,6 +481,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  aspect-ratio: 4 / 3;
+  contain: layout style paint;
 }
 
 .samourai-image img {
@@ -477,6 +491,8 @@
   object-fit: cover;
   object-position: center 25%;
   transition: transform 0.3s ease;
+  aspect-ratio: 4 / 3;
+  content-visibility: auto;
 }
 
 .samourai-card:hover .samourai-image img {
@@ -494,6 +510,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 4 / 3;
 }
 
 .placeholder-icon {
@@ -629,6 +646,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 1 / 1;
 }
 
 .battle-card-image img {
@@ -636,6 +654,7 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
+  aspect-ratio: 1 / 1;
 }
 
 .battle-card:hover .battle-card-image img {

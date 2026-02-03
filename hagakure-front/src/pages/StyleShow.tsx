@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { styleApi, authApi, favoriteApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import Header from '../components/Header'
@@ -20,6 +20,8 @@ interface Style {
 function StyleShow() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromPage = (location.state as { fromPage?: number })?.fromPage
   const [style, setStyle] = useState<Style | null>(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -90,15 +92,34 @@ function StyleShow() {
     }
   }
 
-  if (loading) return <div className="loading">Chargement...</div>
-  if (!style) return <div className="loading">Style non trouvé</div>
+  if (loading) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="loading">Chargement...</div>
+      </div>
+      <Footer />
+    </div>
+  )
+  if (!style) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="show-not-found">
+          <p className="show-not-found-message">Style non trouvé</p>
+          <Link to={fromPage ? `/styles?page=${fromPage}` : '/styles'} className="btn btn-secondary">← Retour à la liste</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
 
   return (
     <div className="app">
       <Header />
       <div className="show-container">
         <div className="show-header">
-          <Link to="/styles" className="btn btn-secondary">
+          <Link to={fromPage ? `/styles?page=${fromPage}` : '/styles'} className="btn btn-secondary">
             ← Retour à la liste
           </Link>
           <div className="show-actions">
@@ -127,7 +148,7 @@ function StyleShow() {
           <div className="show-main">
             {style.image && (
               <div className="show-image">
-                <img src={style.image} alt={style.name} />
+                <img src={style.image} alt={style.name} loading="eager" width="400" height="300" />
               </div>
             )}
             <div className="show-info">

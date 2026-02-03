@@ -107,7 +107,7 @@ function BattleList() {
               <div key={battle.id} className="battle-card">
                 <div className="battle-card-image">
                   {battle.image ? (
-                    <img src={battle.image} alt={battle.name} />
+                    <img src={battle.image} alt={battle.name} loading="lazy" width="120" height="120" />
                   ) : (
                     <div className="battle-image-placeholder">
                       <span className="placeholder-icon">⚔️</span>

@@ -66,11 +66,15 @@ class ClanController extends AbstractController
         $clan->setDescription($data['description'] ?? '');
         $clan->setSlug($this->slugger->slug($data['name'] ?? '')->lower());
         
-        if (isset($data['founded_date'])) {
+        if (isset($data['founded_date']) && $data['founded_date'] !== '') {
             $clan->setFoundedDate(new \DateTime($data['founded_date']));
+        } else {
+            $clan->setFoundedDate(null);
         }
-        if (isset($data['disbanded_date'])) {
+        if (isset($data['disbanded_date']) && $data['disbanded_date'] !== '') {
             $clan->setDisbandedDate(new \DateTime($data['disbanded_date']));
+        } else {
+            $clan->setDisbandedDate(null);
         }
         if (isset($data['image'])) {
             $clan->setImage($data['image']);
@@ -103,11 +107,11 @@ class ClanController extends AbstractController
         if (isset($data['description'])) {
             $clan->setDescription($data['description']);
         }
-        if (isset($data['founded_date'])) {
-            $clan->setFoundedDate(new \DateTime($data['founded_date']));
+        if (array_key_exists('founded_date', $data)) {
+            $clan->setFoundedDate(($data['founded_date'] !== '' && $data['founded_date'] !== null) ? new \DateTime($data['founded_date']) : null);
         }
-        if (isset($data['disbanded_date'])) {
-            $clan->setDisbandedDate(new \DateTime($data['disbanded_date']));
+        if (array_key_exists('disbanded_date', $data)) {
+            $clan->setDisbandedDate(($data['disbanded_date'] !== '' && $data['disbanded_date'] !== null) ? new \DateTime($data['disbanded_date']) : null);
         }
         if (isset($data['image'])) {
             $clan->setImage($data['image']);

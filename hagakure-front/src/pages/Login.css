@@ -21,6 +21,7 @@
   height: 100%;
   object-fit: cover;
   filter: brightness(0.4);
+  aspect-ratio: auto;
 }
 
 .login-overlay {

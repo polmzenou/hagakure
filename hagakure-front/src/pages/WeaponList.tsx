@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { weaponApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import Header from '../components/Header'
@@ -19,10 +19,11 @@ function WeaponList() {
   const [filteredWeapons, setFilteredWeapons] = useState<Weapon[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedType, setSelectedType] = useState<string | null>(null)
-  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
+  const prevFiltersRef = useRef({ searchTerm, selectedType })
 
   const loadData = async () => {
     setError(null)
@@ -58,20 +59,35 @@ function WeaponList() {
     }
 
     setFilteredWeapons(filtered)
-    setCurrentPage(1)
+    const filtersChanged = prevFiltersRef.current.searchTerm !== searchTerm ||
+      prevFiltersRef.current.selectedType !== selectedType
+    prevFiltersRef.current = { searchTerm, selectedType }
+    if (filtersChanged) {
+      setSearchParams(prev => {
+        const o = Object.fromEntries(prev)
+        o.page = '1'
+        return o
+      })
+    }
   }, [searchTerm, selectedType, weapons])
 
-  // Récupérer les types uniques
   const uniqueTypes = Array.from(new Set(weapons.map(w => w.type).filter(Boolean)))
-
-  // Pagination
   const totalPages = Math.ceil(filteredWeapons.length / itemsPerPage)
+  const currentPage = useMemo(() => {
+    const p = parseInt(searchParams.get('page') || '1', 10)
+    if (isNaN(p) || p < 1) return 1
+    return Math.min(p, totalPages || 1)
+  }, [searchParams, totalPages])
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const currentWeapons = filteredWeapons.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+    setSearchParams(prev => {
+      const o = Object.fromEntries(prev)
+      o.page = String(page)
+      return o
+    })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -168,7 +184,7 @@ function WeaponList() {
               <div key={weapon.id} className="samourai-card">
                 {weapon.image ? (
                   <div className="samourai-image">
-                    <img src={weapon.image} alt={weapon.name} />
+                    <img src={weapon.image} alt={weapon.name} loading="lazy" width="300" height="250" />
                   </div>
                 ) : (
                   <div className="samourai-image-placeholder">
@@ -182,7 +198,7 @@ function WeaponList() {
                     {weapon.description?.substring(0, 100) || 'Aucune description'}
                     {weapon.description && weapon.description.length > 100 ? '...' : ''}
                   </p>
-                  <Link to={`/weapons/${weapon.id}`} className="view-button">
+                  <Link to={`/weapons/${weapon.id}`} state={{ fromPage: currentPage }} className="view-button">
                     Voir les détails
                   </Link>
                 </div>

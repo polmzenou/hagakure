@@ -43,8 +43,9 @@ const LandingPage = () => {
       <div className="shared-background">
         <img
           src="/images/hero bg.png"
-          alt="Background"
+          alt=""
           className="shared-bg-image"
+          aria-hidden="true"
         />
         <div className="shared-overlay"></div>
       </div>
@@ -61,7 +62,8 @@ const LandingPage = () => {
               src="/images/logo/Logo blanc-rouge.png"
               alt="Hagakure"
               className="hero-logo"
-              style={{ width: "350px", height: "300px" }}
+              width="350"
+              height="300"
             />
           </div>
 
@@ -80,29 +82,40 @@ const LandingPage = () => {
         
         <section id="decouvrir" className="encyclopedia-section">
           <div className="container">
-            <h2 className="section-title-jp">「完全な百科事典」</h2>
-            <h2 className="section-title-main">Une encyclopédie complète</h2>
-            <p className="section-subtitle-main">
-              Plongez dans une base de données exhaustive sur le Japon féodal
-            </p>
+            <div className="section-header">
+              <div className="section-header-decoration">
+                <span className="decoration-line"></span>
+                <span className="decoration-symbol">家紋</span>
+                <span className="decoration-line"></span>
+              </div>
+              <h2 className="section-title-jp">「完全な百科事典」</h2>
+              <h2 className="section-title-main">Une encyclopédie complète</h2>
+              <p className="section-subtitle-main">
+                Plongez dans une base de données exhaustive sur le Japon féodal
+              </p>
+            </div>
             
             {/* Stats Cards */}
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-number">{stats.samourais}</div>
                 <div className="stat-label">Samourais</div>
+                <div className="stat-subtitle">Guerriers légendaires</div>
               </div>
               <div className="stat-card">
                 <div className="stat-number">{stats.clans}</div>
                 <div className="stat-label">Clans</div>
+                <div className="stat-subtitle">Lignées historiques</div>
               </div>
               <div className="stat-card">
                 <div className="stat-number">{stats.batailles}</div>
                 <div className="stat-label">Batailles</div>
+                <div className="stat-subtitle">Conflits majeurs</div>
               </div>
               <div className="stat-card">
                 <div className="stat-number">{stats.armes}</div>
                 <div className="stat-label">Armes</div>
+                <div className="stat-subtitle">Équipements traditionnels</div>
               </div>
             </div>
           </div>

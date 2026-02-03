@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useRef, useMemo } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { samouraiApi, clanApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import { formatDateShort } from '../utils/dateUtils'
@@ -31,12 +31,13 @@ function SamouraiList() {
   const [clans, setClans] = useState<Clan[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedClans, setSelectedClans] = useState<number[]>([])
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const prevFiltersRef = useRef({ searchTerm, selectedClans })
 
   const loadData = async () => {
     setError(null)
@@ -73,16 +74,34 @@ function SamouraiList() {
     }
 
     setFilteredSamourais(filtered)
-    setCurrentPage(1)
-  }, [searchTerm, selectedClans, samourais])
+    const filtersChanged = prevFiltersRef.current.searchTerm !== searchTerm ||
+      JSON.stringify(prevFiltersRef.current.selectedClans) !== JSON.stringify(selectedClans)
+    prevFiltersRef.current = { searchTerm, selectedClans }
+    if (filtersChanged) {
+      setSearchParams(prev => {
+        const o = Object.fromEntries(prev)
+        o.page = '1'
+        return o
+      })
+    }
+  }, [searchTerm, selectedClans, samourais, setSearchParams])
 
   const totalPages = Math.ceil(filteredSamourais.length / itemsPerPage)
+  const currentPage = useMemo(() => {
+    const p = parseInt(searchParams.get('page') || '1', 10)
+    if (isNaN(p) || p < 1) return 1
+    return Math.min(p, totalPages || 1)
+  }, [searchParams, totalPages])
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const currentSamourais = filteredSamourais.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+    setSearchParams(prev => {
+      const o = Object.fromEntries(prev)
+      o.page = String(page)
+      return o
+    })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -221,7 +240,7 @@ function SamouraiList() {
               <div key={samourai.id} className="samourai-card">
                 {samourai.image ? (
                   <div className="samourai-image">
-                    <img src={samourai.image} alt={samourai.name} />
+                    <img src={samourai.image} alt={samourai.name} loading="lazy" width="300" height="250" />
                   </div>
                 ) : (
                   <div className="samourai-image-placeholder">
@@ -234,7 +253,7 @@ function SamouraiList() {
                   <p className="samourai-dates">
                     {formatDateShort(samourai.birth_date)} - {formatDateShort(samourai.death_date)}
                   </p>
-                  <Link to={`/samourais/${samourai.id}`} className="view-button">
+                  <Link to={`/samourais/${samourai.id}`} state={{ fromPage: currentPage }} className="view-button">
                     Voir la fiche
                   </Link>
                 </div>

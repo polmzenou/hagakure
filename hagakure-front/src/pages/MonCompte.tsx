@@ -147,8 +147,9 @@ function MonCompte() {
           <div className="mon-compte-background">
             <img
               src="/images/hero bg.png"
-              alt="Background"
+              alt=""
               className="mon-compte-bg-image"
+              aria-hidden="true"
             />
             <div className="mon-compte-overlay"></div>
           </div>
@@ -169,8 +170,9 @@ function MonCompte() {
         <div className="mon-compte-background">
           <img
             src="/images/hero bg.png"
-            alt="Background"
+            alt=""
             className="mon-compte-bg-image"
+            aria-hidden="true"
           />
           <div className="mon-compte-overlay"></div>
         </div>
@@ -377,7 +379,7 @@ function MonCompte() {
                     <div key={favorite.id} className="favorite-item">
                       {favorite.entity.image && (
                         <div className="favorite-image">
-                          <img src={favorite.entity.image} alt={favorite.entity.name} />
+                          <img src={favorite.entity.image} alt={favorite.entity.name} loading="lazy" width="80" height="80" />
                         </div>
                       )}
                       <div className="favorite-info">

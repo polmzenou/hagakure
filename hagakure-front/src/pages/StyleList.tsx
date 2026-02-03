@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { styleApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import Header from '../components/Header'
@@ -18,8 +18,8 @@ function StyleList() {
   const [filteredStyles, setFilteredStyles] = useState<Style[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
   const loadData = async () => {
@@ -51,17 +51,32 @@ function StyleList() {
     }
 
     setFilteredStyles(filtered)
-    setCurrentPage(1)
+    if (prevFiltersRef.current !== searchTerm) {
+      prevFiltersRef.current = searchTerm
+      setSearchParams(prev => {
+        const o = Object.fromEntries(prev)
+        o.page = '1'
+        return o
+      })
+    }
   }, [searchTerm, styles])
 
-  // Pagination
   const totalPages = Math.ceil(filteredStyles.length / itemsPerPage)
+  const currentPage = useMemo(() => {
+    const p = parseInt(searchParams.get('page') || '1', 10)
+    if (isNaN(p) || p < 1) return 1
+    return Math.min(p, totalPages || 1)
+  }, [searchParams, totalPages])
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const currentStyles = filteredStyles.slice(startIndex, endIndex)
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+    setSearchParams(prev => {
+      const o = Object.fromEntries(prev)
+      o.page = String(page)
+      return o
+    })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -138,7 +153,7 @@ function StyleList() {
               <div key={style.id} className="samourai-card">
                 {style.image ? (
                   <div className="samourai-image">
-                    <img src={style.image} alt={style.name} />
+                    <img src={style.image} alt={style.name} loading="lazy" width="300" height="250" />
                   </div>
                 ) : (
                   <div className="samourai-image-placeholder">
@@ -151,7 +166,7 @@ function StyleList() {
                     {style.description?.substring(0, 100) || 'Aucune description'}
                     {style.description && style.description.length > 100 ? '...' : ''}
                   </p>
-                  <Link to={`/styles/${style.id}`} className="view-button">
+                  <Link to={`/styles/${style.id}`} state={{ fromPage: currentPage }} className="view-button">
                     Voir les détails
                   </Link>
                 </div>

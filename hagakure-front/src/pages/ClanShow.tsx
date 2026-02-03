@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { clanApi, authApi, favoriteApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
 import { formatDate } from '../utils/dateUtils'
@@ -27,6 +27,8 @@ interface Clan {
 function ClanShow() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const fromPage = (location.state as { fromPage?: number })?.fromPage
   const [clan, setClan] = useState<Clan | null>(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -97,15 +99,34 @@ function ClanShow() {
     }
   }
 
-  if (loading) return <div className="loading">Chargement...</div>
-  if (!clan) return <div className="loading">Clan non trouvé</div>
+  if (loading) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="loading">Chargement...</div>
+      </div>
+      <Footer />
+    </div>
+  )
+  if (!clan) return (
+    <div className="app">
+      <Header />
+      <div className="show-container">
+        <div className="show-not-found">
+          <p className="show-not-found-message">Clan non trouvé</p>
+          <Link to={fromPage ? `/clans?page=${fromPage}` : '/clans'} className="btn btn-secondary">← Retour à la liste</Link>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
 
   return (
     <div className="app">
       <Header />
       <div className="show-container">
         <div className="show-header">
-          <Link to="/clans" className="btn btn-secondary">
+          <Link to={fromPage ? `/clans?page=${fromPage}` : '/clans'} className="btn btn-secondary">
             ← Retour à la liste
           </Link>
           <div className="show-actions">
@@ -134,7 +155,7 @@ function ClanShow() {
           <div className="show-main">
             {clan.image && (
               <div className="show-image">
-                <img src={clan.image} alt={clan.name} />
+                <img src={clan.image} alt={clan.name} loading="eager" width="400" height="300" />
               </div>
             )}
             <div className="show-info">
