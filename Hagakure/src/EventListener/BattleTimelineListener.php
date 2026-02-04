@@ -30,8 +30,8 @@ class BattleTimelineListener
      * Appelé automatiquement après la création d'une nouvelle Battle
      * Crée l'entrée Timeline correspondante
      * 
-     * @param Battle $battle La bataille nouvellement créée
-     * @param LifecycleEventArgs $event L'événement Doctrine
+     * @param Battle $battle
+     * @param LifecycleEventArgs $event 
      */
     public function postPersist(Battle $battle, LifecycleEventArgs $event): void
     {
@@ -45,7 +45,7 @@ class BattleTimelineListener
             $event->getObjectManager()->flush();
 
         } catch (\Exception $e) {
-            $this->logger->error('Error in BattleTimelineListener::postPersist', [
+            $this->logger->error('Erreur dans BattleTimelineListener::postPersist', [
                 'battle_id' => $battle->getId(),
                 'error' => $e->getMessage()
             ]);
@@ -56,8 +56,8 @@ class BattleTimelineListener
      * Appelé automatiquement après la modification d'une Battle existante
      * Met à jour l'entrée Timeline correspondante
      * 
-     * @param Battle $battle La bataille modifiée
-     * @param LifecycleEventArgs $event L'événement Doctrine
+     * @param Battle $battle
+     * @param LifecycleEventArgs $event 
      */
     public function postUpdate(Battle $battle, LifecycleEventArgs $event): void
     {
@@ -71,7 +71,7 @@ class BattleTimelineListener
             $event->getObjectManager()->flush();
 
         } catch (\Exception $e) {
-            $this->logger->error('Error in BattleTimelineListener::postUpdate', [
+            $this->logger->error('Erreur dans BattleTimelineListener::postUpdate', [
                 'battle_id' => $battle->getId(),
                 'error' => $e->getMessage()
             ]);
@@ -82,8 +82,8 @@ class BattleTimelineListener
      * Appelé automatiquement avant la suppression d'une Battle
      * Supprime l'entrée Timeline correspondante pour éviter les orphelins
      * 
-     * @param Battle $battle La bataille sur le point d'être supprimée
-     * @param LifecycleEventArgs $event L'événement Doctrine
+     * @param Battle $battle
+     * @param LifecycleEventArgs $event 
      */
     public function preRemove(Battle $battle, LifecycleEventArgs $event): void
     {
@@ -93,11 +93,11 @@ class BattleTimelineListener
                 'battle_name' => $battle->getName()
             ]);
 
-            // Supprimer l'entrée timeline pour cette bataille
+            // supprimer l'entrée timeline pour cette bataille
             $this->timelineGenerator->deleteBattleTimeline($battle);
 
         } catch (\Exception $e) {
-            $this->logger->error('Error in BattleTimelineListener::preRemove', [
+            $this->logger->error('Erreur dans BattleTimelineListener::preRemove', [
                 'battle_id' => $battle->getId(),
                 'error' => $e->getMessage()
             ]);

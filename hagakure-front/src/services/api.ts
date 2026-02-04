@@ -81,7 +81,7 @@ async function apiRequest<T>(
             console.error('Error response text:', errorText)
           }
         } catch {
-          // Ignorer si on ne peut pas lire le texte
+          // ne rien faire
         }
       }
 
@@ -92,7 +92,7 @@ async function apiRequest<T>(
         status: response.status,
       }
 
-      // 401 sur une requête authentifiée = session expirée => déconnexion + redirection login
+      // 401 sur une requête authentifiée = session expirée => déconnexion + redirection vers la page de connexion
       if (response.status === 401 && token) {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
@@ -101,7 +101,7 @@ async function apiRequest<T>(
       throw error
     }
 
-    // Gérer les réponses vides => renvoyer un objet vide
+    // gérer les réponses vides => renvoyer un objet vide
     const contentType = response.headers.get('content-type')
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json()
@@ -345,10 +345,10 @@ export const favoriteApi = {
     method: 'POST',
     body: JSON.stringify(data),
   }),
-  check: (data: CheckFavoriteData) => apiRequest<{ is_favorite: boolean; favorite_id?: number }>('/favorites/check', {
-    method: 'POST',
-    body: JSON.stringify(data),
-  }),
+  check: (data: CheckFavoriteData) => apiRequest<{ is_favorite: boolean; favorite_id?: number }>(
+    `/favorites/check?entity_type=${encodeURIComponent(data.entity_type)}&entity_id=${data.entity_id}`,
+    { method: 'GET' }
+  ),
   delete: (id: number) => apiRequest<{ message: string }>(`/favorites/${id}`, {
     method: 'DELETE',
   }),

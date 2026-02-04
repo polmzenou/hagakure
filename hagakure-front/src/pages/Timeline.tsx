@@ -32,7 +32,7 @@ function Timeline() {
   const [snappedEvent, setSnappedEvent] = useState<number | null>(null)
   const [inertiaFrameCount, setInertiaFrameCount] = useState(0)
   const animationRef = useRef<number | null>(null)
-  const MAX_INERTIA_FRAMES = 35 // ~0.6 secondes à 60fps
+  const MAX_INERTIA_FRAMES = 35
 
   const loadTimeline = async () => {
     try {
@@ -189,12 +189,12 @@ function Timeline() {
 
   // Définition des périodes historiques avec leurs couleurs
   const historicalPeriods = [
-    { name: 'Heian', start: 794, end: 1185, color: 'rgba(138, 43, 226, 0.08)' }, // Violet clair
-    { name: 'Kamakura', start: 1185, end: 1333, color: 'rgba(30, 144, 255, 0.08)' }, // Bleu clair
-    { name: 'Muromachi', start: 1336, end: 1573, color: 'rgba(50, 205, 50, 0.08)' }, // Vert clair
-    { name: 'Sengoku', start: 1467, end: 1603, color: 'rgba(255, 140, 0, 0.1)' }, // Orange clair (se superpose à Muromachi)
-    { name: 'Edo', start: 1603, end: 1868, color: 'rgba(220, 20, 60, 0.08)' }, // Rouge clair
-    { name: 'Meiji', start: 1868, end: 1912, color: 'rgba(255, 215, 0, 0.1)' }, // Or clair
+    { name: 'Heian', start: 794, end: 1185, color: 'rgba(138, 43, 226, 0.08)' }, 
+    { name: 'Kamakura', start: 1185, end: 1333, color: 'rgba(30, 144, 255, 0.08)' },
+    { name: 'Muromachi', start: 1336, end: 1573, color: 'rgba(50, 205, 50, 0.08)' }, 
+    { name: 'Sengoku', start: 1467, end: 1603, color: 'rgba(255, 140, 0, 0.1)' }, 
+    { name: 'Edo', start: 1603, end: 1868, color: 'rgba(220, 20, 60, 0.08)' }, 
+    { name: 'Meiji', start: 1868, end: 1912, color: 'rgba(255, 215, 0, 0.1)' }, 
   ]
 
   // Trouver l'événement le plus proche du centre visible
@@ -208,10 +208,10 @@ function Timeline() {
     let minDistance = Infinity
 
     events.forEach(event => {
-      if (!isEventFiltered(event)) return // Ignorer les événements filtrés
+      if (!isEventFiltered(event)) return 
 
       const eventPosition = (getEventPosition(event.year) / 100) * 
-        (Math.max(1500, yearRange * 10) * zoomLevel) + 100 // +100 pour le padding-left
+        (Math.max(1500, yearRange * 10) * zoomLevel) + 100
 
       const distance = Math.abs(containerCenter - eventPosition)
       
@@ -261,7 +261,7 @@ function Timeline() {
         
         // Aimantation douce
         if (Math.abs(diff) > 2) {
-          container.scrollLeft += diff * 0.15 // 15% de la distance restante
+          container.scrollLeft += diff * 0.15
           setSnappedEvent(nearest.event.id)
           animationRef.current = requestAnimationFrame(applyInertia)
         } else {
@@ -316,8 +316,8 @@ function Timeline() {
     setLastX(e.pageX)
     setLastTime(Date.now())
     setVelocity(0)
-    setInertiaFrameCount(0) // Réinitialiser le compteur de frames
-    setSnappedEvent(null) // Retirer l'indicateur de snap
+    setInertiaFrameCount(0)
+    setSnappedEvent(null) 
   }
 
   const handleMouseLeave = () => {
@@ -347,18 +347,18 @@ function Timeline() {
     
     timelineRef.current.scrollLeft = scrollLeft - walk
     
-    // Calculer la vélocité (réduite pour un scroll moins rapide)
+    // calculer la vélocité (réduite pour un scroll moins rapide)
     const timeDelta = currentTime - lastTime
     if (timeDelta > 0) {
-      const newVelocity = (currentX - lastX) / timeDelta * 16 // Normaliser à 60fps
-      setVelocity(newVelocity * 0.6) // Multiplicateur réduit de 1.25 à 0.6
+      const newVelocity = (currentX - lastX) / timeDelta * 16
+      setVelocity(newVelocity * 0.6)
     }
     
     setLastX(currentX)
     setLastTime(currentTime)
   }
 
-  // Nettoyer l'animation lors du démontage
+  // nettoyer l'animation lors du démontage
   useEffect(() => {
     return () => {
       if (animationRef.current) {
@@ -506,7 +506,7 @@ function Timeline() {
               {/* Ligne centrale de la frise */}
               <div className="timeline-line"></div>
 
-              {/* Événements */}
+              {/* événements */}
               <div className="timeline-events">
                 {events.map((event, index) => {
                   const isTop = index % 2 === 0
@@ -535,7 +535,7 @@ function Timeline() {
             </div>
           </div>
 
-          {/* Détails de l'événement sélectionné */}
+          {/* détails de l'événement sélectionné */}
           {selectedEvent && (
             <div className="event-details">
               <div className="details-header">
@@ -594,7 +594,7 @@ function Timeline() {
                 <p>{selectedEvent.description}</p>
               </div>
 
-              {/* Lien vers la bataille si c'est un événement de type battle */}
+              {/* lien vers la bataille si c'est un événement de type battle */}
               {selectedEvent.type === 'battle' && selectedEvent.battle_id && (
                 <div className="battle-link-section">
                   {loadingBattle ? (

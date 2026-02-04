@@ -84,7 +84,7 @@ function App() {
         <Route path="/battles/:id" element={<BattleShow />} />
         <Route path="/battles/:id/edit" element={<ProtectedRoute><BattleForm /></ProtectedRoute>} />
         
-        {/* 404 - Catch all route (must be last) */}
+        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

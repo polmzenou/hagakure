@@ -21,9 +21,11 @@ function WeaponList() {
   const [error, setError] = useState<string | null>(null)
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const itemsPerPage = 6
-  const prevFiltersRef = useRef({ searchTerm, selectedType })
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const prevFiltersRef = useRef({ searchTerm, selectedTypes })
 
   const loadData = async () => {
     setError(null)
@@ -64,14 +66,14 @@ function WeaponList() {
     }
 
     // Filtre par type
-    if (selectedType) {
-      filtered = filtered.filter(w => w.type === selectedType)
+    if (selectedTypes.length > 0) {
+      filtered = filtered.filter(w => w.type && selectedTypes.includes(w.type))
     }
 
     setFilteredWeapons(filtered)
     const filtersChanged = prevFiltersRef.current.searchTerm !== searchTerm ||
-      prevFiltersRef.current.selectedType !== selectedType
-    prevFiltersRef.current = { searchTerm, selectedType }
+      JSON.stringify(prevFiltersRef.current.selectedTypes) !== JSON.stringify(selectedTypes)
+    prevFiltersRef.current = { searchTerm, selectedTypes }
     if (filtersChanged) {
       setSearchParams(prev => {
         const next = new URLSearchParams(prev)
@@ -79,7 +81,7 @@ function WeaponList() {
         return next
       })
     }
-  }, [searchTerm, selectedType, weapons])
+  }, [searchTerm, selectedTypes, weapons, setSearchParams])
 
   const uniqueTypes = Array.from(new Set(weapons.map(w => w.type).filter(Boolean)))
   const totalPages = Math.ceil(filteredWeapons.length / itemsPerPage)
@@ -100,6 +102,25 @@ function WeaponList() {
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  const handleTypeToggle = (type: string) => {
+    setSelectedTypes(prev =>
+      prev.includes(type)
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    )
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   if (loading) return <div className="loading">Chargement...</div>
 
@@ -159,23 +180,51 @@ function WeaponList() {
         </div>
 
         {/* Filter Dropdown */}
-        <div className="filter-dropdown-container">
-          <label htmlFor="type-filter" className="filter-label">
-            Filtrer par type :
-          </label>
-          <select
-            id="type-filter"
-            className="filter-select"
-            value={selectedType || ''}
-            onChange={(e) => setSelectedType(e.target.value || null)}
-          >
-            <option value="">Tous les types</option>
-            {uniqueTypes.map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+        <div className="custom-multiselect-container" ref={dropdownRef}>
+          <label className="filter-label">Filtrer par type :</label>
+          
+          <div className="custom-select">
+            <button
+              type="button"
+              className="custom-select-trigger"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <span>
+                {selectedTypes.length === 0
+                  ? 'Tous les types'
+                  : selectedTypes.length === 1
+                  ? selectedTypes[0]
+                  : `${selectedTypes.length} types sélectionnés`}
+              </span>
+              <svg className="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            {isDropdownOpen && (
+              <div className="custom-select-options">
+                {selectedTypes.length > 0 && (
+                  <button
+                    type="button"
+                    className="clear-all-option"
+                    onClick={() => setSelectedTypes([])}
+                  >
+                    ✕ Effacer tous les filtres
+                  </button>
+                )}
+                {uniqueTypes.map(type => (
+                  <label key={type} className="custom-option">
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes(type)}
+                      onChange={() => handleTypeToggle(type)}
+                    />
+                    <span className="option-label">{type}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Results count */}

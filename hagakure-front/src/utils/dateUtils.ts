@@ -3,9 +3,9 @@
  * - Si la date est au format AAAA-01-01 (1er janvier), affiche uniquement l'année AAAA
  * - Si la date a un mois et/ou un jour différent de 01-01, affiche la date complète formatée
  * 
- * @param dateString - Date au format ISO (AAAA-MM-JJ) ou null/undefined
- * @param fallback - Valeur à retourner si la date est null/undefined (défaut: '?')
- * @returns Date formatée ou fallback
+ * @param dateString
+ * @param fallback
+ * @returns
  */
 export function formatDate(dateString: string | null | undefined, fallback: string = '?'): string {
   if (!dateString) {
@@ -13,11 +13,11 @@ export function formatDate(dateString: string | null | undefined, fallback: stri
   }
 
   try {
-    // Parser la date au format ISO (AAAA-MM-JJ)
+    // parser la date au format ISO (AAAA-MM-JJ)
     const dateParts = dateString.split('-')
     
     if (dateParts.length !== 3) {
-      // Si le format n'est pas correct, retourner la date telle quelle
+      // si le format n'est pas correct, retourner la date telle quelle
       return dateString
     }
 
@@ -25,13 +25,13 @@ export function formatDate(dateString: string | null | undefined, fallback: stri
     const month = parseInt(dateParts[1], 10)
     const day = parseInt(dateParts[2], 10)
 
-    // Vérifier si c'est le 1er janvier (01-01)
+    // vérifier si c'est le 1er janvier (01-01)
     if (month === 1 && day === 1) {
-      // Afficher uniquement l'année
+      // afficher uniquement l'année
       return year.toString()
     }
 
-    // Sinon, formater la date complète en français
+    // sinon, formater la date complète en français
     const date = new Date(year, month - 1, day)
     return date.toLocaleDateString('fr-FR', {
       year: 'numeric',
@@ -39,7 +39,7 @@ export function formatDate(dateString: string | null | undefined, fallback: stri
       day: 'numeric'
     })
   } catch (error) {
-    console.error('Error formatting date:', error)
+    console.error('Erreur lors du formatage de la date:', error)
     return dateString
   }
 }
@@ -49,9 +49,9 @@ export function formatDate(dateString: string | null | undefined, fallback: stri
  * - Si la date est au format AAAA-01-01, affiche uniquement l'année AAAA
  * - Sinon, affiche la date au format JJ/MM/AAAA
  * 
- * @param dateString - Date au format ISO (AAAA-MM-JJ) ou null/undefined
- * @param fallback - Valeur à retourner si la date est null/undefined (défaut: '?')
- * @returns Date formatée ou fallback
+ * @param dateString
+ * @param fallback
+ * @returns
  */
 export function formatDateShort(dateString: string | null | undefined, fallback: string = '?'): string {
   if (!dateString) {
@@ -80,7 +80,7 @@ export function formatDateShort(dateString: string | null | undefined, fallback:
       day: '2-digit'
     })
   } catch (error) {
-    console.error('Error formatting date:', error)
+    console.error('Erreur lors du formatage de la date:', error)
     return dateString
   }
 }

@@ -14,7 +14,6 @@ body {
   font-family: 'DM Sans', sans-serif;
 }
 
-/* Import global styles from index.css variables */
 :root {
   --primary-color: #c41e3a;
   --primary-dark: #8b1428;

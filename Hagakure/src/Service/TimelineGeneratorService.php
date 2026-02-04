@@ -70,7 +70,6 @@ class TimelineGeneratorService
             }
         }
 
-        // Sauvegarder toutes les modifications
         $this->entityManager->flush();
 
         return $stats;
@@ -92,7 +91,6 @@ class TimelineGeneratorService
 
         $isNew = false;
 
-        // Si pas d'entrée existante, en créer une nouvelle
         if ($timeline === null) {
             $timeline = new Timeline();
             $timeline->setType('battle');
@@ -100,28 +98,25 @@ class TimelineGeneratorService
             $timeline->setCreatedAt(new \DateTimeImmutable());
             $isNew = true;
 
-            $this->logger->info('Creating new timeline entry for battle', [
+            $this->logger->info('Création d\'une nouvelle entrée de timeline pour la bataille', [
                 'battle_id' => $battle->getId(),
                 'battle_name' => $battle->getName()
             ]);
         } else {
-            $this->logger->info('Updating existing timeline entry for battle', [
+            $this->logger->info('Mise à jour d\'une entrée de timeline existante pour la bataille', [
                 'battle_id' => $battle->getId(),
                 'battle_name' => $battle->getName()
             ]);
         }
 
-        // Mettre à jour les informations de la timeline
         $timeline->setTitle($battle->getName());
         $timeline->setDate($battle->getDate());
         $timeline->setYear((int) $battle->getDate()->format('Y'));
         $timeline->setDescription($battle->getDescription());
         $timeline->setUpdatedAt(new \DateTimeImmutable());
 
-        // Persister la timeline
         $this->entityManager->persist($timeline);
 
-        // Gérer l'entrée TimelineEntities correspondante
         if ($isNew) {
             $this->createTimelineEntity($timeline, 'battle', $battle->getId());
         }
@@ -143,8 +138,6 @@ class TimelineGeneratorService
             return false;
         }
 
-        // Chercher une entrée Timeline existante pour cette naissance
-        // On doit chercher via TimelineEntities car on n'a pas de relation directe
         $timelineEntity = $this->timelineEntitiesRepository->findOneBy([
             'entity_type' => 'samurai',
             'entity_id' => $samourai->getId()
@@ -159,7 +152,7 @@ class TimelineGeneratorService
             
             // Vérifier que c'est bien une entrée de type 'birth'
             if ($timeline !== null && $timeline->getType() !== 'birth') {
-                $this->logger->warning('Timeline entity found but type is not birth', [
+                $this->logger->warning('Timeline entity trouvée mais type n\'est pas birth', [
                     'samurai_id' => $samourai->getId(),
                     'timeline_type' => $timeline->getType()
                 ]);
@@ -175,12 +168,12 @@ class TimelineGeneratorService
             $timeline->setCreatedAt(new \DateTimeImmutable());
             $isNew = true;
 
-            $this->logger->info('Creating new timeline entry for samurai birth', [
+            $this->logger->info('Création d\'une nouvelle entrée de timeline pour la naissance du samouraï', [
                 'samurai_id' => $samourai->getId(),
                 'samurai_name' => $samourai->getName()
             ]);
         } else {
-            $this->logger->info('Updating existing timeline entry for samurai birth', [
+            $this->logger->info('Mise à jour d\'une entrée de timeline existante pour la naissance du samouraï', [
                 'samurai_id' => $samourai->getId(),
                 'samurai_name' => $samourai->getName()
             ]);
@@ -193,10 +186,8 @@ class TimelineGeneratorService
         $timeline->setDescription('Naissance du samurai ' . $samourai->getName());
         $timeline->setUpdatedAt(new \DateTimeImmutable());
 
-        // Persister la timeline
         $this->entityManager->persist($timeline);
 
-        // Gérer l'entrée TimelineEntities correspondante
         if ($isNew) {
             $this->createTimelineEntity($timeline, 'samurai', $samourai->getId());
         }
@@ -212,19 +203,17 @@ class TimelineGeneratorService
      */
     public function deleteBattleTimeline(Battle $battle): void
     {
-        // Chercher l'entrée Timeline pour cette bataille
         $timeline = $this->timelineRepository->findOneBy([
             'type' => 'battle',
             'battle_id' => $battle
         ]);
 
         if ($timeline !== null) {
-            $this->logger->info('Deleting timeline entry for battle', [
+            $this->logger->info('Suppression de l\'entrée de timeline pour la bataille', [
                 'battle_id' => $battle->getId(),
                 'timeline_id' => $timeline->getId()
             ]);
 
-            // Supprimer les TimelineEntities associées
             $timelineEntities = $this->timelineEntitiesRepository->findBy([
                 'timeline_id' => $timeline
             ]);
@@ -233,7 +222,6 @@ class TimelineGeneratorService
                 $this->entityManager->remove($entity);
             }
 
-            // Supprimer la Timeline
             $this->entityManager->remove($timeline);
             $this->entityManager->flush();
         }
@@ -247,7 +235,6 @@ class TimelineGeneratorService
      */
     public function deleteSamuraiBirthTimeline(Samourai $samourai): void
     {
-        // Chercher l'entrée TimelineEntity pour ce samouraï
         $timelineEntity = $this->timelineEntitiesRepository->findOneBy([
             'entity_type' => 'samurai',
             'entity_id' => $samourai->getId()
@@ -256,15 +243,13 @@ class TimelineGeneratorService
         if ($timelineEntity !== null) {
             $timeline = $timelineEntity->getTimelineId();
 
-            $this->logger->info('Deleting timeline entry for samurai birth', [
+            $this->logger->info('Suppression de l\'entrée de timeline pour la naissance du samouraï', [
                 'samurai_id' => $samourai->getId(),
                 'timeline_id' => $timeline?->getId()
             ]);
 
-            // Supprimer la TimelineEntity
             $this->entityManager->remove($timelineEntity);
 
-            // Supprimer la Timeline si elle existe et est de type 'birth'
             if ($timeline !== null && $timeline->getType() === 'birth') {
                 $this->entityManager->remove($timeline);
             }
@@ -287,12 +272,10 @@ class TimelineGeneratorService
             'skipped' => 0,
         ];
 
-        // Récupérer les événements historiques depuis le fichier de données
         $historicalEvents = HistoricalEventsData::getHistoricalEvents();
 
         foreach ($historicalEvents as $eventData) {
             try {
-                // Vérifier si l'événement existe déjà (par titre + année pour éviter les doublons)
                 $existingTimeline = $this->timelineRepository->findOneBy([
                     'title' => $eventData['title'],
                     'year' => $eventData['year']
@@ -301,46 +284,41 @@ class TimelineGeneratorService
                 $isNew = false;
 
                 if ($existingTimeline === null) {
-                    // Créer une nouvelle entrée Timeline
                     $timeline = new Timeline();
                     $timeline->setCreatedAt(new \DateTimeImmutable());
                     $isNew = true;
                     $stats['created']++;
 
-                    $this->logger->info('Creating new historical timeline entry', [
+                    $this->logger->info('Création d\'une nouvelle entrée de timeline pour l\'événement historique', [
                         'title' => $eventData['title'],
                         'year' => $eventData['year'],
                         'type' => $eventData['type']
                     ]);
                 } else {
-                    // Mettre à jour l'entrée existante
                     $timeline = $existingTimeline;
                     $stats['updated']++;
 
-                    $this->logger->info('Updating existing historical timeline entry', [
+                    $this->logger->info('Mise à jour d\'une entrée de timeline existante pour l\'événement historique', [
                         'title' => $eventData['title'],
                         'year' => $eventData['year']
                     ]);
                 }
 
-                // Mettre à jour les informations de la timeline
                 $timeline->setTitle($eventData['title']);
-                $timeline->setType($eventData['type']); // 'politique' ou 'duel'
+                $timeline->setType($eventData['type']);
                 $timeline->setYear($eventData['year']);
                 
-                // Convertir la date string en DateTime
                 $date = new \DateTime($eventData['date']);
                 $timeline->setDate($date);
                 
                 $timeline->setDescription($eventData['description']);
-                $timeline->setBattleId(null); // Les événements historiques ne sont pas liés à des batailles
+                $timeline->setBattleId(null);
                 $timeline->setUpdatedAt(new \DateTimeImmutable());
 
-                // Persister la timeline
                 $this->entityManager->persist($timeline);
 
             } catch (\Exception $e) {
-                $this->logger->error('Error syncing historical event', [
+                $this->logger->error('Erreur lors de la synchronisation de l\'événement historique', [
                     'title' => $eventData['title'] ?? 'unknown',
                     'error' => $e->getMessage()
                 ]);
@@ -348,14 +326,13 @@ class TimelineGeneratorService
             }
         }
 
-        // Sauvegarder toutes les modifications
         $this->entityManager->flush();
 
         return $stats;
     }
 
     /**
-     * Crée une entrée TimelineEntities pour lier une Timeline à une entité
+     * Crée une entrée TimelineEntities pour lier une timeline à une entité
      * 
      * @param Timeline $timeline La timeline à lier
      * @param string $entityType Type d'entité ('battle' ou 'samurai')
@@ -370,7 +347,7 @@ class TimelineGeneratorService
 
         $this->entityManager->persist($timelineEntity);
 
-        $this->logger->info('Creating timeline entity link', [
+        $this->logger->info('Création d\'un lien entre une timeline et une entité', [
             'entity_type' => $entityType,
             'entity_id' => $entityId
         ]);

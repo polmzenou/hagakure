@@ -242,21 +242,22 @@ class FavoriteController extends AbstractController
         }
     }
 
-    #[Route('/check', name: 'check', methods: ['POST'])]
+    #[Route('/check', name: 'check', methods: ['GET'])]
     public function check(Request $request): JsonResponse
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        $data = json_decode($request->getContent(), true);
+        $entityType = $request->query->get('entity_type');
+        $entityId = $request->query->getInt('entity_id');
 
-        if (!isset($data['entity_type']) || !isset($data['entity_id'])) {
+        if (!$entityType || !$entityId) {
             return $this->json(['message' => 'entity_type et entity_id requis'], Response::HTTP_BAD_REQUEST);
         }
 
         $favorite = $this->favoriteRepository->findOneBy([
             'user_id' => $user,
-            'entity_type' => $data['entity_type'],
-            'entity_id' => $data['entity_id']
+            'entity_type' => $entityType,
+            'entity_id' => $entityId
         ]);
 
         return $this->json([

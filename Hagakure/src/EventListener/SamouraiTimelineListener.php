@@ -30,8 +30,8 @@ class SamouraiTimelineListener
      * Appelé automatiquement après la création d'un nouveau Samourai
      * Crée l'entrée Timeline de naissance si birth_date existe
      * 
-     * @param Samourai $samourai Le samouraï nouvellement créé
-     * @param LifecycleEventArgs $event L'événement Doctrine
+     * @param Samourai $samourai
+     * @param LifecycleEventArgs $event 
      */
     public function postPersist(Samourai $samourai, LifecycleEventArgs $event): void
     {
@@ -46,13 +46,13 @@ class SamouraiTimelineListener
                 $this->timelineGenerator->syncSamuraiBirthTimeline($samourai);
                 $event->getObjectManager()->flush();
             } else {
-                $this->logger->info('Skipping timeline creation: samurai has no birth_date', [
+                $this->logger->info('Passage sans date de naissance, pas de création de timeline', [
                     'samurai_id' => $samourai->getId()
                 ]);
             }
 
         } catch (\Exception $e) {
-            $this->logger->error('Error in SamouraiTimelineListener::postPersist', [
+            $this->logger->error('Erreur dans SamouraiTimelineListener::postPersist', [
                 'samurai_id' => $samourai->getId(),
                 'error' => $e->getMessage()
             ]);
@@ -63,8 +63,8 @@ class SamouraiTimelineListener
      * Appelé automatiquement après la modification d'un Samourai existant
      * Met à jour l'entrée Timeline si birth_date existe, ou la supprime si birth_date a été retirée
      * 
-     * @param Samourai $samourai Le samouraï modifié
-     * @param LifecycleEventArgs $event L'événement Doctrine
+     * @param Samourai $samourai
+     * @param LifecycleEventArgs $event 
      */
     public function postUpdate(Samourai $samourai, LifecycleEventArgs $event): void
     {
@@ -79,7 +79,7 @@ class SamouraiTimelineListener
                 $this->timelineGenerator->syncSamuraiBirthTimeline($samourai);
                 $event->getObjectManager()->flush();
             } else {
-                $this->logger->info('Birth date removed, deleting timeline entry if exists', [
+                $this->logger->info('Date de naissance retirée, suppression de l\'entrée de timeline si elle existe', [
                     'samurai_id' => $samourai->getId()
                 ]);
 
@@ -87,7 +87,7 @@ class SamouraiTimelineListener
             }
 
         } catch (\Exception $e) {
-            $this->logger->error('Error in SamouraiTimelineListener::postUpdate', [
+            $this->logger->error('Erreur dans SamouraiTimelineListener::postUpdate', [
                 'samurai_id' => $samourai->getId(),
                 'error' => $e->getMessage()
             ]);
@@ -98,8 +98,8 @@ class SamouraiTimelineListener
      * Appelé automatiquement avant la suppression d'un Samourai
      * Supprime l'entrée Timeline de naissance correspondante pour éviter les orphelins
      * 
-     * @param Samourai $samourai Le samouraï sur le point d'être supprimé
-     * @param LifecycleEventArgs $event L'événement Doctrine
+     * @param Samourai $samourai
+     * @param LifecycleEventArgs $event 
      */
     public function preRemove(Samourai $samourai, LifecycleEventArgs $event): void
     {
@@ -109,11 +109,11 @@ class SamouraiTimelineListener
                 'samurai_name' => $samourai->getName()
             ]);
 
-            // Supprimer l'entrée timeline de naissance pour ce samouraï
+            // supprimer l'entrée timeline de naissance pour ce samouraï
             $this->timelineGenerator->deleteSamuraiBirthTimeline($samourai);
 
         } catch (\Exception $e) {
-            $this->logger->error('Error in SamouraiTimelineListener::preRemove', [
+            $this->logger->error('Erreur dans SamouraiTimelineListener::preRemove', [
                 'samurai_id' => $samourai->getId(),
                 'error' => $e->getMessage()
             ]);

@@ -45,7 +45,7 @@ class WeaponController extends AbstractController
         $weapon = $this->repository->find($id);
 
         if (!$weapon) {
-            return $this->json(['error' => 'Weapon not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Arme non trouvée'], Response::HTTP_NOT_FOUND);
         }
 
         $response = $this->json($this->serializeWeapon($weapon));
@@ -86,7 +86,7 @@ class WeaponController extends AbstractController
         $weapon = $this->repository->find($id);
 
         if (!$weapon) {
-            return $this->json(['error' => 'Weapon not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Arme non trouvée'], Response::HTTP_NOT_FOUND);
         }
 
         $data = json_decode($request->getContent(), true);
@@ -118,13 +118,13 @@ class WeaponController extends AbstractController
         $weapon = $this->repository->find($id);
 
         if (!$weapon) {
-            return $this->json(['error' => 'Weapon not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'Arme non trouvée'], Response::HTTP_NOT_FOUND);
         }
 
         $this->entityManager->remove($weapon);
         $this->entityManager->flush();
 
-        return $this->json(['message' => 'Weapon deleted successfully']);
+        return $this->json(['message' => 'Arme supprimée avec succès']);
     }
 
     private function serializeWeapon(Weapon $weapon): array

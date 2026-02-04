@@ -107,17 +107,6 @@ const eras: Era[] = [
 ]
 
 function HistoricalEras() {
-  // Kanjis de samouraïs pour le fond décoratif
-  // 侍 (samurai) - Samouraï
-  // 武士 (bushi) - Guerrier
-  // 刀 (katana) - Sabre
-  // 戦 (ikusa) - Bataille
-  // 武 (bu) - Martial
-  // 道 (dō) - Voie (comme dans bushido)
-  // 忠 (chū) - Loyauté
-  // 義 (gi) - Justice/Honneur
-  // 勇 (yū) - Courage
-  // 仁 (jin) - Bienveillance
   
   const samuraiKanjis = [
     { kanji: '侍', meaning: 'Samouraï' },
@@ -134,7 +123,6 @@ function HistoricalEras() {
 
   return (
     <div className="historical-eras-section">
-      {/* Watermarks japonais en arrière-plan */}
       <div className="eras-watermarks">
         {samuraiKanjis.map((item, index) => (
           <div
