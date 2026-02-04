@@ -120,17 +120,17 @@ function BattleList() {
                     <div className="battle-meta">
                       {battle.date && (
                         <span className="battle-date">
-                          📅 {formatDateShort(battle.date, '-')}
+                          {formatDateShort(battle.date, '-')}
                         </span>
                       )}
                       {battle.location && (
                         <span className="battle-location">
-                          📍 {battle.location.name}
+                          {battle.location.name}
                         </span>
                       )}
                       {battle.winner_clan && (
                         <span className="battle-winner">
-                          🏆 {battle.winner_clan.name}
+                          {battle.winner_clan.name}
                         </span>
                       )}
                     </div>

@@ -42,8 +42,8 @@ class GenerateTimelineCommand extends Command
     /**
      * Exécute la génération de la timeline
      * 
-     * @param InputInterface $input Interface d'entrée de la commande
-     * @param OutputInterface $output Interface de sortie de la commande
+     * @param InputInterface $input 
+     * @param OutputInterface $output
      * @return int Code de retour (0 = succès, autre = erreur)
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -102,10 +102,10 @@ class GenerateTimelineCommand extends Command
             return Command::SUCCESS;
 
         } catch (\Exception $e) {
-            $io->error('An error occurred during timeline generation');
+            $io->error('Une erreur est survenue lors de la génération de la timeline');
             $io->text([
-                '<fg=red>Error:</> ' . $e->getMessage(),
-                '<fg=yellow>File:</> ' . $e->getFile() . ':' . $e->getLine(),
+                '<fg=red>Erreur:</> ' . $e->getMessage(),
+                '<fg=yellow>Fichier:</> ' . $e->getFile() . ':' . $e->getLine(),
             ]);
 
             if ($output->isVerbose()) {

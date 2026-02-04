@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
  * Event Listener Doctrine pour synchroniser automatiquement la Timeline
  * lors des opérations CRUD sur l'entité Battle
  * 
- * Ce listener assure que chaque bataille a toujours une entrée correspondante
+ * ce listener assure que chaque bataille a toujours une entrée correspondante
  * dans la timeline, créée/mise à jour automatiquement
  */
 #[AsEntityListener(event: Events::postPersist, method: 'postPersist', entity: Battle::class)]
@@ -80,7 +80,7 @@ class BattleTimelineListener
 
     /**
      * Appelé automatiquement avant la suppression d'une Battle
-     * Supprime l'entrée Timeline correspondante pour éviter les orphelins
+     * Supprime l'entrée Timeline correspondante
      * 
      * @param Battle $battle
      * @param LifecycleEventArgs $event 

@@ -33,7 +33,7 @@ class TimelineGeneratorService
      * Génère la timeline complète pour toutes les batailles et naissances existantes
      * Utilisé principalement par la commande pour génération initiale en masse
      * 
-     * @return array Statistiques de génération [created, updated, skipped]
+     * @return array
      */
     public function generateTimeline(): array
     {
@@ -79,8 +79,8 @@ class TimelineGeneratorService
      * Synchronise l'entrée Timeline pour une bataille spécifique
      * Crée une nouvelle entrée ou met à jour l'existante
      * 
-     * @param Battle $battle La bataille à synchroniser
-     * @return bool True si création, False si mise à jour
+     * @param Battle $battle
+     * @return bool
      */
     public function syncBattleTimeline(Battle $battle): bool
     {
@@ -128,8 +128,8 @@ class TimelineGeneratorService
      * Synchronise l'entrée Timeline pour la naissance d'un samouraï
      * Crée une nouvelle entrée ou met à jour l'existante
      * 
-     * @param Samourai $samourai Le samouraï dont on synchronise la naissance
-     * @return bool True si création, False si mise à jour
+     * @param Samourai $samourai
+     * @return bool
      */
     public function syncSamuraiBirthTimeline(Samourai $samourai): bool
     {
@@ -197,9 +197,9 @@ class TimelineGeneratorService
 
     /**
      * Supprime l'entrée Timeline associée à une bataille
-     * Utilisé lors de la suppression d'une bataille
+     * utilisé lors de la suppression d'une bataille
      * 
-     * @param Battle $battle La bataille dont on supprime la timeline
+     * @param Battle $battle
      */
     public function deleteBattleTimeline(Battle $battle): void
     {
@@ -229,9 +229,9 @@ class TimelineGeneratorService
 
     /**
      * Supprime l'entrée Timeline associée à la naissance d'un samouraï
-     * Utilisé lors de la suppression d'un samouraï
+     * utilisé lors de la suppression d'un samouraï
      * 
-     * @param Samourai $samourai Le samouraï dont on supprime la timeline de naissance
+     * @param Samourai $samourai
      */
     public function deleteSamuraiBirthTimeline(Samourai $samourai): void
     {
@@ -258,85 +258,14 @@ class TimelineGeneratorService
         }
     }
 
-    /**
-     * Synchronise les événements historiques (politique et duels) dans la timeline
-     * Les données proviennent de HistoricalEventsData
-     * 
-     * @return array Statistiques [created, updated, skipped]
-     */
-    public function syncHistoricalEvents(): array
-    {
-        $stats = [
-            'created' => 0,
-            'updated' => 0,
-            'skipped' => 0,
-        ];
-
-        $historicalEvents = HistoricalEventsData::getHistoricalEvents();
-
-        foreach ($historicalEvents as $eventData) {
-            try {
-                $existingTimeline = $this->timelineRepository->findOneBy([
-                    'title' => $eventData['title'],
-                    'year' => $eventData['year']
-                ]);
-
-                $isNew = false;
-
-                if ($existingTimeline === null) {
-                    $timeline = new Timeline();
-                    $timeline->setCreatedAt(new \DateTimeImmutable());
-                    $isNew = true;
-                    $stats['created']++;
-
-                    $this->logger->info('Création d\'une nouvelle entrée de timeline pour l\'événement historique', [
-                        'title' => $eventData['title'],
-                        'year' => $eventData['year'],
-                        'type' => $eventData['type']
-                    ]);
-                } else {
-                    $timeline = $existingTimeline;
-                    $stats['updated']++;
-
-                    $this->logger->info('Mise à jour d\'une entrée de timeline existante pour l\'événement historique', [
-                        'title' => $eventData['title'],
-                        'year' => $eventData['year']
-                    ]);
-                }
-
-                $timeline->setTitle($eventData['title']);
-                $timeline->setType($eventData['type']);
-                $timeline->setYear($eventData['year']);
-                
-                $date = new \DateTime($eventData['date']);
-                $timeline->setDate($date);
-                
-                $timeline->setDescription($eventData['description']);
-                $timeline->setBattleId(null);
-                $timeline->setUpdatedAt(new \DateTimeImmutable());
-
-                $this->entityManager->persist($timeline);
-
-            } catch (\Exception $e) {
-                $this->logger->error('Erreur lors de la synchronisation de l\'événement historique', [
-                    'title' => $eventData['title'] ?? 'unknown',
-                    'error' => $e->getMessage()
-                ]);
-                $stats['skipped']++;
-            }
-        }
-
-        $this->entityManager->flush();
-
-        return $stats;
-    }
+    
 
     /**
      * Crée une entrée TimelineEntities pour lier une timeline à une entité
      * 
-     * @param Timeline $timeline La timeline à lier
-     * @param string $entityType Type d'entité ('battle' ou 'samurai')
-     * @param int $entityId ID de l'entité
+     * @param Timeline $timeline
+     * @param string $entityType
+     * @param int $entityId
      */
     private function createTimelineEntity(Timeline $timeline, string $entityType, int $entityId): void
     {
@@ -354,3 +283,103 @@ class TimelineGeneratorService
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+     * Synchronise les événements historiques (politique et duels) dans la timeline
+     * les données proviennent de HistoricalEventsData
+     * 
+     * @return array Statistiques [created, updated, skipped]
+     */
+    // public function syncHistoricalEvents(): array
+    // {
+    //     $stats = [
+    //         'created' => 0,
+    //         'updated' => 0,
+    //         'skipped' => 0,
+    //     ];
+
+    //     $historicalEvents = HistoricalEventsData::getHistoricalEvents();
+
+    //     foreach ($historicalEvents as $eventData) {
+    //         try {
+    //             $existingTimeline = $this->timelineRepository->findOneBy([
+    //                 'title' => $eventData['title'],
+    //                 'year' => $eventData['year']
+    //             ]);
+
+    //             $isNew = false;
+
+    //             if ($existingTimeline === null) {
+    //                 $timeline = new Timeline();
+    //                 $timeline->setCreatedAt(new \DateTimeImmutable());
+    //                 $isNew = true;
+    //                 $stats['created']++;
+
+    //                 $this->logger->info('Création d\'une nouvelle entrée de timeline pour l\'événement historique', [
+    //                     'title' => $eventData['title'],
+    //                     'year' => $eventData['year'],
+    //                     'type' => $eventData['type']
+    //                 ]);
+    //             } else {
+    //                 $timeline = $existingTimeline;
+    //                 $stats['updated']++;
+
+    //                 $this->logger->info('Mise à jour d\'une entrée de timeline existante pour l\'événement historique', [
+    //                     'title' => $eventData['title'],
+    //                     'year' => $eventData['year']
+    //                 ]);
+    //             }
+
+    //             $timeline->setTitle($eventData['title']);
+    //             $timeline->setType($eventData['type']);
+    //             $timeline->setYear($eventData['year']);
+                
+    //             $date = new \DateTime($eventData['date']);
+    //             $timeline->setDate($date);
+                
+    //             $timeline->setDescription($eventData['description']);
+    //             $timeline->setBattleId(null);
+    //             $timeline->setUpdatedAt(new \DateTimeImmutable());
+
+    //             $this->entityManager->persist($timeline);
+
+    //         } catch (\Exception $e) {
+    //             $this->logger->error('Erreur lors de la synchronisation de l\'événement historique', [
+    //                 'title' => $eventData['title'] ?? 'unknown',
+    //                 'error' => $e->getMessage()
+    //             ]);
+    //             $stats['skipped']++;
+    //         }
+    //     }
+
+    //     $this->entityManager->flush();
+
+    //     return $stats;
+    // }
