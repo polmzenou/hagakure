@@ -137,11 +137,11 @@ Pour vous connecter en tant qu’admin dans l’application :
 
 ```bash
 cd Hagakure
-php bin/console app:create-admin VOTRE_EMAIL@exemple.fr VOTRE_MOT_DE_PASSE
+php bin/console doctrine:fixtures:load
 cd ..
 ```
 
-Remplacer `VOTRE_EMAIL@exemple.fr` et `VOTRE_MOT_DE_PASSE` par les valeurs souhaitées. Cet utilisateur aura le rôle administrateur.
+Vous aurez une liste de user dont un avec le rôle administrateur.
 
 ---
 
