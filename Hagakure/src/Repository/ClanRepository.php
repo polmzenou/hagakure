@@ -21,6 +21,7 @@ class ClanRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->leftJoin('c.leader_id', 'l')
             ->addSelect('l')
+            ->orderBy('c.id', 'ASC')
             ->getQuery()
             ->getResult();
     }

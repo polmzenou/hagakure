@@ -25,6 +25,7 @@ class BattleRepository extends ServiceEntityRepository
             ->addSelect('wc')
             ->leftJoin('b.samourais', 's')
             ->addSelect('s')
+            ->orderBy('b.id', 'ASC')
             ->getQuery()
             ->getResult();
     }

@@ -24,7 +24,7 @@ class StyleController extends AbstractController
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $styles = $this->repository->findAll();
+        $styles = $this->repository->findBy([], ['id' => 'ASC']);
         $data = [];
 
         foreach ($styles as $style) {

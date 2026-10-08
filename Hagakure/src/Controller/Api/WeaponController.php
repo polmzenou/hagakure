@@ -24,7 +24,7 @@ class WeaponController extends AbstractController
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $weapons = $this->repository->findAll();
+        $weapons = $this->repository->findBy([], ['id' => 'ASC']);
         $data = [];
 
         foreach ($weapons as $weapon) {

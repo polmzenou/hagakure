@@ -22,10 +22,10 @@ class Location
     #[ORM\Column(length: 255)]
     private ?string $region = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 20, scale: 20)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 7)]
     private ?string $latitude = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 20, scale: 20)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 7)]
     private ?string $longitude = null;
 
     #[ORM\Column(length: 255, nullable: true)]

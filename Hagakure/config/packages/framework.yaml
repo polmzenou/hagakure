@@ -1,2 +1,3 @@
 framework:
-    # Configuration framework - CORS géré par CorsListener
+    secret: '%env(APP_SECRET)%'
+    # Configuration framework - CORS géré par nelmio_cors (voir nelmio_cors.yaml)

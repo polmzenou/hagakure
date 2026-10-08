@@ -42,7 +42,7 @@ function SamouraiShow() {
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
-  const [favoriteId, setFavoriteId] = useState<number | null>(null)
+  const [, setFavoriteId] = useState<number | null>(null)
 
   useEffect(() => {
     setIsAuthenticated(authApi.isAuthenticated())

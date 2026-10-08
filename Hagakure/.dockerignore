@@ -1,0 +1,13 @@
+vendor/
+var/
+node_modules/
+tests/
+.env
+.env.*
+!.env.example
+config/jwt/*.pem
+config/certs/
+compose*.yaml
+phpunit*.xml
+.phpunit.result.cache
+src/DataFixtures/

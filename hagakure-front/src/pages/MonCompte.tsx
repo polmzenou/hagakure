@@ -8,7 +8,7 @@ import './MonCompte.css'
 
 function MonCompte() {
   const navigate = useNavigate()
-  const [profile, setProfile] = useState<ProfileData | null>(null)
+  const [, setProfile] = useState<ProfileData | null>(null)
   const [favorites, setFavorites] = useState<Favorite[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

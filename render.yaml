@@ -1,0 +1,34 @@
+# Blueprint Render : API Symfony (Docker, plan gratuit)
+# Render > New > Blueprint > sélectionner ce repo
+services:
+  - type: web
+    name: hagakure-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Hagakure/Dockerfile
+    dockerContext: ./Hagakure
+    healthCheckPath: /api/health
+    autoDeploy: true
+    # Ne redéployer que si le backend change
+    buildFilter:
+      paths:
+        - Hagakure/**
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: APP_DEBUG
+        value: "0"
+      - key: APP_SECRET
+        generateValue: true
+      - key: JWT_PASSPHRASE
+        generateValue: true
+      # Chaîne de connexion Neon (direct, pas -pooler) :
+      # postgresql://<user>:<mot_de_passe>@<host>.neon.tech/neondb?serverVersion=16&charset=utf8&sslmode=require
+      - key: DATABASE_URL
+        sync: false
+      # Regex des URL du front autorisées (à ajuster avec l'URL Vercel réelle)
+      - key: CORS_ALLOW_ORIGIN
+        value: ^https://hagakure[a-z0-9-]*\.vercel\.app$
+      - key: DEFAULT_URI
+        value: https://hagakure-api.onrender.com

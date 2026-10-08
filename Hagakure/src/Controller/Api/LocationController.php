@@ -22,7 +22,7 @@ class LocationController extends AbstractController
     #[Route('', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $locations = $this->repository->findAll();
+        $locations = $this->repository->findBy([], ['id' => 'ASC']);
         $data = [];
 
         foreach ($locations as $location) {
@@ -129,12 +129,20 @@ class LocationController extends AbstractController
             'id' => $location->getId(),
             'name' => $location->getName(),
             'region' => $location->getRegion(),
-            'latitude' => $location->getLatitude(),
-            'longitude' => $location->getLongitude(),
+            'latitude' => $this->trimDecimal($location->getLatitude()),
+            'longitude' => $this->trimDecimal($location->getLongitude()),
             'type' => $location->getType(),
             'description' => $location->getDescription(),
             'battles_count' => $location->getBattles()->count(),
         ];
+    }
+
+    /**
+     * PostgreSQL renvoie les NUMERIC avec tous les zéros (35.0116000) : on garde le format court (35.0116)
+     */
+    private function trimDecimal(?string $value): ?string
+    {
+        return $value === null || !str_contains($value, '.') ? $value : rtrim(rtrim($value, '0'), '.');
     }
 }
 

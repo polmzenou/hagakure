@@ -15,9 +15,9 @@ security:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
         
-        # Firewall pour les routes d'authentification (login, register)
+        # Firewall pour les routes publiques sans JWT (login, register, health)
         auth:
-            pattern: ^/api/(login|register)
+            pattern: ^/api/(login|register|health)
             stateless: true
             security: false
         
@@ -40,6 +40,7 @@ security:
         # Routes publiques (accessible à tous)
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/health$, roles: PUBLIC_ACCESS }
         
         # Routes GET (liste et show) - accessibles publiquement (sans authentification)
         - { path: ^/api/(samourais|clans|weapons|battles|locations|timeline)$, roles: PUBLIC_ACCESS, methods: [GET] }

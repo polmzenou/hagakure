@@ -25,6 +25,7 @@ class SamouraiRepository extends ServiceEntityRepository
             ->addSelect('w')
             ->leftJoin('s.style_id', 'st')
             ->addSelect('st')
+            ->orderBy('s.id', 'ASC')
             ->getQuery()
             ->getResult();
     }
