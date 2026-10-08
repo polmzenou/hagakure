@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { MapContainer, TileLayer, Marker, Popup, LayersControl, ScaleControl, ZoomControl } from 'react-leaflet'
+import { MapContainer, TileLayer, LayerGroup, Marker, Popup, LayersControl, ScaleControl, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import { locationApi, battleApi } from '../services/api'
 import { isAdmin } from '../utils/permissions'
@@ -8,6 +8,8 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import 'leaflet/dist/leaflet.css'
 import './Map.css'
+
+const ESRI_ATTRIBUTION = 'Tiles &copy; <a href="https://www.esri.com">Esri</a> &mdash; Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 
 interface Location {
   id: number
@@ -293,11 +295,19 @@ function Map() {
               {/* Contrôle des calques */}
               <LayersControl position="topright">
                 {/* Calque de base - Style ancien/sépia */}
+                {/* Fonds Esri : utilisables sans clé d'API (CARTO en exige une désormais) */}
                 <LayersControl.BaseLayer checked name="Carte ancienne">
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                    url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                  />
+                  <LayerGroup>
+                    <TileLayer
+                      attribution={ESRI_ATTRIBUTION}
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+                      maxNativeZoom={16}
+                    />
+                    <TileLayer
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+                      maxNativeZoom={16}
+                    />
+                  </LayerGroup>
                 </LayersControl.BaseLayer>
 
                 {/* Calque alternatif - Relief montagneux */}
@@ -310,10 +320,17 @@ function Map() {
 
                 {/* Calque sombre */}
                 <LayersControl.BaseLayer name="Carte sombre">
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-                  />
+                  <LayerGroup>
+                    <TileLayer
+                      attribution={ESRI_ATTRIBUTION}
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+                      maxNativeZoom={16}
+                    />
+                    <TileLayer
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+                      maxNativeZoom={16}
+                    />
+                  </LayerGroup>
                 </LayersControl.BaseLayer>
               </LayersControl>
 
